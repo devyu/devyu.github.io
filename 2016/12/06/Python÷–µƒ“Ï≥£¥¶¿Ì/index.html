@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Python中的异常处理 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="异常处理Python中使用try...except...finally...来处理异常。简单的栗子： 123456try:    print(&apos;try...&apos;)except ZeroDivisionError as e:    print(&apos;except:&apos;, e)finally:    print(&apos;finally...&apos;) 如果某段代码出现错误，可以使用try来包含这段代码，如果执行出错，则后">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python中的异常处理">
+<meta property="og:url" content="http://yoursite.com/2016/12/06/Python÷–µƒ“Ï≥£¥¶¿Ì/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="异常处理Python中使用try...except...finally...来处理异常。简单的栗子： 123456try:    print(&apos;try...&apos;)except ZeroDivisionError as e:    print(&apos;except:&apos;, e)finally:    print(&apos;finally...&apos;) 如果某段代码出现错误，可以使用try来包含这段代码，如果执行出错，则后">
+<meta property="og:updated_time" content="2017-08-12T02:21:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python中的异常处理">
+<meta name="twitter:description" content="异常处理Python中使用try...except...finally...来处理异常。简单的栗子： 123456try:    print(&apos;try...&apos;)except ZeroDivisionError as e:    print(&apos;except:&apos;, e)finally:    print(&apos;finally...&apos;) 如果某段代码出现错误，可以使用try来包含这段代码，如果执行出错，则后">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Python÷–µƒ“Ï≥£¥¶¿Ì" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/12/06/Python÷–µƒ“Ï≥£¥¶¿Ì/" class="article-date">
+  <time datetime="2016-12-06T15:55:29.000Z" itemprop="datePublished">2016-12-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python中的异常处理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>Python中使用<code>try...except...finally...</code>来处理异常。简单的栗子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    print(<span class="string">'try...'</span>)</span><br><span class="line"><span class="keyword">except</span> ZeroDivisionError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">'except:'</span>, e)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    print(<span class="string">'finally...'</span>)</span><br></pre></td></tr></table></figure>
+<p>如果某段代码出现错误，可以使用<code>try</code>来包含这段代码，如果执行出错，则后续代码则不会被执行，而是直接跳转到错误处理代码，即<code>except</code>语句块。如果有<code>finally</code>语句块，则执行<code>finally</code>语句块。</p>
+<p>在异常处理的流程当中，<code>try</code>语句中如果没有错误，则<code>except</code>一定不会被执行，如果有<code>finally</code>语句块（也可以没有），一定会会执行<code>finally</code>语句块。</p>
+<p>可以有多个<code>except</code>语句，来处理不同类型的错误，如下面int()函数可能会抛出<code>ValueError</code>错误，所以使用<code>except</code>捕获<code>ValueError</code>。如果没有错误发生，可以再<code>except</code>语句块后面添加一个<code>else</code>，当没有错误发生时，自动执行<code>else</code>语句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    r = <span class="number">10</span> / int(<span class="string">'2'</span>)</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">'ValueError:'</span>, e)</span><br><span class="line"><span class="keyword">except</span> ZeroDivisionError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">'ZeroDivisionError:'</span>, e)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'no error!'</span>)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    print(<span class="string">'finally...'</span>)</span><br><span class="line">print(<span class="string">'END'</span>)</span><br></pre></td></tr></table></figure>
+<p>Python的错误类型都继承自<code>BaseException</code>，它不仅仅能捕获该类型错误，还能将其子类也捕获。比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    foo()</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">'ValueError'</span>)</span><br><span class="line"><span class="keyword">except</span> UnicodeError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">'UnicodeError'</span>)</span><br></pre></td></tr></table></figure>
+<p>第二个<code>except</code>永远也不会执行，因为<code>UnicodeError</code>是<code>ValueError</code>的子类。该错误只能被第一个<code>except</code>捕获。<a href="https://docs.python.org/3/library/exceptions.html#exception-hierarchy" target="_blank" rel="noopener">官方文档</a>描述了有关错误类型的继承关系。</p>
+<p><code>try...except...</code>可以跨多层调用，比如下面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def foo(s):</span><br><span class="line">    return 10 / int(s)</span><br><span class="line"></span><br><span class="line">def bar(s):</span><br><span class="line">    return foo(s) * 2</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    try:</span><br><span class="line">        bar(&apos;0&apos;)</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(&apos;Error:&apos;, e)</span><br><span class="line">    finally:</span><br><span class="line">        print(&apos;finally...&apos;)</span><br></pre></td></tr></table></figure>
+<p>不需要再每个地方都捕获错误，只要在合适的层次去捕获错误就可以了。</p>
+<p>如果没有捕获错误，它就会一直上抛，最后被Python解释器捕获，打印一个错误信息，然后程序退出。</p>
+<p>Python内置的logging模块可以非常容易的记录错误信息，同时，让程序继续执行下去。程序打印完错误信息后会继续执行，并正常退出。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span> / int(s)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> foo(s) * <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        bar(<span class="string">'0'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        logging.exception(e)</span><br><span class="line"></span><br><span class="line">main()</span><br><span class="line">print(<span class="string">'END'</span>)</span><br></pre></td></tr></table></figure>
+<p>log:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ python3 err_logging.py</span><br><span class="line">ERROR:root:division by zero</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"err_logging.py"</span>, line <span class="number">13</span>, <span class="keyword">in</span> main</span><br><span class="line">    bar(<span class="string">'0'</span>)</span><br><span class="line">  File <span class="string">"err_logging.py"</span>, line <span class="number">9</span>, <span class="keyword">in</span> bar</span><br><span class="line">    <span class="keyword">return</span> foo(s) * <span class="number">2</span></span><br><span class="line">  File <span class="string">"err_logging.py"</span>, line <span class="number">6</span>, <span class="keyword">in</span> foo</span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span> / int(s)</span><br><span class="line">ZeroDivisionError: division by zero</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>抛出错误：Python内置函数会抛出很多错误，也可以自己编写函数抛出错误。可以定义一个错误的class，选择继承关系，使用<code>raise</code>语句抛出一个错误的实例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FooError</span><span class="params">(ValueError)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(s)</span>:</span></span><br><span class="line">    n = int(s)</span><br><span class="line">    <span class="keyword">if</span> n==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> FooError(<span class="string">'invalid value: %s'</span> % s)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span> / n</span><br><span class="line"></span><br><span class="line">foo(<span class="string">'0'</span>)</span><br></pre></td></tr></table></figure>
+<p>另外一种处理错误的方式：在捕获错误的时候，打印<code>ValueError!</code>后，又将错误抛出。这是由于这个函数不知道怎么处理这个错误，所以，最恰当的方式是继续上抛，让顶层调用者去处理。<code>raise</code>语句如果不带参数，就会把当前的错误按照原样抛出。此外还可以将<code>except</code>中的<code>raise</code>一个Error，将一种错误转换成另外一种类型：<code>raise ValueError(&#39;input error!&#39;)</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(s)</span>:</span></span><br><span class="line">    n = int(s)</span><br><span class="line">    <span class="keyword">if</span> n==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'invalid value: %s'</span> % s)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span> / n</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        foo(<span class="string">'0'</span>)</span><br><span class="line">    <span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">'ValueError!'</span>)</span><br><span class="line">        <span class="keyword">raise</span></span><br><span class="line"></span><br><span class="line">bar()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/12/06/Python÷–µƒ“Ï≥£¥¶¿Ì/" data-id="cjc8teuo1000w6aindp2dzeax" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/12/07/Python÷–µƒ◊∞ Œ∆˜/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          Python中的装饰器
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/12/05/Python÷–µƒ÷™ ∂µ„/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">Python中容易混淆的知识点</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cocoa/">Cocoa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 12px;">C++</a> <a href="/tags/Cocoa/" style="font-size: 14px;">Cocoa</a> <a href="/tags/JavaScript/" style="font-size: 12px;">JavaScript</a> <a href="/tags/Objective-C/" style="font-size: 18px;">Objective-C</a> <a href="/tags/Python/" style="font-size: 16px;">Python</a> <a href="/tags/React-Native/" style="font-size: 10px;">React Native</a> <a href="/tags/Swift/" style="font-size: 20px;">Swift</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/数据结构/" style="font-size: 14px;">数据结构</a> <a href="/tags/数据结构与算法/" style="font-size: 10px;">数据结构与算法</a> <a href="/tags/音视频/" style="font-size: 10px;">音视频</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/13/CoreAnimation/">CoreAnimation</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/13/git-proxy/">git proxy</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/09/Darwin-Notification/">Darwin Notification</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/08/map°¢fitter°¢reduce/">map、fitter、reduce、flatMap</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/21/∂¡ È± º«/">读书笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

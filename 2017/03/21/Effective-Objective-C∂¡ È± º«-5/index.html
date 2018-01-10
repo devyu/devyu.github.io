@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Effective-Objective-C读书笔记(5) | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="内存管理第29条：理解引用计数通过引用计数来管理内存，当对象使用 new、alloc、retain，创建的时候，其 引用计数+1。当使用release的时候，引用计数-1。当其引用计数为0的时候，对象会被释放，同时需要将指针置 nil，防止出现悬垂指针。 自动释放池：当对象调用 release 会立即递减对象的引用计数，有时候可以不调用它。改为调用 autorelease，此方法会在稍后递减计数，">
+<meta name="keywords" content="Objective-C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective-Objective-C读书笔记(5)">
+<meta property="og:url" content="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="内存管理第29条：理解引用计数通过引用计数来管理内存，当对象使用 new、alloc、retain，创建的时候，其 引用计数+1。当使用release的时候，引用计数-1。当其引用计数为0的时候，对象会被释放，同时需要将指针置 nil，防止出现悬垂指针。 自动释放池：当对象调用 release 会立即递减对象的引用计数，有时候可以不调用它。改为调用 autorelease，此方法会在稍后递减计数，">
+<meta property="og:updated_time" content="2017-08-12T02:21:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Effective-Objective-C读书笔记(5)">
+<meta name="twitter:description" content="内存管理第29条：理解引用计数通过引用计数来管理内存，当对象使用 new、alloc、retain，创建的时候，其 引用计数+1。当使用release的时候，引用计数-1。当其引用计数为0的时候，对象会被释放，同时需要将指针置 nil，防止出现悬垂指针。 自动释放池：当对象调用 release 会立即递减对象的引用计数，有时候可以不调用它。改为调用 autorelease，此方法会在稍后递减计数，">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Effective-Objective-C∂¡ È± º«-5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-5/" class="article-date">
+  <time datetime="2017-03-21T14:27:28.000Z" itemprop="datePublished">2017-03-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Effective-Objective-C读书笔记(5)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h3><h4 id="第29条：理解引用计数"><a href="#第29条：理解引用计数" class="headerlink" title="第29条：理解引用计数"></a>第29条：理解引用计数</h4><p>通过引用计数来管理内存，当对象使用 <code>new</code>、<code>alloc</code>、<code>retain</code>，创建的时候，其 <code>引用计数+1</code>。当使用<code>release</code>的时候，<code>引用计数-1</code>。当其引用计数为0的时候，对象会被释放，同时需要将指针置 nil，防止出现<code>悬垂指针</code>。</p>
+<p><code>自动释放池</code>：当对象调用 <code>release</code> 会立即递减对象的引用计数，有时候可以不调用它。改为调用 <code>autorelease</code>，此方法会在稍后递减计数，通常会在下一次事件循环的时候递减。此方法可以保证对象在跨越<code>方法调用边界</code>后一定存活。使用 <code>autorelease</code> 可以延长对象生命周期。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (NSString *)stringValue &#123;</span><br><span class="line">  NSString *str = [[NSString alloc] initWithFormat:@&quot;I am this: %@&quot;, self];</span><br><span class="line">  return [str autorelease];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// stringValue 返回调用者时，此对象必然存活。所以可以这样调用</span><br><span class="line">NSString *str = [self stringValue];</span><br></pre></td></tr></table></figure>
+<p>由于返回的 str 对象稍后将自动释放，所以无需再执行内存管理操作。但是如果要持有该对象的话（比如要将其设置给实例变量），那就需要保留，并稍后释放：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_instanceVariable = [[self stringValue] retain];</span><br></pre></td></tr></table></figure>
+<h4 id="第30条：用-ARC-简化引用计数"><a href="#第30条：用-ARC-简化引用计数" class="headerlink" title="第30条：用 ARC 简化引用计数"></a>第30条：用 ARC 简化引用计数</h4><ul>
+<li>在 ARC 环境中，引用计数实际上还是要执行的，只不过引用计数现在是由 ARC 自动添加。</li>
+<li>不能使用 <code>retain</code>、<code>release</code>、<code>autorelease</code>、<code>dealloc</code> 方法。</li>
+<li>若方法名以 <code>alloc</code>、<code>new</code>、<code>copy</code>、<code>mutableCopy</code> 开头，则返回的对象归调用者所有。</li>
+<li>不使用 ARC 情况下，在实现单例类的时候，因为单例不可以释放，所有我们经常个覆写 <code>release</code> 方法，将其替换为 <code>空操作</code>。</li>
+<li>ARC 下会借用 Objective-C++ 中的一项特性来清理对象，回收 Objective-C++ 对象时，待回收对象会调用 C++ 对象的析构函数。编译器如果发现对象里含有 C++ 对象，就会生成 <code>.cxx_destruct</code> 的方法。在此方法中生成清理内存的代码。</li>
+<li>ARC 只负责管理 Objective-C 对象内存，CoreFoundation 对象不归 ARC 管理，开发者必须适时调用 CFRetain/CFRelease。</li>
+</ul>
+<h4 id="第31条：在-dealloc-方法中只释放引用并解除监听"><a href="#第31条：在-dealloc-方法中只释放引用并解除监听" class="headerlink" title="第31条：在 dealloc 方法中只释放引用并解除监听"></a>第31条：在 dealloc 方法中只释放引用并解除监听</h4><ul>
+<li>在 dealloc 方法中，ARC 会通过自动生成 <code>.cxx_destruct</code> 方法，并自动释放所有的 Objective-C 对象。</li>
+<li>在此方法中移除通知</li>
+<li>如果不使用 ARC ，那么最后还需要调用 <code>[super dealloc]</code>。ARC 会自动执行此操作。</li>
+<li>如果对象持有文件描述符等资源，应该撰文写一个方法来释放此种资源。这样的类要和使用者约定：用完资源后必须调用 close 方法。</li>
+<li>执行异步任务的方法不应该在 dealloc 里调用。只能在正常状态下执行的那些方法也不应该在 dealloc 里调用，因为此时对象已处在正在回收的状态了。</li>
+</ul>
+<h4 id="第32条：编写异常安全代码时要注意内存管理问题"><a href="#第32条：编写异常安全代码时要注意内存管理问题" class="headerlink" title="第32条：编写异常安全代码时要注意内存管理问题"></a>第32条：编写<code>异常安全代码</code>时要注意内存管理问题</h4><ul>
+<li>在非 ARC 下，使用<code>@try...@catch</code>来捕获异常，当异常发生时，程序直接执行<code>@catch</code>中的语句。忽略了<code>@try</code>中的内存管理语句。最好的做法是将<code>@try</code>中的内存管理语句放在 <code>@finally</code> 当中。</li>
+<li>默认情况下，ARC 不生成安全处理异常的所需要的清理代码。开启编译器<code>-fobjc-arc-exceptions</code>标志后，可以生成这种代码，不过会导致应用程序变大。降低运行效率。</li>
+</ul>
+<h4 id="第33条：用弱引用避免循环引用"><a href="#第33条：用弱引用避免循环引用" class="headerlink" title="第33条：用弱引用避免循环引用"></a>第33条：用弱引用避免循环引用</h4><ul>
+<li>将某些引用设置为 <code>weak</code>，避免循环引用。</li>
+<li>weak 引用可以自动清空，也可以不自动清空。自动清空是随着 ARC 而引入的新特性，由运行时系统来实习那。在自动清空功能的弱引用上，可以随意读取其数据，因为这种引用不会指向已经回收过的对象。</li>
+</ul>
+<h4 id="第34条：使用-autoreleasepool-来降低内存峰值"><a href="#第34条：使用-autoreleasepool-来降低内存峰值" class="headerlink" title="第34条：使用 autoreleasepool 来降低内存峰值"></a>第34条：使用 <code>autoreleasepool</code> 来降低内存峰值</h4><ul>
+<li>当程序当中需要创建大量的临时对象（比如循环），会造成内存增长，可以考虑将临时代码放在<code>autoreleasepool</code>当中，那么在循环中自动释放的对象就会放在这个池，而不是线程的主池里面。</li>
+<li><code>autoreleasepool</code>存放在栈中，对象收到 <code>autorelease</code> 消息后，系统将其放入最顶端的池里。</li>
+</ul>
+<h4 id="第35条：用僵尸对象调试内存管理问题"><a href="#第35条：用僵尸对象调试内存管理问题" class="headerlink" title="第35条：用僵尸对象调试内存管理问题"></a>第35条：用<code>僵尸对象</code>调试内存管理问题</h4><ul>
+<li>向已经回收的对象发送消息是不安全的，因为这有时可以，有时不行。完全取决于对象所占内存有没有为其他内容所覆写，而这块内存有没有移作他用，又无法确定。此时需要开启僵尸对象进行检查。</li>
+<li>系统在回收对象的时候，可以不将其真的回收，而是把它转化为僵尸对象。通过 <code>NSZombieEnabled</code> 可开启此功能。</li>
+</ul>
+<h4 id="第36条：不要使用-retainCount"><a href="#第36条：不要使用-retainCount" class="headerlink" title="第36条：不要使用 retainCount"></a>第36条：不要使用 retainCount</h4><ul>
+<li>不要使用 retainCount 来查看对象是否还被持有，因为任何给定时间点上 <code>绝对引用计数</code> 都无法反应对象生命周期的全貌。引用计数可能处在自动释放池中，retainCount 可能不准确。</li>
+<li>ARC 后，retainCount 就被废止了。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-5/" data-id="cjc8teunt000f6aindg5ukizh" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          Effective-Objective-C读书笔记(6)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">Effective-Objective-C读书笔记(4)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cocoa/">Cocoa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 12px;">C++</a> <a href="/tags/Cocoa/" style="font-size: 14px;">Cocoa</a> <a href="/tags/JavaScript/" style="font-size: 12px;">JavaScript</a> <a href="/tags/Objective-C/" style="font-size: 18px;">Objective-C</a> <a href="/tags/Python/" style="font-size: 16px;">Python</a> <a href="/tags/React-Native/" style="font-size: 10px;">React Native</a> <a href="/tags/Swift/" style="font-size: 20px;">Swift</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/数据结构/" style="font-size: 14px;">数据结构</a> <a href="/tags/数据结构与算法/" style="font-size: 10px;">数据结构与算法</a> <a href="/tags/音视频/" style="font-size: 10px;">音视频</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/13/CoreAnimation/">CoreAnimation</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/13/git-proxy/">git proxy</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/09/Darwin-Notification/">Darwin Notification</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/08/map°¢fitter°¢reduce/">map、fitter、reduce、flatMap</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/21/∂¡ È± º«/">读书笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

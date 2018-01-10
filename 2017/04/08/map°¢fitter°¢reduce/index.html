@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>map、fitter、reduce、flatMap | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在 Swift 高阶使用中，map、fitter、reduce 是很常见的操作，能使代码干净整洁。在理解其概念之前，先要明白泛型的概念。 泛型定义 computeIntArray 函数，接收一个数组，并返回其元素的2倍组成的另一个新的数组。但此函数只支持 Int 类型。如果换成其他类型则不适用，所以这里考虑用泛型来解决。123456789101112131415161718192021222324">
+<meta name="keywords" content="Swift">
+<meta property="og:type" content="article">
+<meta property="og:title" content="map、fitter、reduce、flatMap">
+<meta property="og:url" content="http://yoursite.com/2017/04/08/map°¢fitter°¢reduce/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在 Swift 高阶使用中，map、fitter、reduce 是很常见的操作，能使代码干净整洁。在理解其概念之前，先要明白泛型的概念。 泛型定义 computeIntArray 函数，接收一个数组，并返回其元素的2倍组成的另一个新的数组。但此函数只支持 Int 类型。如果换成其他类型则不适用，所以这里考虑用泛型来解决。123456789101112131415161718192021222324">
+<meta property="og:updated_time" content="2017-08-12T02:21:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="map、fitter、reduce、flatMap">
+<meta name="twitter:description" content="在 Swift 高阶使用中，map、fitter、reduce 是很常见的操作，能使代码干净整洁。在理解其概念之前，先要明白泛型的概念。 泛型定义 computeIntArray 函数，接收一个数组，并返回其元素的2倍组成的另一个新的数组。但此函数只支持 Int 类型。如果换成其他类型则不适用，所以这里考虑用泛型来解决。123456789101112131415161718192021222324">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-map°¢fitter°¢reduce" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/08/map°¢fitter°¢reduce/" class="article-date">
+  <time datetime="2017-04-08T02:14:06.000Z" itemprop="datePublished">2017-04-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      map、fitter、reduce、flatMap
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 Swift 高阶使用中，map、fitter、reduce 是很常见的操作，能使代码干净整洁。在理解其概念之前，先要明白泛型的概念。</p>
+<h3 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h3><p>定义 <code>computeIntArray</code> 函数，接收一个数组，并返回其元素的2倍组成的另一个新的数组。但此函数只支持 <code>Int</code> 类型。如果换成其他类型则不适用，所以这里考虑用泛型来解决。<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">computeIntArray</span><span class="params">(xs: [Int], transform: <span class="params">(Int)</span></span></span> -&gt; <span class="type">Int</span>) -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="keyword">var</span> result: [<span class="type">Int</span>] = []</span><br><span class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</span><br><span class="line">    result.append(transform(x))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">doubleArray</span><span class="params">(xs: [Int])</span></span> -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="keyword">return</span> computeIntArray(xs: xs) &#123; x <span class="keyword">in</span> x * <span class="number">2</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">doubleArray(xs: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 换成 bool，则会出现编译错误</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">isEvenArray</span><span class="params">(xs: [Int])</span></span> -&gt; [<span class="type">Bool</span>] &#123;</span><br><span class="line">  <span class="keyword">return</span> computeIntArray(xs: xs) &#123; x <span class="keyword">in</span>  x % <span class="number">2</span> == <span class="number">0</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用泛型支持各种类型，进行抽象，对于任何 Element 的数组和 transform: Element -&gt; T 函数，它都会生成一个 T 类型数组</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;Element, T&gt;<span class="params">(xs: [Element], transform: <span class="params">(Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">  <span class="keyword">var</span> result: [<span class="type">T</span>] = []</span><br><span class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</span><br><span class="line">    result.append(transform(x))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">genericComputeArray</span>&lt;T&gt;<span class="params">(xs: [Int], transform: <span class="params">(Int)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">map</span>(xs: xs, transform: transform)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">genericComputeArray(xs: [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]) &#123; x <span class="keyword">in</span> x * <span class="number">2</span> &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p><code>map</code>函数能够被数组调用，还接收一个闭包参数，将数组中的每一个元素依次作用于该闭包，并返回一个新的数组。</p>
+<p>上面的例子中，将泛型函数写成全局函数固然能够完成任务，但是为了避免写入顶层函数实现。将此函数定义为 Array 的扩展更合适。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;T&gt;<span class="params">(tranform: <span class="params">(Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">    <span class="keyword">var</span> result: [<span class="type">T</span>] = []</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">      result.append(tranform(x))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].<span class="built_in">map</span> &#123; x <span class="keyword">in</span> x * x &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="fitter"><a href="#fitter" class="headerlink" title="fitter"></a>fitter</h3><p>与 <code>map</code> 函数类似，<code>fitter</code> 函数也可以接收一个闭包作为参数，同样可以避免函数为顶层实现：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">filter</span><span class="params">(includeElement: <span class="params">(Element)</span></span></span> -&gt; <span class="type">Bool</span>) -&gt; [<span class="type">Element</span>] &#123;</span><br><span class="line">    <span class="keyword">var</span> result: [<span class="type">Element</span>] = []</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> <span class="keyword">where</span> includeElement(x) &#123;</span><br><span class="line">      result.append(x)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ["HelloWorld.swift"]</span></span><br><span class="line">[<span class="string">"HelloWorld.swift"</span>, <span class="string">"HelloWorld.md"</span>].<span class="built_in">filter</span> &#123;x <span class="keyword">in</span> x.hasSuffix(<span class="string">"swift"</span>)&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="reduce"><a href="#reduce" class="headerlink" title="reduce"></a>reduce</h3><p><code>reduce</code> 函数将变量初始化为某个值，对数组中的每一项进行遍历，最后一某种方式更新结果。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">reduce</span>&lt;T&gt;<span class="params">(initial: T, combine: <span class="params">(T, Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; <span class="type">T</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> result = initial</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">      result = combine(result, x)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出：1</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="built_in">reduce</span>(initial: <span class="number">0</span>) &#123; result, x <span class="keyword">in</span> result + x &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 也可以用运算符作为最后一个参数。这里初始化值为：1</span></span><br><span class="line"><span class="comment">// 输出：7</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="built_in">reduce</span>(initial: <span class="number">1</span>, combine: +)</span><br></pre></td></tr></table></figure>
+<h3 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h3><p><code>flatMap</code> 与 <code>map</code> 类似，区别是若元素值不为 nil 的情况下，<code>flatMap</code> 能将可选类型转换为非可选类型：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> array = [<span class="string">"123"</span>, <span class="string">""</span>, <span class="string">"4567"</span>]</span><br><span class="line"><span class="keyword">let</span> anotherArray = array.<span class="built_in">map</span> &#123; (string: <span class="type">String</span>) -&gt; <span class="type">Int</span>? <span class="keyword">in</span></span><br><span class="line">  <span class="keyword">let</span> length = string.characters.<span class="built_in">count</span></span><br><span class="line">  <span class="keyword">guard</span> length &gt; <span class="number">0</span> <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> string.characters.<span class="built_in">count</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// [Optional(3), nil, Optional(4)]</span></span><br><span class="line"><span class="built_in">print</span>(anotherArray)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> anotherArray2 = array.flatMap&#123; (string: <span class="type">String</span>) -&gt; <span class="type">Int</span>? <span class="keyword">in</span></span><br><span class="line">  <span class="keyword">let</span> length = string.characters.<span class="built_in">count</span></span><br><span class="line">  <span class="keyword">guard</span> length &gt; <span class="number">0</span> <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> string.characters.<span class="built_in">count</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// [3, 4]</span></span><br><span class="line"><span class="built_in">print</span>(anotherArray2)</span><br></pre></td></tr></table></figure>
+<h3 id="Any-与-泛型"><a href="#Any-与-泛型" class="headerlink" title="Any 与 泛型"></a>Any 与 泛型</h3><p>尽量避免使用 <code>Any</code> 类型，因为使用 <code>Any</code> 类型会避开 swift 的类型系统。比如将 <code>noOp</code> 函数返回值设为 0 会导致类型错误。此外，任何调用 <code>noOpAny</code> 的函数都不知道返回值会被转换为何种类型。而结果就是可能导致各种各样的运行时错误。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">noOp</span>&lt;T&gt;<span class="params">(x: T)</span></span> -&gt; <span class="type">T</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">noOpAny</span><span class="params">(x: Any)</span></span> -&gt; <span class="type">Any</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> result = noOp(x: <span class="number">3</span>)</span><br><span class="line"><span class="keyword">let</span> ret = noOpAny(x: <span class="string">"3"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// oOp中，我们可以清楚返回值和输入值完全一样，而 noOpAny 则不一样，返回是任意类型。甚至和原来输入值不同的类型。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">noOpWrong</span><span class="params">(x: Any)</span></span> -&gt; <span class="type">Any</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> s = noOpWrong(x: <span class="string">"string"</span>)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/04/08/map°¢fitter°¢reduce/" data-id="cjc8teuos00286ainxbwrkfbg" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/09/Darwin-Notification/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          Darwin Notification
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/21/∂¡ È± º«/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">读书笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cocoa/">Cocoa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 12px;">C++</a> <a href="/tags/Cocoa/" style="font-size: 14px;">Cocoa</a> <a href="/tags/JavaScript/" style="font-size: 12px;">JavaScript</a> <a href="/tags/Objective-C/" style="font-size: 18px;">Objective-C</a> <a href="/tags/Python/" style="font-size: 16px;">Python</a> <a href="/tags/React-Native/" style="font-size: 10px;">React Native</a> <a href="/tags/Swift/" style="font-size: 20px;">Swift</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/数据结构/" style="font-size: 14px;">数据结构</a> <a href="/tags/数据结构与算法/" style="font-size: 10px;">数据结构与算法</a> <a href="/tags/音视频/" style="font-size: 10px;">音视频</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/13/CoreAnimation/">CoreAnimation</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/13/git-proxy/">git proxy</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/09/Darwin-Notification/">Darwin Notification</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/08/map°¢fitter°¢reduce/">map、fitter、reduce、flatMap</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/21/∂¡ È± º«/">读书笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

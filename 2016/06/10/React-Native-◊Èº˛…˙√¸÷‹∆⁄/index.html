@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>React Native 组件生命周期 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="getInitialState()组件在安装之前，会调用 getInitialState 来初始化组件的状态，返回值被用作 this.state 的初始值来使用。 注意：在 ES6 中，使用下面方式设置初始化值：1234567class Counter extends React.Component &amp;#123;  constructor(props) &amp;#123;    super(props)">
+<meta name="keywords" content="React Native">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React Native 组件生命周期">
+<meta property="og:url" content="http://yoursite.com/2016/06/10/React-Native-◊Èº˛…˙√¸÷‹∆⁄/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="getInitialState()组件在安装之前，会调用 getInitialState 来初始化组件的状态，返回值被用作 this.state 的初始值来使用。 注意：在 ES6 中，使用下面方式设置初始化值：1234567class Counter extends React.Component &amp;#123;  constructor(props) &amp;#123;    super(props)">
+<meta property="og:updated_time" content="2017-08-12T02:21:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React Native 组件生命周期">
+<meta name="twitter:description" content="getInitialState()组件在安装之前，会调用 getInitialState 来初始化组件的状态，返回值被用作 this.state 的初始值来使用。 注意：在 ES6 中，使用下面方式设置初始化值：1234567class Counter extends React.Component &amp;#123;  constructor(props) &amp;#123;    super(props)">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-React-Native-◊Èº˛…˙√¸÷‹∆⁄" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/10/React-Native-◊Èº˛…˙√¸÷‹∆⁄/" class="article-date">
+  <time datetime="2016-06-10T05:16:35.000Z" itemprop="datePublished">2016-06-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React Native 组件生命周期
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="getInitialState"><a href="#getInitialState" class="headerlink" title="getInitialState()"></a>getInitialState()</h3><p>组件在安装之前，会调用 <code>getInitialState</code> 来初始化组件的状态，返回值被用作 <code>this.state</code> 的初始值来使用。</p>
+<p><code>注意</code>：在 ES6 中，使用下面方式设置初始化值：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line">    <span class="keyword">this</span>.state = &#123;<span class="attr">count</span>: props.initialCount&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="getDefaultProps"><a href="#getDefaultProps" class="headerlink" title="getDefaultProps()"></a>getDefaultProps()</h3><p>在创建类的时候调用并缓存，如果该组件没有从父组件获得到 props，可以通过这个方法设置默认值。这个组件创建的值不能够跨实例共享，不会被赋值。</p>
+<p><code>注意</code>：在 ES6 中，可以使用下面的方式设置默认值：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Greeting</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Greeting.defaultProps = &#123;</span><br><span class="line">  name: <span class="string">'Mary'</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="propTypes"><a href="#propTypes" class="headerlink" title="propTypes"></a>propTypes</h3><p>该 <code>propTypes</code> 对象能够验证传递给组件的 props 的类型：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">propTypes: &#123;</span><br><span class="line">  <span class="comment">// You can declare that a prop is a specific JS primitive. By default, these</span></span><br><span class="line">  <span class="comment">// are all optional.</span></span><br><span class="line">  optionalArray: React.PropTypes.array,</span><br><span class="line">  optionalBool: React.PropTypes.bool,</span><br><span class="line">  optionalFunc: React.PropTypes.func,</span><br><span class="line">  optionalNumber: React.PropTypes.number,</span><br><span class="line">  optionalObject: React.PropTypes.object,</span><br><span class="line">  optionalString: React.PropTypes.string,</span><br><span class="line">  optionalSymbol: React.PropTypes.symbol,</span><br><span class="line">  <span class="comment">// more ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更多详细信息可参考<a href="http://reactjs.cn/react/docs/reusable-components.html" target="_blank" rel="noopener">这里</a></p>
+<h3 id="componentWillMount"><a href="#componentWillMount" class="headerlink" title="componentWillMount()"></a>componentWillMount()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> componentWillMount()</span><br></pre></td></tr></table></figure></p>
+<p>这个方法是在组件创建并初始化之后，在第一次 <code>render()</code> 之前调用，可以做一些业务初始化操作，也可以设置㢟状态。这个函数在整个生命周期中只被<code>调用一次</code>。</p>
+<h3 id="componentDidMount"><a href="#componentDidMount" class="headerlink" title="componentDidMount()"></a>componentDidMount()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> componentDidMount()</span><br></pre></td></tr></table></figure></p>
+<p>组件第一次 <code>render()</code> 之后，只会<code>调用一次</code>。可以再这个函数中操作子组件。需要注意的是，React Native 是先调用子组件的 <code>componentDidMount()</code> ，然后在调用父组件的函数。可以在这个组件当中设置计时器或者网络请求等。调用这个函数完毕后，就等待触发其他事件。</p>
+<h3 id="componentWillReceiveProps"><a href="#componentWillReceiveProps" class="headerlink" title="componentWillReceiveProps()"></a>componentWillReceiveProps()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> componentWillReceiveProps(</span><br><span class="line">  object nextProps</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>当组件收到新的 props，就会调用该函数。举个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// nextProps 是即将被设置的新的属性，旧的属性还可以通过 this.props 来获取。</span></span><br><span class="line"><span class="comment">// 根据属性的变化，通过 this.setState() 来更新组件状态、这里面更新状态是安全的，并不会触发额外的 render()</span></span><br><span class="line">componentWillReceiveProps(nextProps) &#123;  </span><br><span class="line">  <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">    likesIncreasing: nextProps.likeCount &gt; <span class="keyword">this</span>.props.likeCount</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate()"></a>shouldComponentUpdate()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">boolean shouldComponentUpdate(  </span><br><span class="line">  object nextProps, object nextState</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>当组件接收到新的 <code>props</code> 和 <code>state</code> 改变的话，会触发调用该方法。参数 <code>nextProps</code> 和 <code>componentWillReceiveProps</code> 函数一样。参数 <code>nextState</code> 表示组件即将更新的状态值。返回参数决定是否需要更新组件，如果 <code>true</code> 表示更新，继续向下执行。否则表示不更新，直接进入等待状态。</p>
+<p>默认情况下，该函数永远返回 <code>true</code> 来保证数据变化的时候 UI 能同步更新，也可以通过检查属性变化前后来决定 UI 是否更新来提高应用性能。</p>
+<h3 id="componentWillUpdate"><a href="#componentWillUpdate" class="headerlink" title="componentWillUpdate()"></a>componentWillUpdate()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> componentWillUpdate(</span><br><span class="line">  object nextProps, object nextState</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p><code>shouldComponentUpdate</code> 函数返回 <code>true</code>，并且 <code>nextProps</code> 或者 <code>nextState</code> 发生改变时，就会开始更新组件。</p>
+<p><code>注意</code>：这个方法里面不能调用 <code>this.setState()</code> 来修改状态，这个函数调用之后，就会把 <code>nextProps</code> 和 <code>nextState</code> 分别设置到 <code>this.props</code> 和 <code>this.state</code> 中。紧接着这个函数，就会调用 <code>render()</code> 来更新界面了。</p>
+<h3 id="componentDidUpdate"><a href="#componentDidUpdate" class="headerlink" title="componentDidUpdate()"></a>componentDidUpdate()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> componentDidUpdate(  </span><br><span class="line">  object prevProps, object prevState</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>这里已经完成 props 和 state 状态的更新，此函数的输入参数就变成了 <code>prevProps</code> 和 <code>prevState</code>。</p>
+<h3 id="componentWillUnmount"><a href="#componentWillUnmount" class="headerlink" title="componentWillUnmount()"></a>componentWillUnmount()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> componentWillUnmount()</span><br></pre></td></tr></table></figure></p>
+<p>组件销毁的时候调用，可以做一些组件相关的清理工作，例如取消计时器等。</p>
+<hr>
+<p>参考：<br><a href="https://race604.com/react-native-component-lifecycle/" target="_blank" rel="noopener">https://race604.com/react-native-component-lifecycle/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/06/10/React-Native-◊Èº˛…˙√¸÷‹∆⁄/" data-id="cjc8teuo900186aindbt0phxc" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React-Native/">React Native</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/12/05/Python÷–µƒ÷™ ∂µ„/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          Python中容易混淆的知识点
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/12/lodash-ºÚΩÈ/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">lodash 简介</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cocoa/">Cocoa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 12px;">C++</a> <a href="/tags/Cocoa/" style="font-size: 14px;">Cocoa</a> <a href="/tags/JavaScript/" style="font-size: 12px;">JavaScript</a> <a href="/tags/Objective-C/" style="font-size: 18px;">Objective-C</a> <a href="/tags/Python/" style="font-size: 16px;">Python</a> <a href="/tags/React-Native/" style="font-size: 10px;">React Native</a> <a href="/tags/Swift/" style="font-size: 20px;">Swift</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/数据结构/" style="font-size: 14px;">数据结构</a> <a href="/tags/数据结构与算法/" style="font-size: 10px;">数据结构与算法</a> <a href="/tags/音视频/" style="font-size: 10px;">音视频</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/13/CoreAnimation/">CoreAnimation</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/13/git-proxy/">git proxy</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/09/Darwin-Notification/">Darwin Notification</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/08/map°¢fitter°¢reduce/">map、fitter、reduce、flatMap</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/21/∂¡ È± º«/">读书笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

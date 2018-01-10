@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Effective Objective-C读书笔记(1) | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="熟悉 Objective-CObjective-C 中的消息Objective-C 起源于 Smalltalk，所以借鉴了 Smalltalk 的消息结构(messaging structure)，而非像 C++ 那样的函数调用(function calling)。主要区别：使用消息结构的语言，其运行时所应执行的代码由运行环境来决定。而使用函数调用的语言，由编译器决定。如果示例代码是多态的，那么在">
+<meta name="keywords" content="Objective-C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective Objective-C读书笔记(1)">
+<meta property="og:url" content="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="熟悉 Objective-CObjective-C 中的消息Objective-C 起源于 Smalltalk，所以借鉴了 Smalltalk 的消息结构(messaging structure)，而非像 C++ 那样的函数调用(function calling)。主要区别：使用消息结构的语言，其运行时所应执行的代码由运行环境来决定。而使用函数调用的语言，由编译器决定。如果示例代码是多态的，那么在">
+<meta property="og:image" content="http://yoursite.com/image/Effective-Objective-C-2.0-cahpter1-01.png">
+<meta property="og:image" content="http://yoursite.com/image/Effective-Objective-C-2.0-cahpter1-02.png">
+<meta property="og:image" content="http://yoursite.com/image/Effective-Objective-C-2.0-cahpter1-03.png">
+<meta property="og:updated_time" content="2017-08-12T02:21:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Effective Objective-C读书笔记(1)">
+<meta name="twitter:description" content="熟悉 Objective-CObjective-C 中的消息Objective-C 起源于 Smalltalk，所以借鉴了 Smalltalk 的消息结构(messaging structure)，而非像 C++ 那样的函数调用(function calling)。主要区别：使用消息结构的语言，其运行时所应执行的代码由运行环境来决定。而使用函数调用的语言，由编译器决定。如果示例代码是多态的，那么在">
+<meta name="twitter:image" content="http://yoursite.com/image/Effective-Objective-C-2.0-cahpter1-01.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Effective-Objective-C∂¡ È± º«-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-1/" class="article-date">
+  <time datetime="2017-03-21T08:08:12.000Z" itemprop="datePublished">2017-03-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Effective Objective-C读书笔记(1)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="熟悉-Objective-C"><a href="#熟悉-Objective-C" class="headerlink" title="熟悉 Objective-C"></a>熟悉 Objective-C</h3><h4 id="Objective-C-中的消息"><a href="#Objective-C-中的消息" class="headerlink" title="Objective-C 中的消息"></a>Objective-C 中的消息</h4><p>Objective-C 起源于 Smalltalk，所以借鉴了 Smalltalk 的<code>消息结构(messaging structure)</code>，而非像 C++ 那样的<code>函数调用(function calling)</code>。<br><code>主要区别</code>：使用消息结构的语言，其运行时所应执行的代码由运行环境来决定。而使用函数调用的语言，由编译器决定。如果示例代码是多态的，那么在运行时就会按照<code>虚方法表(virtual table)</code>来查看到底该执行哪个函数实现。而采用消息结构的语言，不论是否是多态，总是在运行时才会查找要执行的方法。编译器不关心接收消息的对象是哪种类型。接收消息的对象问题也要在运行时处理。这个过程叫做<code>动态绑定</code>。</p>
+<p>Objective-C 的工作都是由 <code>运行期组件(runtime component)</code>而非编译器来完成，<code>运行期组件</code>本质就是一种与开发者所编写代码相连接的动态库，这样只需更新<code>运行期组件</code>，就可以提升应用程序性能。而那种许多工作都在编译期完成的语言，想要获得类似的性能提升，则要重新编译应用程序代码。Objective-C 是 C 的“超集”，必须要理解 C 语言的内存模型。举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NSString *someString = @&quot;some string&quot;;</span><br><span class="line">NSString *anotherString = someString;</span><br></pre></td></tr></table></figure>
+<p>对象是存储在堆内存当中，anotherString 指向了 string 变量，它们两个共享一块存储区域，并不会拷贝对象。其内存空间分配是这样的：</p>
+<p><img src="/image/Effective-Objective-C-2.0-cahpter1-01.png" alt=""></p>
+<p>需要注意的是：分配在堆中的内存必须直接管理，而分配在栈上用于保存变量的内存则会在栈上弹出时自动清理。Objective-C 将内存管理抽象出来了，不用像 C 那样使用 <code>malloc</code>、<code>free</code> 来回收内存，Objective-C 在运行时把这部分工作抽象为一套内存管理的框架，叫做<code>引用计数</code>。</p>
+<p>在 Objective-C 程序当中，遇到不含<code>*</code>的变量，它们可能使用<code>栈空间</code>。比如<code>CGRect</code>等等。</p>
+<h4 id="类的头文件中尽量少引入其他头文件"><a href="#类的头文件中尽量少引入其他头文件" class="headerlink" title="类的头文件中尽量少引入其他头文件"></a>类的头文件中尽量少引入其他头文件</h4><p>更优雅的做法是使用 <code>@class ****</code> 来引入某个类，这叫做<code>向前声明(forward declaring)</code>该类。在<code>.m</code>文件中<code>import</code>该类。这样就隐藏了该类的所有接口实现。将引入头文件的时机尽量延后，只有在需要时才引入，这样就会减少类的使用者所需引入的头文件数量。减少编译时间。还可以避免两个互相import导致循环引用的问题。</p>
+<p>如果某些类需要遵循某个协议，那么该协议必须要有完整的定义。且不能使用向前声明，这时候可以将该协议单独放在一个头文件当中。特例是<code>委托协议</code>就不用单独写一个头文件，协议只有与接受委托的类放在一起才有意义。这种情况下，最好能在实现文件中声明这个类实现了该委托协议，并把这段实现代码放在分类当中。这样只要在实现文件中引入包含委托协议的头文件即可，而不需将其放在公共头文件里。好处是降低依赖程度，缩短编译时间，代码清晰容易维护。</p>
+<p>总结一下：优先使用<code>向前声明</code>来进行解耦，如果无法使用<code>向前声明</code>，尽量把<code>该类遵循某个协议</code>移至该类的分类当中。实在不行的话，就把协议单独放在一个头文件，然后将其引入。</p>
+<h4 id="多使用字面量，少用与之等价的方法"><a href="#多使用字面量，少用与之等价的方法" class="headerlink" title="多使用字面量，少用与之等价的方法"></a>多使用字面量，少用与之等价的方法</h4><p>在使用字面量的时候，多使用字面数值，代码更加整洁：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 不使用字面量</span><br><span class="line">NSNumber *someNumber = [NSNumber numberWithInt:1];</span><br><span class="line"></span><br><span class="line">// 使用字面量</span><br><span class="line">NSNumber *intNumber = @1;</span><br><span class="line">NSNumber *boolNumber = @YES;</span><br><span class="line"></span><br><span class="line">int x = 5;</span><br><span class="line">int y = 6.32f;</span><br><span class="line">NSNumber *number = @(x * y);</span><br></pre></td></tr></table></figure>
+<p><code>字面量数组</code>：使用字面量数组更加直观，易于理解，并能尽可能早发现程序设计中的问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">id obj1 = /* ... */;</span><br><span class="line">id obj2 = /* ... */;</span><br><span class="line">id obj3 = /* ... */;</span><br><span class="line"></span><br><span class="line">NSArray *arrayA = [NSArray arrayWithObjects:obj1, obj2, obj3, nil];</span><br><span class="line">NSArray *arrayB = @[obj1, obj2, obj3];</span><br></pre></td></tr></table></figure>
+<p>如果 <code>obj2</code> 为 nil，字面量语法创建的数组 <code>arrayB</code> 会崩溃，而 arrayA 虽然能创建出对象，但是只包含 <code>obj1</code>，因为<code>arrayWithObjects:</code>会依次处理各个参数，直到发现<code>nil</code>为止。使用字面量语法更加安全，更快的发现错误。</p>
+<p><code>字典字面量</code>：与上面的数组类似，字典在遇到值为<code>nil</code>时抛出异常</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NSDictionary *dict1 = [NSDictionary dictionaryWithObjectsAndKeys:@&quot;value1&quot;, @&quot;key1&quot;, @&quot;value2&quot;, @&quot;key2&quot;, nil];</span><br><span class="line">NSDictionary *dict2 = @&#123;</span><br><span class="line">                        @&quot;key1&quot; : @&quot;value1&quot;,</span><br><span class="line">                        @&quot;key2&quot; : @&quot;value2&quot;,</span><br><span class="line">                        &#125;;</span><br><span class="line"></span><br><span class="line">[dict1 objectForKey:@&quot;value1&quot;];</span><br><span class="line">NSString *key1 = dict2[@&quot;value1&quot;];</span><br></pre></td></tr></table></figure>
+<p>注意上面的<code>dictionaryWithObjectsAndKeys:</code>的参数是 <code>&lt;Object&gt; : &lt;key&gt;</code> 的形式。很显然使用字面量更加简洁。</p>
+<p><code>字面量语法也有局限性</code>：就是除了字符串意外，所创建出来的对象必须属于 Foundation 框架才行。如果自定义了这些类的子类，则无法使用字面量语法创建对象。当然很少有人这么做，因为 NSArray、NSDictionary 都是已定型的 “子族”，无需再改动。</p>
+<p>使用字面量创建的对象都是<code>不可变</code>的，虽然多创建一个对象，但好处还是多于缺点的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSMutableArray *mutable = [@[@1, @2] mutableCopy];</span><br></pre></td></tr></table></figure></p>
+<h4 id="多使用类型常量，少用-define-预处理指令"><a href="#多使用类型常量，少用-define-预处理指令" class="headerlink" title="多使用类型常量，少用 #define 预处理指令"></a>多使用类型常量，少用 #define 预处理指令</h4><p>不要使用<code>#define</code>预处理指定定义常量，这样定义出来的类型不含类型信息。编译器只是会在编译器根据此执行查找与替换操作。即使有人重新定义了常量值，编译器也不警告。可以利用编译器特性来定义。比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@implementation ViewController</span><br><span class="line">static const NSTimeInterval kAnimationDuration = 0.3;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>在实现文件中使用<code>static const</code>来定义”只在编译单元内可见的常量”（每个.m为一个编译单元），此类常量不在全局符号表当中，所以无需加前缀。</p>
+<p>在头文件中使用<code>extern</code>来声明全局变量，这种常量出现在全局符号表当中。所以其名称应该加以区分，通常用类名作为前缀：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">extern NSString *const EOCLoginManagerDidLoginNotification;</span><br><span class="line"></span><br><span class="line">NSString *const EOCLoginManagerDidLoginNotification = @&quot;EOCLoginManagerDidLoginNotification&quot;;</span><br></pre></td></tr></table></figure>
+<h4 id="用枚举表示状态、选项、状态码"><a href="#用枚举表示状态、选项、状态码" class="headerlink" title="用枚举表示状态、选项、状态码"></a>用枚举表示状态、选项、状态码</h4><p>使用 enum 的时候需要注意，应该用枚举来表示状态机的状态、传递给方法的选项以及状态码等值，给这个值起个通俗易懂的名字。</p>
+<p>如果把传递给某个方法的选项表示为枚举类型，而多个选项可同时使用，那么将各个选项定义为2的幂，以便通过<code>按位或操作</code>将其组合起来。<br>在使用 <code>NS_ENUM</code> 和 <code>NS_OPTHONS</code> 宏来定义枚举类型，要指名其数据类型，这样做可以确保枚举是用开发者所选的数据类型实现出来的，而不会采用编译器所选的类型。<code>NS_ENUM</code> 、<code>NS_OPTHONS</code> 其实内部做了这样一件事情：</p>
+<p><img src="/image/Effective-Objective-C-2.0-cahpter1-02.png" alt=""></p>
+<p>其实就是判断编译器是否支持新式枚举，编译器按 C++ 模式编译，那么<code>enum</code>定义枚举的时候，其展开方式与<code>NS_ENUM</code>相同。枚举值使用<code>按位或运算</code>来组合的时候，C++ 认为运算结果的数据类型应该是枚举的底层类型，也就是<code>NSUInteger</code>，C++ 不允许将这个底层类型进行隐式转换，其展开方式为<code>NS_OPTHONS</code>。鉴于此，凡是需要<code>按位或</code>操作来组合的枚举都应该使用<code>NS_OPTHONS</code>来定义。若是枚举不需要互相组合，则应使用<code>NS_ENUM</code>来定义。通常我们会这样使用：</p>
+<p><img src="/image/Effective-Objective-C-2.0-cahpter1-03.png" alt=""></p>
+<p>在处理<code>switch</code>语句中，不要实现<code>default</code> 分支。在枚举值改变后，编译器就会提醒开发者：<code>switch</code>语句并未处理所有枚举。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-1/" data-id="cjc8teunn00086aine0518xr3" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          Effective-Objective-C读书笔记(2)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/17/ ”∆µH-264—πÀı∏Ò Ω/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">视频H.264压缩格式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cocoa/">Cocoa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 12px;">C++</a> <a href="/tags/Cocoa/" style="font-size: 14px;">Cocoa</a> <a href="/tags/JavaScript/" style="font-size: 12px;">JavaScript</a> <a href="/tags/Objective-C/" style="font-size: 18px;">Objective-C</a> <a href="/tags/Python/" style="font-size: 16px;">Python</a> <a href="/tags/React-Native/" style="font-size: 10px;">React Native</a> <a href="/tags/Swift/" style="font-size: 20px;">Swift</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/数据结构/" style="font-size: 14px;">数据结构</a> <a href="/tags/数据结构与算法/" style="font-size: 10px;">数据结构与算法</a> <a href="/tags/音视频/" style="font-size: 10px;">音视频</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/13/CoreAnimation/">CoreAnimation</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/13/git-proxy/">git proxy</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/09/Darwin-Notification/">Darwin Notification</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/08/map°¢fitter°¢reduce/">map、fitter、reduce、flatMap</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/21/∂¡ È± º«/">读书笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

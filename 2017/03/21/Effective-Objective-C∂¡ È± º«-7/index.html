@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Effective-Objective-C读书笔记(7) | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="系统框架第47条：熟悉系统框架Fundation、CoreFundation、CFNetwork(封装 BSD socket，抽象成易于使用的网络接口)、CoreAudio、AVFoundation、CoreData、CoreText 等。 第48条：多用 block 枚举，少用 for 循环遍历 collection 可以使用 for 循环、NSEnumerator、快速遍历法。block 枚举">
+<meta name="keywords" content="Objective-C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective-Objective-C读书笔记(7)">
+<meta property="og:url" content="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-7/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="系统框架第47条：熟悉系统框架Fundation、CoreFundation、CFNetwork(封装 BSD socket，抽象成易于使用的网络接口)、CoreAudio、AVFoundation、CoreData、CoreText 等。 第48条：多用 block 枚举，少用 for 循环遍历 collection 可以使用 for 循环、NSEnumerator、快速遍历法。block 枚举">
+<meta property="og:updated_time" content="2017-08-12T02:21:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Effective-Objective-C读书笔记(7)">
+<meta name="twitter:description" content="系统框架第47条：熟悉系统框架Fundation、CoreFundation、CFNetwork(封装 BSD socket，抽象成易于使用的网络接口)、CoreAudio、AVFoundation、CoreData、CoreText 等。 第48条：多用 block 枚举，少用 for 循环遍历 collection 可以使用 for 循环、NSEnumerator、快速遍历法。block 枚举">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Effective-Objective-C∂¡ È± º«-7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-7/" class="article-date">
+  <time datetime="2017-03-21T14:29:08.000Z" itemprop="datePublished">2017-03-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Effective-Objective-C读书笔记(7)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="系统框架"><a href="#系统框架" class="headerlink" title="系统框架"></a>系统框架</h3><h4 id="第47条：熟悉系统框架"><a href="#第47条：熟悉系统框架" class="headerlink" title="第47条：熟悉系统框架"></a>第47条：熟悉系统框架</h4><p>Fundation、CoreFundation、CFNetwork(封装 BSD socket，抽象成易于使用的网络接口)、CoreAudio、AVFoundation、CoreData、CoreText 等。</p>
+<h4 id="第48条：多用-block-枚举，少用-for-循环"><a href="#第48条：多用-block-枚举，少用-for-循环" class="headerlink" title="第48条：多用 block 枚举，少用 for 循环"></a>第48条：多用 block 枚举，少用 for 循环</h4><p>遍历 collection 可以使用 <code>for 循环</code>、<code>NSEnumerator</code>、<code>快速遍历法</code>。<code>block 枚举</code>本身通过 GCD 来并发这行遍历操作，无需另外编写代码。而其它遍历方式无法轻易实现这一点。如果已知待遍历的 collection 含有何种对象，则应该修改签名，指出对象的具体类型。</p>
+<h4 id="第49条：对自定义内存管理语句-collection-使用无缝桥接"><a href="#第49条：对自定义内存管理语句-collection-使用无缝桥接" class="headerlink" title="第49条：对自定义内存管理语句 collection 使用无缝桥接"></a>第49条：对自定义内存管理语句 collection 使用无缝桥接</h4><p>使用<code>__bridge</code>进行桥接 Foundation 与 CoreFoundation 框架中的 C 怨言数据结构之间转换：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NSArray *anArray = @[@1, @2, @3];</span><br><span class="line">CFArrayRef aCFArray = (__bridge CFArrayRef)(anArray);</span><br></pre></td></tr></table></figure></p>
+<p>转换涉及到的内存管理：</p>
+<ul>
+<li><code>__bridge</code>：告诉ARC 如何处理 Objective-C 对象，ARC 仍然具备这个对象的所有权。</li>
+<li><code>__bridge_retained</code>：ARC 将交出对象的所有权。</li>
+<li><code>__bridge_transfer</code>：反向转换，比如将 <code>CFArrayRef</code> 转换为 <code>NSArray *</code>。并令 ARC 获得对象所有权。</li>
+<li>使用 <code>CoreFoundation</code> 框架最后一定要调用与之对应的<code>CFRelease()</code>。</li>
+</ul>
+<h4 id="第50条：构建缓存时选用-NSCache-而非-NSDictionary"><a href="#第50条：构建缓存时选用-NSCache-而非-NSDictionary" class="headerlink" title="第50条：构建缓存时选用 NSCache 而非 NSDictionary"></a>第50条：构建缓存时选用 NSCache 而非 NSDictionary</h4><p>对比：</p>
+<ul>
+<li>当系统资源耗尽，可以自动删减缓存。使用NSDictionary需要自己 hook，在内存低警告的时候手动删减缓存。NSCache 是线程安全的，NSDictionary 不具备这种优势。</li>
+<li>可以给 NSCache 对象设置上限，用于限制缓存中的对象总个数。</li>
+<li>将 <code>NSPurgeableData</code> 对象与 <code>NSCache</code> 搭配使用，可以实现自动清除数据的功能。也就是说，当 <code>NSPurgeableData</code> 对象锁斩内存被系统所丢弃，该对象自身也可会从缓存中移除。</li>
+</ul>
+<h4 id="第51条：精简-initialize-与-load-的实现代码"><a href="#第51条：精简-initialize-与-load-的实现代码" class="headerlink" title="第51条：精简 initialize 与 load 的实现代码"></a>第51条：精简 initialize 与 load 的实现代码</h4><p>对于加入runtime系统中的每个类和分类，都会调用这个方法，并且只调用一次。如果分类和类里面都定义了<code>load</code>方法，会先调用类里的，在调用分类里的。<code>load</code>方法再调用前，会加载父类的<code>load</code>方法。执行该<code>load</code>方法时，系统还处于“脆弱状态”(fragile state)，根据某个指定的程序库，却无法判断出其中各个类的载入顺序。因此，在<code>load</code>方法中使用其他类是不安全的。比如说：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@interface EOCClassB</span><br><span class="line">+ (void)load &#123;</span><br><span class="line">  NSLog(@&quot;Loading EOCClassB&quot;);</span><br><span class="line">  // 此处代码不安全，也许 EOCClassA 方法并没有加载</span><br><span class="line">  EOCClassA *obj = [EOCClassA new];</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>该类不能在里面等待锁，也不要调用可能会加锁的方法。凡是在类加载之前执行某些任务的，基本都不太对。其真正的用途是仅仅在调试程序，比如可以在分类里编写此方法，用来判断该分类是否已经正确载入系统中。</p>
+<p>想要执行与类初始化有关的操作，还要覆写<code>+ (void)initialize</code>。它与<code>+ (void)load</code>方法都是由 runtime 调用的，并且只调用一次。但是有一些区别：</p>
+<ul>
+<li><code>initialize</code>是<code>惰性调用的</code>，也就是程序用到相关的类时，才会调用。也就是说应用程序无需将每个类的<code>initialize</code>都执行一遍，这与<code>load</code>方法不同。对于<code>load</code>，应用程序必须阻塞并等着所有类的<code>load</code>都执行完，才能继续。</li>
+<li>runtime 系统在执行该方法时，是处于正常状态的。因此，此时可以安全使用并调用任意类中的任意方法。而且 runtime 系统能确保<code>initialize</code>方法在“线程安全的环境”中执行。也就是说只有执行<code>initialize</code>的那个线程可以操作类或类实例。其他线程都要先阻塞，等着<code>initialize</code>执行完。</li>
+<li><code>initialize</code>与其他消息一样，如果某个类未实现它，其父类实习那了，那么就会运行父类的实现代码。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@interface EOCBaseClass: NSObject</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation EOCBaseClass</span><br><span class="line">+ (void)initialize &#123;</span><br><span class="line">  NSLog(@&quot;%@ initialize&quot;, self);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@interface EOCSubClass: NSObject</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation EOCSubClass</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>首次使用 <code>EOCSubClass</code> 时，会输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">EOCBaseClass initialize</span><br><span class="line">EOCSubClass initialize</span><br></pre></td></tr></table></figure>
+<p>与其他方法一样（load 除外）， initialize 也遵循常用的继承规则。所以在初始化 EOCSubClass 时，由于子类未覆写<code>initialize</code>方法，因此还要把父类的实现代码再运行一遍。鉴于此通常会这样实现 <code>initialize</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+ (void)initialize &#123;</span><br><span class="line">  if (self == [EOCBaseClass class]) &#123;</span><br><span class="line">    NSLog(@&quot;%@ initialize&quot;, self);  </span><br><span class="line"></span><br><span class="line">    // 初始化内部数据，不应该在这里调用其它方法。</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结：</p>
+<ul>
+<li>再加载阶段，如果类实现了 load 方法，那么系统就会调用它。类的 load 方法比分类的要先调用。与其他方法不同，load 方法不参与覆写机制。</li>
+<li>首次使用某个类，系统会向其发送 initialize 消息，此方法遵从普通对象的覆写规则，所以要在初始化方法中判断初始化的是哪个类。</li>
+<li>load、initialize 方法应该实现的更精简一些，避免循环引用。</li>
+<li>常量，基本类型可以在编译期定义。无法编译期设定的全局常量（Objective-C 对象），可以放在 initialize 方法里面初始化。</li>
+</ul>
+<h4 id="第52条：NSTimer-会保留目标对象"><a href="#第52条：NSTimer-会保留目标对象" class="headerlink" title="第52条：NSTimer 会保留目标对象"></a>第52条：NSTimer 会保留目标对象</h4><ul>
+<li>NSTimer 对象会保留其目标对象，直到计数器本身失效位置，调用 <code>invalidate</code> 方法可令计时器失效。另外，一次性的计时器在触发完任务之后也会失效。</li>
+<li>反复执行任务的计时器，容易产生循环引用，因为 NSTimer 保留其目标实例，目标实例变量又持有 NSTimer，导致循环引用。</li>
+<li>扩充 NSTimer 的功能，通过 block 方式来打破循环引用。如下：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">// NSTimer+EOCBlockSupport.h</span><br><span class="line">@interface NSTimer (EOCBlockSupport)</span><br><span class="line">+ (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval</span><br><span class="line">                                          block:(void (^)())block</span><br><span class="line">                                        repeats:(BOOL)repeats;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">// NSTimer+EOCBlockSupport.m</span><br><span class="line">@implementation NSTimer (EOCBlockSupport)</span><br><span class="line">+ (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval</span><br><span class="line">                                          block:(void (^)())block</span><br><span class="line">                                        repeats:(BOOL)repeats &#123;</span><br><span class="line">  return [self scheduledTimerWithTimeInterval:interval</span><br><span class="line">                                       target:self</span><br><span class="line">                                     selector:@selector(eoc_blockInvoke:)</span><br><span class="line">                                     userInfo:[block copy]</span><br><span class="line">                                      repeats:repeats];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (void)eoc_blockInvoke:(NSTimer *)timer &#123;</span><br><span class="line">  void (^block)() = timer.userInfo;</span><br><span class="line">  if (block) &#123;</span><br><span class="line">    block();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// EOCClass.h</span><br><span class="line">@interface NSTimer : NSObject</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">// EOCClass.m</span><br><span class="line">@implementation EOCClass &#123;</span><br><span class="line">  NSTimer *_pollTimer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)startPolling &#123;</span><br><span class="line">  // 通过 wealSelf 来避免实例变量 _pollTimer 持有 NSTimer，NSTimer 又持有 block，block 又持有 self 的三重循环引用。</span><br><span class="line">  __weak EOCClass *wealSelf = self;</span><br><span class="line">  _pollTimer = [NSTimer eoc_scheduledTimerWithTimeInterval:5.0</span><br><span class="line">                                                     block:^&#123;</span><br><span class="line">                                                       EOCClass *strongSelf = wealSelf;</span><br><span class="line">                                                       [strongSelf p_doPoll];</span><br><span class="line">                                                     &#125; repeats:YES];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)p_doPoll &#123;&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-7/" data-id="cjc8teunv000j6ainyjhxu91n" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/21/∂¡ È± º«/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          读书笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-6/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">Effective-Objective-C读书笔记(6)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cocoa/">Cocoa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 12px;">C++</a> <a href="/tags/Cocoa/" style="font-size: 14px;">Cocoa</a> <a href="/tags/JavaScript/" style="font-size: 12px;">JavaScript</a> <a href="/tags/Objective-C/" style="font-size: 18px;">Objective-C</a> <a href="/tags/Python/" style="font-size: 16px;">Python</a> <a href="/tags/React-Native/" style="font-size: 10px;">React Native</a> <a href="/tags/Swift/" style="font-size: 20px;">Swift</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/数据结构/" style="font-size: 14px;">数据结构</a> <a href="/tags/数据结构与算法/" style="font-size: 10px;">数据结构与算法</a> <a href="/tags/音视频/" style="font-size: 10px;">音视频</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/13/CoreAnimation/">CoreAnimation</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/13/git-proxy/">git proxy</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/09/Darwin-Notification/">Darwin Notification</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/08/map°¢fitter°¢reduce/">map、fitter、reduce、flatMap</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/21/∂¡ È± º«/">读书笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-CoreAnimation" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/13/CoreAnimation/" class="article-date">
+  <time datetime="2017-04-13T02:01:28.000Z" itemprop="datePublished">2017-04-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/13/CoreAnimation/">CoreAnimation</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Core Animation 是一个复合引擎，它的职责就是尽可能快地组合屏幕上不同的可视内容，这个内容是被分解成独立的图层，存储在一个叫做图层树的体系之中。于是这个树形成了UIKit以及在iOS应用程序当中你所能在屏幕上看见的一切的基础。</p>
+<h3 id="图层与视图"><a href="#图层与视图" class="headerlink" title="图层与视图"></a>图层与视图</h3><p>在iOS当中，所有的视图都从一个叫做UIVIew的派生而来，UIView可以处理触摸事件和一些简单的动画。而 CALayer 是继承自 NSObject 的类。它们两个是一种平行的关系。</p>
+<p>CALayer 与 UIVIew 类似。同样被层级关系树管理，也可以做动画，但是和 UIView 最大的不同是 CALayer <code>不能处理用户的交互</code>。CALayer 不清楚具体的响应链，其不能够响应时间，即使它提供了一些方法来判断是否一个触点在图层的范围之内。每一个 UIVIew 都有一个 CALayer 实例的图层属性。UIVIew 来管理这些图层，确保在子视图中添加或者被移除的时候，它们关联的图层也同样对应在层级关系树当中有相同的操作。</p>
+<p>实际上 CALayer 才是真正在屏幕上显示和做动画，UIVIew 仅仅是对其的封装，只用来处理触摸的具体功能，封装 Core Animation 底层方法的高级接口。</p>
+<p>分离 UIVIew 与 CALayer 的设计初衷在于，这样做能够很好的进行职责分离。避免重复代码，因为在 iOS 和 macOS 两个平台用户交互方式不同，UIKit 当中的 UIVIew 和 macOS 平台的 NSView 功能相似，但是实现上有很大的区别，与Core Animation分离能够在两个平台代码共享。</p>
+<p>这么看来使用 UIVIew 就好了，没有必要使用 CALayer 了，但是 CALayer 可以实现 UIVIew 额外的功能，比如：</p>
+<ul>
+<li>阴影，圆角，带颜色的边框</li>
+<li>3D变换</li>
+<li>非矩形范围</li>
+<li>透明遮罩</li>
+<li>多级非线性动画</li>
+</ul>
+<p>可以这样添加 CALayer：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//create sublayer</span><br><span class="line">CALayer *blueLayer = [CALayer layer];</span><br><span class="line">blueLayer.frame = CGRectMake(50.0f, 50.0f, 100.0f, 100.0f);</span><br><span class="line">blueLayer.backgroundColor = [UIColor blueColor].CGColor;</span><br><span class="line">//add it to our view</span><br><span class="line">[self.layerView.layer addSublayer:blueLayer];</span><br></pre></td></tr></table></figure>
+<h3 id="宿主图"><a href="#宿主图" class="headerlink" title="宿主图"></a>宿主图</h3><p>CALayer 通过 <code>contents</code> 属性，还可以指定一张图片：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UIImage *image = [UIImage imageNamed:@&quot;Snowman.png&quot;];</span><br><span class="line">// 这里需要将 CGImageRef 这个 Core Foundation 桥接到 Cocoa 对象中</span><br><span class="line">self.layerView.layer.contents = (__bridge id)image.CGImage;</span><br></pre></td></tr></table></figure>
+<p>将图片设置在 CALayer 上可能会导致图片变形，这在 UIImageView 遇到的情况是一样的。可以设置 layerView 的 <code>contentMode</code> 属性。对 UIView 操作其实相当于对 CALayer 操作，它其实与 CALayer 的 <code>contentsGravity</code> 属性等价：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">view.contentMode = UIViewContentModeScaleAspectFit;</span><br><span class="line"></span><br><span class="line">// 等同于设置 CALayer 的 contentsGravity，值为一个字符串，可以去 CALayer 类中查找</span><br><span class="line">self.layerView.layer.contentsGravity = kCAGravityResizeAspect;</span><br></pre></td></tr></table></figure>
+<p><code>contentsScale</code>：属性定义了寄宿图的像素尺寸和视图大小的比例，默认情况下它是一个值为1.0的浮点数。它其实是属于支持 Retina 屏幕机制的一部分，用来判断绘制图层的时候应该为宿主图片创建的空间大小，和需要显示的图片的拉伸度（假设并没有设置contentsGravity属性）。如果 <code>contentsScale</code> 设置为1.0，将会以每个点1个像素绘制图片，如果设置为2.0，则会以每个点2个像素绘制图片，这就是我们熟知的Retina屏幕。所以在用代码方式设置宿主图片的时候，一定要手动设置 CALayer 的 <code>contentsScale</code> 属性，否则 Retina 屏幕就显示不正确：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">layer.contentsScale = [UIScreen mainScreen].scale;</span><br></pre></td></tr></table></figure>
+<p>默认情况下 UIVIew 会绘制超过视图边界的内容或者子视图，CALayer 也是如此。UIVIew 中有个 <code>clipsToBounds</code> 属性，可以决定是否显示超出边界的内容。对应 CALayer 中的 <code>maskToBounds</code>。将其设置为 <code>YES</code>，即可裁剪掉超出宿主视图的内容。</p>
+<p><code>contentsRect</code>：属性允许我们在图层边框里显示寄宿图的一个子区域，这里与 <code>frame</code>、<code>bounds</code> 不同，<code>contentsRect</code> 不是按照点来计算的，它使用了单位坐标，是一个相对值。单位坐标比像素点更加方便度量。当大小改变的时候，也不需要再次调整。单位坐标在OpenGL这种纹理坐标系统中用得很多，Core Animation中也用到了单位坐标。默认的contentsRect是{0, 0, 1, 1}，这意味着整个寄宿图默认都是可见的，如果我们指定一个小一点的矩形，图片就会被裁剪。</p>
+<p><img src="../image/CoreAnimation/core-animation-cahpter2-01.png" alt=""></p>
+<p><code>contentsCenter</code>：它定义了一个固定的边框和一个在图层上可拉伸的区域。 改变contentsCenter的值并不会影响到寄宿图的显示，除非这个图层的大小改变了，你才看得到效果。和 UIImage 中的 <code>resizableImageWithCapInsets:</code> 方法类似。也可以在属性面板中配置 <code>Stretching</code> 属性。</p>
+<p><img src="../image/CoreAnimation/core-animation-cahpter2-02.png" alt=""></p>
+<p>如果 UIView 检测到 UIView 的 <code>drawRect:</code> 方法被实现，就会为视图分配一个宿主图。注意这个方法会造成 CPU 资源浪费。当视图出现的时候，该方法会被自动调用，然后其内容就会被缓存起来直到它需要被更新（通常是手动调用 <code>setNeedsDisplay</code> ）。尽管影响到表现效果的属性值被更改时，一些视图类型会被自动重绘，如bounds属性）。虽然 <code>drawRect:</code>是 UIView 的方法，其实绘制是由 CALayer 来完成的。CALayer 有 <code>delegate</code> 属性，实现了 <code>CALayerDelegate</code> 协议，当CALayer需要一个内容特定的信息时，就会从协议中请求。在使用 <code>CALayerDelegate</code> 的时候，并没有对超出边界的视图提供绘制支持。</p>
+<p>当视图被重绘，CALayer会请求它的代理给他一个寄宿图来显示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/* If defined, called by the default implementation of the -display</span><br><span class="line"> * method, in which case it should implement the entire display</span><br><span class="line"> * process (typically by setting the `contents&apos; property). */</span><br><span class="line">- (void)displayLayer:(CALayer *)layer;</span><br><span class="line"></span><br><span class="line">/* If defined, called by the default implementation of -drawInContext: */</span><br><span class="line">// 如果代理不实现 displayLayer: 方法，就会调用 下面这个方法</span><br><span class="line">- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx;</span><br></pre></td></tr></table></figure>
+<p>下面是个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">@implementation ViewController</span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">  [super viewDidLoad];</span><br><span class="line">  ￼</span><br><span class="line">  CALayer *blueLayer = [CALayer layer];</span><br><span class="line">  blueLayer.frame = CGRectMake(50.0f, 50.0f, 100.0f, 100.0f);</span><br><span class="line">  blueLayer.backgroundColor = [UIColor blueColor].CGColor;</span><br><span class="line"></span><br><span class="line">  //set controller as layer delegate</span><br><span class="line">  blueLayer.delegate = self;</span><br><span class="line"></span><br><span class="line">  //ensure that layer backing image uses correct scale</span><br><span class="line">  blueLayer.contentsScale = [UIScreen mainScreen].scale; //add layer to our view</span><br><span class="line">  [self.layerView.layer addSublayer:blueLayer];</span><br><span class="line"></span><br><span class="line">  // CALayer 不会自动重新绘制，需要手动调用该方法。</span><br><span class="line">  [blueLayer display];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx &#123;</span><br><span class="line">  //draw a thick red circle</span><br><span class="line">  CGContextSetLineWidth(ctx, 10.0f);</span><br><span class="line">  CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);</span><br><span class="line">  CGContextStrokeEllipseInRect(ctx, layer.bounds);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<h3 id="专用图层"><a href="#专用图层" class="headerlink" title="专用图层"></a>专用图层</h3><ul>
+<li>CAReplicatorLayer：为了高效生成许多相似的图层。它会绘制一个或多个图层的子图层，并在每个复制体上应用不同的变换。还可以生成镜像一样的反射效果</li>
+<li>CAScrollLayer：实现图层滑动，类似 UIScrollView</li>
+<li>CATiledLayer：为载入大图造成的性能问题提供了一个解决方案：将大图分解成小片然后将他们单独按需载入。</li>
+<li>AVPlayerLayer：用来在iOS上播放视频的。他是高级接口例如MPMoivePlayer的底层实现，提供了显示视频的底层控制。</li>
+<li>CAEmitterLayer：iOS5 中引入的高性能粒子引擎，其中粒子效果是由 CAEmitterCell 来定义。</li>
+<li>CAEAGLLayer：当iOS要处理高性能图形绘制，必要时就是OpenGL。</li>
+</ul>
+<h3 id="显示动画"><a href="#显示动画" class="headerlink" title="显示动画"></a>显示动画</h3><ul>
+<li>CABasicAnimation</li>
+<li>CAKeyframeAnimation</li>
+<li>CAAnimationGroup</li>
+<li>CATransition</li>
+</ul>
+<h3 id="缓冲"><a href="#缓冲" class="headerlink" title="缓冲"></a>缓冲</h3><p>Core Animation使用缓冲来使动画移动更平滑更自然，而不是看起来的那种机械。</p>
+<p>CAMediaTimingFunction：</p>
+<p>kCAMediaTimingFunctionLinear ：线性步调对于那些立即加速并且保持匀速到达终点的场景会有意义（例如射出枪膛的子弹）<br>kCAMediaTimingFunctionEaseIn ：一个慢慢加速然后突然停止的方法。对于之前提到的自由落体的例子来说很适合，或者比如对准一个目标的导弹的发射。<br>kCAMediaTimingFunctionEaseOut ：它以一个全速开始，然后慢慢减速停止。它有一个削弱的效果，应用的场景比如一扇门慢慢地关上，而不是砰地一声。<br>kCAMediaTimingFunctionEaseInEaseOut：一个慢慢加速然后再慢慢减速的过程。这是现实世界大多数物体移动的方式，也是大多数动画来说最好的选择<br>kCAMediaTimingFunctionDefault：它和kCAMediaTimingFunctionEaseInEaseOut很类似，但是加速和减速的过程都稍微有些慢</p>
+<p>用CAKeyframeAnimation来避开CAMediaTimingFunction的限制，创建完全自定义的缓冲函数。</p>
+<h3 id="NSTimer"><a href="#NSTimer" class="headerlink" title="NSTimer"></a>NSTimer</h3><p>iOS上的每个线程都管理了一个NSRunloop，字面上看就是通过一个循环来完成一些任务列表。但是对主线程，这些任务包含如下几项：<br>处理触摸事件<br>发送和接受网络数据包<br>执行使用gcd的代码<br>处理计时器行为<br>屏幕重绘</p>
+<p>当你设置一个NSTimer，他会被插入到当前任务列表中，然后直到指定时间过去之后才会被执行。但是何时启动定时器并没有一个时间上限，而且它只会在列表中上一个任务完成之后开始执行。这通常会导致有几毫秒的延迟，但是如果上一个任务过了很久才完成就会导致延迟很长一段时间。<br>屏幕重绘的频率是一秒钟六十次，但是和定时器行为一样，如果列表中上一个执行了很长时间，它也会延迟。这些延迟都是一个随机值，于是就不能保证定时器精准地一秒钟执行六十次。有时候发生在屏幕重绘之后，这就会使得更新屏幕会有个延迟，看起来就是动画卡壳了。有时候定时器会在屏幕更新的时候执行两次，于是动画看起来就跳动了。<br>我们可以通过一些途径来优化：<br>我们可以用CADisplayLink让更新频率严格控制在每次屏幕刷新之后。<br>基于真实帧的持续时间而不是假设的更新频率来做动画。<br>调整动画计时器的run loop模式，这样就不会被别的事件干扰。</p>
+<h3 id="CADisplayLink"><a href="#CADisplayLink" class="headerlink" title="CADisplayLink"></a>CADisplayLink</h3><p>CADisplayLink是CoreAnimation提供的另一个类似于NSTimer的类，它总是在屏幕完成一次更新之前启动，它的接口设计的和NSTimer很类似，所以它实际上就是一个内置实现的替代，但是和timeInterval以秒为单位不同，CADisplayLink有一个整型的frameInterval属性，指定了间隔多少帧之后才执行。默认值是1，意味着每次屏幕更新之前都会执行一次。但是如果动画的代码执行起来超过了六十分之一秒，你可以指定frameInterval为2，就是说动画每隔一帧执行一次（一秒钟30帧）或者3，也就是一秒钟20次，等等。<br>用CADisplayLink而不是NSTimer，会保证帧率足够连续，使得动画看起来更加平滑，但即使CADisplayLink也不能保证每一帧都按计划执行，一些失去控制的离散的任务或者事件（例如资源紧张的后台程序）可能会导致动画偶尔地丢帧。当使用NSTimer的时候，一旦有机会计时器就会开启，但是CADisplayLink却不一样：如果它丢失了帧，就会直接忽略它们，然后在下一次更新的时候接着运行。</p>
+<h3 id="RunLoop-模式"><a href="#RunLoop-模式" class="headerlink" title="RunLoop 模式"></a>RunLoop 模式</h3><p>注意到当创建CADisplayLink的时候，我们需要指定一个run loop和run loop mode，对于run loop来说，我们就使用了主线程的run loop，因为任何用户界面的更新都需要在主线程执行，但是模式的选择就并不那么清楚了，每个添加到run loop的任务都有一个指定了优先级的模式，为了保证用户界面保持平滑，iOS会提供和用户界面相关任务的优先级，而且当UI很活跃的时候的确会暂停一些别的任务。<br>一个典型的例子就是当是用UIScrollview滑动的时候，重绘滚动视图的内容会比别的任务优先级更高，所以标准的NSTimer和网络请求就不会启动，一些常见的run loop模式如下：<br>NSDefaultRunLoopMode - 标准优先级<br>NSRunLoopCommonModes - 高优先级<br>UITrackingRunLoopMode - 用于UIScrollView和别的控件的动画<br>在我们的例子中，我们是用了NSDefaultRunLoopMode，但是不能保证动画平滑的运行，所以就可以用NSRunLoopCommonModes来替代。但是要小心，因为如果动画在一个高帧率情况下运行，你会发现一些别的类似于定时器的任务或者类似于滑动的其他iOS动画会暂停，直到动画结束。<br>同样可以同时对CADisplayLink指定多个run loop模式，于是我们可以同时加入NSDefaultRunLoopMode和UITrackingRunLoopMode来保证它不会被滑动打断，也不会被其他UIKit控件动画影响性能，像这样：<br>self.timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(step:)];<br>[self.timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];<br>[self.timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:UITrackingRunLoopMode];</p>
+<h3 id="GPU相关的操作"><a href="#GPU相关的操作" class="headerlink" title="GPU相关的操作"></a>GPU相关的操作</h3><p>大多数CALayer的属性都是用GPU来绘制。如果你设置图层背景或者边框的颜色，那么这些可以通过着色的三角板实时绘制出来。如果对一个contents属性设置一张图片，然后裁剪它。它就会被纹理的三角形绘制出来，而不需要软件层面做任何绘制。</p>
+<p>有一些操作会降低（基于 GPU）图层的绘制：</p>
+<ul>
+<li>太多的几何结构：这发生在需要太多的三角板来做变换，以应对处理器的栅格化的时候。现代iOS设备的图形芯片可以处理几百万个三角板，所以在Core Animation中几何结构并不是GPU的瓶颈所在。但由于图层在显示之前通过IPC发送到渲染服务器的时候（图层实际上是由很多小物体组成的特别重量级的对象），太多的图层就会引起CPU的瓶颈。</li>
+<li>重绘：GPU的填充比率（用颜色填充像素的比率）是有限的，所以需要避免重绘（每一帧用相同的像素填充多次）的发生。</li>
+<li>离屏绘制：这发生在当不能直接在屏幕上绘制，并且必须绘制到离屏图片的上下文中的时候。离屏绘制发生在基于CPU或者是GPU的渲染，或者是为离屏图片分配额外内存，以及切换绘制上下文，这些都会降低GPU性能。对于特定图层效果的使用，比如圆角，图层遮罩，阴影或者是图层光栅化都会强制Core Animation提前渲染图层的离屏绘制。但这不意味着你需要避免使用这些效果，只是要明白这会带来性能的负面影响。</li>
+<li>过大的图片：如果视图绘制超出GPU支持的2048x2048或者4096x4096尺寸的纹理，就必须要用CPU在图层每次显示之前对图片预处理，同样也会降低性能。</li>
+</ul>
+<h3 id="CPU相关的操作："><a href="#CPU相关的操作：" class="headerlink" title="CPU相关的操作："></a>CPU相关的操作：</h3><p>大多数工作在Core Animation的CPU都发生在动画开始之前。这意味着它不会影响到帧率，所以很好，但是他会延迟动画开始的时间，让你的界面看起来会比较迟钝。</p>
+<p>以下CPU的操作都会延迟动画的开始时间：</p>
+<ul>
+<li>布局计算：视图过于复杂，使用自动布局都会加强 CPU 的工作。</li>
+<li>视图懒加载：iOS只会当视图控制器的视图显示到屏幕上时才会加载它。这对内存使用和程序启动时间很有好处，但是当呈现到屏幕上之前，按下按钮导致的许多工作都会不能被及时响应。比如控制器从数据库中获取数据，或者视图从一个nib文件中加载，或者涉及IO的图片显示（见后续“IO相关操作”），都会比CPU正常操作慢得多。</li>
+<li>Core Graphics绘制：如果对视图实现了-drawRect:方法，或者CALayerDelegate的-drawLayer:inContext:方法，那么在绘制任何东西之前都会产生一个巨大的性能开销。为了支持对图层内容的任意绘制，Core Animation必须创建一个内存中等大小的寄宿图片。然后一旦绘制结束之后，必须把图片数据通过IPC传到渲染服务器。在此基础上，Core Graphics绘制就会变得十分缓慢，所以在一个对性能十分挑剔的场景下这样做十分不好。</li>
+<li>解压图片： PNG或者JPEG压缩之后的图片文件会比同质量的位图小得多。但是在图片绘制到屏幕上之前，必须把它扩展成完整的未解压的尺寸（通常等同于图片宽 x 长 x 4个字节）。为了节省内存，iOS通常直到真正绘制的时候才去解码图片。根据你加载图片的方式，第一次对图层内容赋值的时候（直接或者间接使用UIImageView）或者把它绘制到Core Graphics中，都需要对它解压，这样的话，对于一个较大的图片，都会占用一定的时间。</li>
+</ul>
+<p>当图层被成功打包，发送到渲染服务器之后，CPU仍然要做如下工作：为了显示屏幕上的图层，Core Animation必须对渲染树种的每个可见图层通过OpenGL循环转换成纹理三角板。由于GPU并不知晓Core Animation图层的任何结构，所以必须要由CPU做这些事情。这里CPU涉及的工作和图层个数成正比，所以如果在你的层级关系中有太多的图层，就会导致CPU没一帧的渲染，即使这些事情不是你的应用程序可控的。</p>
+<h3 id="IO相关操作"><a href="#IO相关操作" class="headerlink" title="IO相关操作"></a>IO相关操作</h3><p>  还有一项没涉及的就是IO相关工作。上下文中的IO（输入/输出）指的是例如闪存或者网络接口的硬件访问。IO比内存访问更慢，所以如果动画涉及到IO，就是一个大问题。总的来说，这就需要使用聪敏但尴尬的技术，也就是多线程，缓存和投机加载（提前加载当前不需要的资源，但是之后可能需要用到）。这些技术将会在第14章中讨论。</p>
+<h3 id="Core-Animation-可视化的图形检测工具"><a href="#Core-Animation-可视化的图形检测工具" class="headerlink" title="Core Animation 可视化的图形检测工具"></a>Core Animation 可视化的图形检测工具</h3><p>Core Animation工具也提供了一系列复选框选项来帮助调试渲染瓶颈：</p>
+<ul>
+<li>Color Blended Layers：这个选项基于渲染程度对屏幕中的混合区域进行绿到红的高亮（也就是多个半透明图层的叠加）。由于重绘的原因，混合对GPU性能会有影响，同时也是滑动或者动画帧率下降的罪魁祸首之一。</li>
+<li>ColorHitsGreenandMissesRed：当使用shouldRasterizep属性的时候，耗时的图层绘制会被缓存，然后当做一个简单的扁平图片呈现。当缓存再生的时候这个选项就用红色对栅格化图层进行了高亮。如果缓存频繁再生的话，就意味着栅格化可能会有负面的性能影响了</li>
+<li>Color Copied Images：有时候寄宿图片的生成意味着Core Animation被强制生成一些图片，然后发送到渲染服务器，而不是简单的指向原始指针。这个选项把这些图片渲染成蓝色。复制图片对内存和CPU使用来说都是一项非常昂贵的操作，所以应该尽可能的避免。</li>
+<li>Color Immediately：通常Core Animation Instruments以每毫秒10次的频率更新图层调试颜色。对某些效果来说，这显然太慢了。这个选项就可以用来设置每帧都更新（可能会影响到渲染性能，而且会导致帧率测量不准，所以不要一直都设置它）。</li>
+<li>Color Misaligned Images：这里会高亮那些被缩放或者拉伸以及没有正确对齐到像素边界的图片（也就是非整型坐标）。这些中的大多数通常都会导致图片的不正常缩放，如果把一张大图当缩略图显示，或者不正确地模糊图像，那么这个选项将会帮你识别出问题所在。</li>
+<li>Color Offscreen-Rendered Yellow：这里会把那些需要离屏渲染的图层高亮成黄色。这些图层很可能需要用shadowPath或者shouldRasterize来优化。</li>
+<li>Color OpenGL Fast Path Blue：这个选项会对任何直接使用OpenGL绘制的图层进行高亮。如果仅仅使用UIKit或者Core Animation的API，那么不会有任何效果。如果使用GLKView或者CAEAGLLayer，那如果不显示蓝色块的话就意味着你正在强制CPU渲染额外的纹理，而不是绘制到屏幕。</li>
+<li><p>Flash Updated Regions：这个选项会对重绘的内容高亮成黄色（也就是任何在软件层面使用Core Graphics绘制的图层）。这种绘图的速度很慢。如果频繁发生这种情况的话，这意味着有一个隐藏的bug或者说通过增加缓存或者使用替代方案会有提升性能的空间。</p>
+<p><img src="https://zsisme.gitbooks.io/ios-/content/chapter12/instruments.html" alt="instrument 介绍"></p>
+</li>
+</ul>
+<h3 id="软件绘图"><a href="#软件绘图" class="headerlink" title="软件绘图"></a>软件绘图</h3><p>  软件绘图不仅效率低，而且耗费内存。CALayer只需要一些与自己相关的内存：只有它的寄宿图会消耗一定的内存空间。即使直接赋给contents属性一张图片，也不需要增加额外的照片存储大小。如果相同的一张图片被多个图层作为contents属性，那么他们将会共用同一块内存，而不是复制内存块。</p>
+<p>  一旦你实现了CALayerDelegate协议中的-drawLayer:inContext:方法或者UIView中的-drawRect:方法（其实就是前者的包装方法），图层就创建了一个绘制上下文，这个上下文需要的大小的内存可从这个算式得出：图层宽<em>图层高</em>4字节，宽高的单位均为像素。对于一个在Retina iPad上的全屏图层来说，这个内存量就是 2048<em>1526</em>4字节，相当于12MB内存，图层每次重绘的时候都需要重新抹掉内存然后重新分配。</p>
+<p>  使用 draReact 重新绘制视图，会造成视图重新绘制，消耗大量内存。可以通过使用 CAShapeLayer 来绘制。</p>
+<h3 id="脏矩阵"><a href="#脏矩阵" class="headerlink" title="脏矩阵"></a>脏矩阵</h3><p>  为了减少不必要的绘制，Mac OS和iOS设备将会把屏幕区分为需要重绘的区域和不需要重绘的区域。那些需要重绘的部分被称作『脏区域』。在实际应用中，鉴于非矩形区域边界裁剪和混合的复杂性，通常会区分出包含指定视图的矩形位置，而这个位置就是『脏矩形』。</p>
+<p>  当你检测到指定视图或图层的指定部分需要被重绘，你直接调用-setNeedsDisplayInRect:来标记它，然后将影响到的矩形作为参数传入。这样就会在一次视图刷新时调用视图的-drawRect:（或图层代理的-drawLayer:inContext:方法）。</p>
+<h3 id="异步绘制"><a href="#异步绘制" class="headerlink" title="异步绘制"></a>异步绘制</h3><p>  UIKit的单线程天性意味着寄宿图通畅要在主线程上更新，这意味着绘制会打断用户交互，甚至让整个app看起来处于无响应状态。我们对此无能为力，但是如果能避免用户等待绘制完成就好多了。</p>
+<p>  针对这个问题，有一些方法可以用到：一些情况下，我们可以推测性地提前在另外一个线程上绘制内容，然后将由此绘出的图片直接设置为图层的内容。这实现起来可能不是很方便，但是在特定情况下是可行的。Core Animation提供了一些选择：CATiledLayer和drawsAsynchronously属性。</p>
+<p>  CATiledLayer还有一个有趣的特性：在多个线程中为每个小块同时调用-drawLayer:inContext:方法。这就避免了阻塞用户交互而且能够利用多核心新片来更快地绘制。只有一个小块的CATiledLayer是实现异步更新图片视图的简单方法。</p>
+<p>  iOS 6中，苹果为CALayer引入了这个令人好奇的属性，drawsAsynchronously属性对传入-drawLayer:inContext:的CGContext进行改动，允许CGContext延缓绘制命令的执行以至于不阻塞用户交互。</p>
+<p>  它与CATiledLayer使用的异步绘制并不相同。它自己的-drawLayer:inContext:方法只会在主线程调用，但是CGContext并不等待每个绘制命令的结束。相反地，它会将命令加入队列，当方法返回时，在后台线程逐个执行真正的绘制。</p>
+<p>  根据苹果的说法。这个特性在需要频繁重绘的视图上效果最好（比如我们的绘图应用，或者诸如UITableViewCell之类的），对那些只绘制一次或很少重绘的图层内容来说没什么太大的帮助。</p>
+<h3 id="图像-IO"><a href="#图像-IO" class="headerlink" title="图像 IO"></a>图像 IO</h3><p>  图像 IO 非常缓慢，如果图片非常小，可以在主线程中同步加载，但是对于大图来说，加载会消耗很长时间，造成滑动不流畅，滑动动画会在主线程的 run loop 中更新，所以会有更多运行在渲染服务进程中CPU相关的性能问题。</p>
+<p>  有时候在通过加载大图的时候，使用 <code>+ imageWithContentsOfFile:</code> 会造成性能瓶颈。可以在另外一个线程当中加载图片（这并不能降低实际的加载时间，也可能会出现更糟的情况，因为系统要消耗 CPU 时间来处理加载的图片数据）。但是主线程可以有时间来响应用户输入，以及滑动动画等等。可以通过后台线程加载图片提高性能：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^&#123;</span><br><span class="line">  //load image</span><br><span class="line">  NSInteger index = indexPath.row;</span><br><span class="line">  NSString *imagePath = self.imagePaths[index];</span><br><span class="line">  UIImage *image = [UIImage imageWithContentsOfFile:imagePath];</span><br><span class="line">  //set image on main thread, but only if index still matches up</span><br><span class="line">  dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">      if (index == cell.tag) &#123;</span><br><span class="line">          imageView.image = image; &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="延迟解压"><a href="#延迟解压" class="headerlink" title="延迟解压"></a>延迟解压</h4><p>  一旦图片文件被加载就必须要进行解码，解码过程是一个相当复杂的任务，需要消耗非常长的时间。解码后的图片将同样使用相当大的内存。用于加载的CPU时间相对于解码来说根据图片格式而不同。对于PNG图片来说，加载会比JPEG更长，因为文件可能更大，但是解码会相对较快，而且Xcode会把PNG图片进行解码优化之后引入工程。JPEG图片更小，加载更快，但是解压的步骤要消耗更长的时间，因为JPEG解压算法比基于zip的PNG算法更加复杂。</p>
+<p>  在加载图片的时候，iOS 会延迟解压图片的时间，直到加载到内存之后。在准备绘制图片的时候影响性能，因为需要在绘制之前进行解压（这里是消耗时间的问题所在）。可以使用 <code>+ imageNamed:</code> 方法避免延时加载，个方法会在加载图片之后立刻进行解压。不像 <code>+ imageWithContentsOfFile:</code> 或者其他的 UIImage 加载方法。但是 <code>+ imageNamed:</code> 方法只对从应用资源中访问的图片有效，对于生成的图片或者是网络下载的图片就没法使用了。</p>
+<p>可以使用 <code>ImageIO</code> 框架来提升性能：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NSInteger index = indexPath.row;</span><br><span class="line">NSURL *imageURL = [NSURL fileURLWithPath:self.imagePaths[index]];</span><br><span class="line">NSDictionary *options = @&#123;(__bridge id)kCGImageSourceShouldCache: @YES&#125;;</span><br><span class="line">CGImageSourceRef source = CGImageSourceCreateWithURL((__bridge CFURLRef)imageURL, NULL);</span><br><span class="line">CGImageRef imageRef = CGImageSourceCreateImageAtIndex(source, 0,(__bridge CFDictionaryRef)options);</span><br><span class="line">UIImage *image = [UIImage imageWithCGImage:imageRef];</span><br><span class="line">CGImageRelease(imageRef);</span><br><span class="line">CFRelease(source);</span><br></pre></td></tr></table></figure>
+<p>强制图片解压显示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^&#123;</span><br><span class="line">   //load image</span><br><span class="line">   NSInteger index = indexPath.row;</span><br><span class="line">   NSString *imagePath = self.imagePaths[index];</span><br><span class="line">   UIImage *image = [UIImage imageWithContentsOfFile:imagePath];</span><br><span class="line">   //redraw image using device context</span><br><span class="line">   UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, YES, 0);</span><br><span class="line">   [image drawInRect:imageView.bounds];</span><br><span class="line">   image = UIGraphicsGetImageFromCurrentImageContext();</span><br><span class="line">   UIGraphicsEndImageContext();</span><br><span class="line">   //set image on main thread, but only if index still matches up</span><br><span class="line">   dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">       if (index == cell.tag) &#123;</span><br><span class="line">           imageView.image = image;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>也可以使用 CATiledLayer 用来异步加载和显示大型图片，但是它也有缺点：</p>
+<ul>
+<li>CATiledLayer的队列和缓存算法没有暴露出来，所以我们只能祈祷它能匹配我们的需求</li>
+<li>CATiledLayer需要我们每次重绘图片到CGContext中，即使它已经解压缩，而且和我们单元格尺寸一样（因此可以直接用作图层内容，而不需要重绘）。</li>
+</ul>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>可以使用 <code>+ imageNamed:</code> 方法加载图片有个好处在于可以立刻解压图片而不用等到绘制的时候。这种方法仅仅适用于在应用程序资源束目录下的图片，但是大多数应用的许多图片都要从网络或者是用户的相机中获取，所以 <code>[UIImage imageNamed:]</code> 就没法用了。</p>
+<p>NSCache 和 NSDictionary 类似，可以<code>在系统低内存的时候自动丢弃存储的对象</code>，你可以通过-setObject:forKey:和 -object:forKey: 方法分别来插入，检索。NSCache用来判断何时丢弃对象的算法并没有在文档中给出，但是你可以使用-setCountLimit:方法设置缓存大小，以及-setObject:forKey:cost:来对每个存储的对象指定消耗的值来提供一些暗示。NSCache是一个普遍的缓存解决方案，我们创建一个比传送器案例更好的自定义的缓存类。（例如，我们可以基于不同的缓存图片索引和当前中间索引来判断哪些图片需要首先被释放）。但是NSCache对我们当前的缓存需求来说已经足够了；没必要过早做优化。</p>
+<h3 id="图层性能"><a href="#图层性能" class="headerlink" title="图层性能"></a>图层性能</h3><p>避免在内容不断变化的图层上开启图层光栅化 <code>shouldRasterize</code> 属性。</p>
+<p>当图层属性的混合体被指定为在未预合成之前不能直接在屏幕中绘制时，屏幕外渲染就被唤起了。屏幕外渲染并不意味着软件绘制，但是它意味着图层必须在被显示之前在一个屏幕外上下文中被渲染（不论CPU还是GPU）。图层的以下属性将会触发屏幕外绘制：</p>
+<ul>
+<li>圆角（当和maskToBounds一起使用时）</li>
+<li>图层蒙板</li>
+<li>阴影</li>
+</ul>
+<p>大量的图层在屏幕外渲染会影响到性能，对于那些需要动画而且要在屏幕外渲染的图层来说，可以用CAShapeLayer，contentsCenter或者shadowPath来获得同样的表现而且较少地影响到性能。</p>
+<p>cornerRadius和maskToBounds独立作用的时候都不会有太大的性能问题，但是当他俩结合在一起，就触发了屏幕外渲染。有时候你想显示圆角并沿着图层裁切子图层的时候，你可能会发现你并不需要沿着圆角裁切，这个情况下用CAShapeLayer就可以避免这个问题了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">  [super viewDidLoad];</span><br><span class="line"></span><br><span class="line">  //create shape layer</span><br><span class="line">  CAShapeLayer *blueLayer = [CAShapeLayer layer];</span><br><span class="line">  blueLayer.frame = CGRectMake(50, 50, 100, 100);</span><br><span class="line">  blueLayer.fillColor = [UIColor blueColor].CGColor;</span><br><span class="line">  blueLayer.path = [UIBezierPath bezierPathWithRoundedRect:</span><br><span class="line">  CGRectMake(0, 0, 100, 100) cornerRadius:20].CGPath;</span><br><span class="line">  ￼</span><br><span class="line">  //add it to our view</span><br><span class="line">  [self.layerView.layer addSublayer:blueLayer];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>GPU每一帧可以绘制的像素有一个最大限制，是如果由于重叠图层的关系需要不停地重绘同一区域的话，掉帧就可能发生了。所以要避免混合和过度绘制：</p>
+<ul>
+<li>给视图设置 backgroundColor</li>
+<li>设置 opaque 为 YES</li>
+</ul>
+<p>减少图层的绘制数量：</p>
+<ul>
+<li>通过设置对象回收， 对象回收的基础原则就是你需要创建一个相似对象池。当一个对象的指定实例（本例子中指的是图层）结束了使命，你把它添加到对象池中。每次当你需要一个实例时，你就从池中取出一个。当且仅当池中为空时再创建一个新的。</li>
+<li>Core Graphics绘制。</li>
+</ul>
+<p><a href="http://ios.jobbole.com/87233/" target="_blank" rel="noopener">http://ios.jobbole.com/87233/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/04/13/CoreAnimation/" data-id="cjc8teunk00046ainhqlefkx5" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cocoa/">Cocoa</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-git-proxy" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/13/git-proxy/" class="article-date">
+  <time datetime="2017-04-13T01:38:38.000Z" itemprop="datePublished">2017-04-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/13/git-proxy/">git proxy</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天在clone Google 的代码的时候遇到一个很奇怪的问题：<code>Failed to connect to chromium.googlesource.com port 443: Operation timed out</code>。查了一下，需要本地开启 VPN 并设置 git proxy，可以通过以下方式配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git config --global https.proxy http://127.0.0.1:1080</span><br><span class="line">git config --global https.proxy https://127.0.0.1:1080</span><br><span class="line">git config --global http.proxy &apos;socks5://127.0.0.1:1080&apos;</span><br><span class="line">git config --global https.proxy &apos;socks5://127.0.0.1:1080&apos;</span><br></pre></td></tr></table></figure>
+<p>取消设置代理：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global --unset http.proxy</span><br><span class="line">git config --global --unset https.proxy</span><br></pre></td></tr></table></figure>
+<p>注意：我遇到开启 VPN 还是无法 clone 代码，后来想想可能是 VPN 的穿透能力不强。如果遇到这个问题，需要换个 VPN。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/04/13/git-proxy/" data-id="cjc8teuoo00206ain2yfm4as5" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Darwin-Notification" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/09/Darwin-Notification/" class="article-date">
+  <time datetime="2017-04-09T03:26:49.000Z" itemprop="datePublished">2017-04-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/09/Darwin-Notification/">Darwin Notification</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Darwin Notification</p>
+<ul>
+<li>跨进程间消息收发</li>
+<li>接收到系统发出的消息</li>
+</ul>
+<p>发送通知：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">/* This function is called when a notification is received. */</span><br><span class="line">void MyNotificationCenterCallBack(CFNotificationCenterRef center,</span><br><span class="line">        void *observer,</span><br><span class="line">        CFStringRef name,</span><br><span class="line">        const void *object,</span><br><span class="line">        CFDictionaryRef userInfo)</span><br><span class="line">&#123;</span><br><span class="line">    printf(&quot;Notification center handler called\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">/* Create a notification center */</span><br><span class="line">CFNotificationCenterRef center = CFNotificationCenterGetDarwinNotifyCenter();</span><br><span class="line"></span><br><span class="line">/* Tell notifyd to alert us when this notification</span><br><span class="line">   is received. */</span><br><span class="line">if (center) &#123;</span><br><span class="line">    CFNotificationCenterAddObserver(center,</span><br><span class="line">        NULL,</span><br><span class="line">        MyNotificationCenterCallBack,</span><br><span class="line">        CFSTR(&quot;org.apache.httpd.configFileChanged&quot;),</span><br><span class="line">        NULL,</span><br><span class="line">        CFNotificationSuspensionBehaviorDeliverImmediately);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Post</span><br><span class="line">CFNotificationCenterPostNotification(center, CFSTR(&quot;Notification Name&quot;), NULL, NULL, TRUE);</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p> <a href="https://zhuanlan.zhihu.com/p/20795810" target="_blank" rel="noopener">钟颖 Cyan知乎专栏</a><br> <a href="https://developer.apple.com/library/content/documentation/Darwin/Conceptual/MacOSXNotifcationOv/DarwinNotificationConcepts/DarwinNotificationConcepts.html#//apple_ref/doc/uid/TP40005947-CH5-SW1" target="_blank" rel="noopener">Apple doc</a><br> <a href="https://github.com/choefele/CCHDarwinNotificationCenter" target="_blank" rel="noopener">开源项目</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/04/09/Darwin-Notification/" data-id="cjc8teunl00056ain40vluju4" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cocoa/">Cocoa</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-map°¢fitter°¢reduce" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/08/map°¢fitter°¢reduce/" class="article-date">
+  <time datetime="2017-04-08T02:14:06.000Z" itemprop="datePublished">2017-04-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/08/map°¢fitter°¢reduce/">map、fitter、reduce、flatMap</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 Swift 高阶使用中，map、fitter、reduce 是很常见的操作，能使代码干净整洁。在理解其概念之前，先要明白泛型的概念。</p>
+<h3 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h3><p>定义 <code>computeIntArray</code> 函数，接收一个数组，并返回其元素的2倍组成的另一个新的数组。但此函数只支持 <code>Int</code> 类型。如果换成其他类型则不适用，所以这里考虑用泛型来解决。<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">computeIntArray</span><span class="params">(xs: [Int], transform: <span class="params">(Int)</span></span></span> -&gt; <span class="type">Int</span>) -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="keyword">var</span> result: [<span class="type">Int</span>] = []</span><br><span class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</span><br><span class="line">    result.append(transform(x))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">doubleArray</span><span class="params">(xs: [Int])</span></span> -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="keyword">return</span> computeIntArray(xs: xs) &#123; x <span class="keyword">in</span> x * <span class="number">2</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">doubleArray(xs: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 换成 bool，则会出现编译错误</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">isEvenArray</span><span class="params">(xs: [Int])</span></span> -&gt; [<span class="type">Bool</span>] &#123;</span><br><span class="line">  <span class="keyword">return</span> computeIntArray(xs: xs) &#123; x <span class="keyword">in</span>  x % <span class="number">2</span> == <span class="number">0</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用泛型支持各种类型，进行抽象，对于任何 Element 的数组和 transform: Element -&gt; T 函数，它都会生成一个 T 类型数组</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;Element, T&gt;<span class="params">(xs: [Element], transform: <span class="params">(Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">  <span class="keyword">var</span> result: [<span class="type">T</span>] = []</span><br><span class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</span><br><span class="line">    result.append(transform(x))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">genericComputeArray</span>&lt;T&gt;<span class="params">(xs: [Int], transform: <span class="params">(Int)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">map</span>(xs: xs, transform: transform)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">genericComputeArray(xs: [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]) &#123; x <span class="keyword">in</span> x * <span class="number">2</span> &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p><code>map</code>函数能够被数组调用，还接收一个闭包参数，将数组中的每一个元素依次作用于该闭包，并返回一个新的数组。</p>
+<p>上面的例子中，将泛型函数写成全局函数固然能够完成任务，但是为了避免写入顶层函数实现。将此函数定义为 Array 的扩展更合适。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;T&gt;<span class="params">(tranform: <span class="params">(Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">    <span class="keyword">var</span> result: [<span class="type">T</span>] = []</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">      result.append(tranform(x))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].<span class="built_in">map</span> &#123; x <span class="keyword">in</span> x * x &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="fitter"><a href="#fitter" class="headerlink" title="fitter"></a>fitter</h3><p>与 <code>map</code> 函数类似，<code>fitter</code> 函数也可以接收一个闭包作为参数，同样可以避免函数为顶层实现：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">filter</span><span class="params">(includeElement: <span class="params">(Element)</span></span></span> -&gt; <span class="type">Bool</span>) -&gt; [<span class="type">Element</span>] &#123;</span><br><span class="line">    <span class="keyword">var</span> result: [<span class="type">Element</span>] = []</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> <span class="keyword">where</span> includeElement(x) &#123;</span><br><span class="line">      result.append(x)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ["HelloWorld.swift"]</span></span><br><span class="line">[<span class="string">"HelloWorld.swift"</span>, <span class="string">"HelloWorld.md"</span>].<span class="built_in">filter</span> &#123;x <span class="keyword">in</span> x.hasSuffix(<span class="string">"swift"</span>)&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="reduce"><a href="#reduce" class="headerlink" title="reduce"></a>reduce</h3><p><code>reduce</code> 函数将变量初始化为某个值，对数组中的每一项进行遍历，最后一某种方式更新结果。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">reduce</span>&lt;T&gt;<span class="params">(initial: T, combine: <span class="params">(T, Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; <span class="type">T</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> result = initial</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">      result = combine(result, x)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出：1</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="built_in">reduce</span>(initial: <span class="number">0</span>) &#123; result, x <span class="keyword">in</span> result + x &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 也可以用运算符作为最后一个参数。这里初始化值为：1</span></span><br><span class="line"><span class="comment">// 输出：7</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="built_in">reduce</span>(initial: <span class="number">1</span>, combine: +)</span><br></pre></td></tr></table></figure>
+<h3 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h3><p><code>flatMap</code> 与 <code>map</code> 类似，区别是若元素值不为 nil 的情况下，<code>flatMap</code> 能将可选类型转换为非可选类型：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> array = [<span class="string">"123"</span>, <span class="string">""</span>, <span class="string">"4567"</span>]</span><br><span class="line"><span class="keyword">let</span> anotherArray = array.<span class="built_in">map</span> &#123; (string: <span class="type">String</span>) -&gt; <span class="type">Int</span>? <span class="keyword">in</span></span><br><span class="line">  <span class="keyword">let</span> length = string.characters.<span class="built_in">count</span></span><br><span class="line">  <span class="keyword">guard</span> length &gt; <span class="number">0</span> <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> string.characters.<span class="built_in">count</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// [Optional(3), nil, Optional(4)]</span></span><br><span class="line"><span class="built_in">print</span>(anotherArray)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> anotherArray2 = array.flatMap&#123; (string: <span class="type">String</span>) -&gt; <span class="type">Int</span>? <span class="keyword">in</span></span><br><span class="line">  <span class="keyword">let</span> length = string.characters.<span class="built_in">count</span></span><br><span class="line">  <span class="keyword">guard</span> length &gt; <span class="number">0</span> <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> string.characters.<span class="built_in">count</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// [3, 4]</span></span><br><span class="line"><span class="built_in">print</span>(anotherArray2)</span><br></pre></td></tr></table></figure>
+<h3 id="Any-与-泛型"><a href="#Any-与-泛型" class="headerlink" title="Any 与 泛型"></a>Any 与 泛型</h3><p>尽量避免使用 <code>Any</code> 类型，因为使用 <code>Any</code> 类型会避开 swift 的类型系统。比如将 <code>noOp</code> 函数返回值设为 0 会导致类型错误。此外，任何调用 <code>noOpAny</code> 的函数都不知道返回值会被转换为何种类型。而结果就是可能导致各种各样的运行时错误。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">noOp</span>&lt;T&gt;<span class="params">(x: T)</span></span> -&gt; <span class="type">T</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">noOpAny</span><span class="params">(x: Any)</span></span> -&gt; <span class="type">Any</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> result = noOp(x: <span class="number">3</span>)</span><br><span class="line"><span class="keyword">let</span> ret = noOpAny(x: <span class="string">"3"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// oOp中，我们可以清楚返回值和输入值完全一样，而 noOpAny 则不一样，返回是任意类型。甚至和原来输入值不同的类型。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">noOpWrong</span><span class="params">(x: Any)</span></span> -&gt; <span class="type">Any</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> s = noOpWrong(x: <span class="string">"string"</span>)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/04/08/map°¢fitter°¢reduce/" data-id="cjc8teuos00286ainxbwrkfbg" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-∂¡ È± º«" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/21/∂¡ È± º«/" class="article-date">
+  <time datetime="2017-03-21T15:56:40.000Z" itemprop="datePublished">2017-03-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/21/∂¡ È± º«/">读书笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这篇文章合集是整理了一些读书笔记，做了一些目录索引。</p>
+<hr>
+<h4 id="《Effective-Objective-C-2-0》"><a href="#《Effective-Objective-C-2-0》" class="headerlink" title="《Effective Objective-C 2.0》"></a>《Effective Objective-C 2.0》</h4><p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-1/" target="_blank" rel="noopener">Effective Objective-C 2.0 第一章</a></p>
+<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-2/" target="_blank" rel="noopener">Effective Objective-C 2.0 第二章</a></p>
+<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-3/" target="_blank" rel="noopener">Effective Objective-C 2.0 第三章</a></p>
+<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-4/" target="_blank" rel="noopener">Effective Objective-C 2.0 第四章</a></p>
+<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-5/" target="_blank" rel="noopener">Effective Objective-C 2.0 第五章</a></p>
+<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-6/" target="_blank" rel="noopener">Effective Objective-C 2.0 第六章</a></p>
+<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-7/" target="_blank" rel="noopener">Effective Objective-C 2.0 第七章</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/21/∂¡ È± º«/" data-id="cjc8teuox002n6ainiyvu0mdq" class="article-share-link">Teilen</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Effective-Objective-C∂¡ È± º«-7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-7/" class="article-date">
+  <time datetime="2017-03-21T14:29:08.000Z" itemprop="datePublished">2017-03-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/21/Effective-Objective-C∂¡ È± º«-7/">Effective-Objective-C读书笔记(7)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="系统框架"><a href="#系统框架" class="headerlink" title="系统框架"></a>系统框架</h3><h4 id="第47条：熟悉系统框架"><a href="#第47条：熟悉系统框架" class="headerlink" title="第47条：熟悉系统框架"></a>第47条：熟悉系统框架</h4><p>Fundation、CoreFundation、CFNetwork(封装 BSD socket，抽象成易于使用的网络接口)、CoreAudio、AVFoundation、CoreData、CoreText 等。</p>
+<h4 id="第48条：多用-block-枚举，少用-for-循环"><a href="#第48条：多用-block-枚举，少用-for-循环" class="headerlink" title="第48条：多用 block 枚举，少用 for 循环"></a>第48条：多用 block 枚举，少用 for 循环</h4><p>遍历 collection 可以使用 <code>for 循环</code>、<code>NSEnumerator</code>、<code>快速遍历法</code>。<code>block 枚举</code>本身通过 GCD 来并发这行遍历操作，无需另外编写代码。而其它遍历方式无法轻易实现这一点。如果已知待遍历的 collection 含有何种对象，则应该修改签名，指出对象的具体类型。</p>
+<h4 id="第49条：对自定义内存管理语句-collection-使用无缝桥接"><a href="#第49条：对自定义内存管理语句-collection-使用无缝桥接" class="headerlink" title="第49条：对自定义内存管理语句 collection 使用无缝桥接"></a>第49条：对自定义内存管理语句 collection 使用无缝桥接</h4><p>使用<code>__bridge</code>进行桥接 Foundation 与 CoreFoundation 框架中的 C 怨言数据结构之间转换：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NSArray *anArray = @[@1, @2, @3];</span><br><span class="line">CFArrayRef aCFArray = (__bridge CFArrayRef)(anArray);</span><br></pre></td></tr></table></figure></p>
+<p>转换涉及到的内存管理：</p>
+<ul>
+<li><code>__bridge</code>：告诉ARC 如何处理 Objective-C 对象，ARC 仍然具备这个对象的所有权。</li>
+<li><code>__bridge_retained</code>：ARC 将交出对象的所有权。</li>
+<li><code>__bridge_transfer</code>：反向转换，比如将 <code>CFArrayRef</code> 转换为 <code>NSArray *</code>。并令 ARC 获得对象所有权。</li>
+<li>使用 <code>CoreFoundation</code> 框架最后一定要调用与之对应的<code>CFRelease()</code>。</li>
+</ul>
+<h4 id="第50条：构建缓存时选用-NSCache-而非-NSDictionary"><a href="#第50条：构建缓存时选用-NSCache-而非-NSDictionary" class="headerlink" title="第50条：构建缓存时选用 NSCache 而非 NSDictionary"></a>第50条：构建缓存时选用 NSCache 而非 NSDictionary</h4><p>对比：</p>
+<ul>
+<li>当系统资源耗尽，可以自动删减缓存。使用NSDictionary需要自己 hook，在内存低警告的时候手动删减缓存。NSCache 是线程安全的，NSDictionary 不具备这种优势。</li>
+<li>可以给 NSCache 对象设置上限，用于限制缓存中的对象总个数。</li>
+<li>将 <code>NSPurgeableData</code> 对象与 <code>NSCache</code> 搭配使用，可以实现自动清除数据的功能。也就是说，当 <code>NSPurgeableData</code> 对象锁斩内存被系统所丢弃，该对象自身也可会从缓存中移除。</li>
+</ul>
+<h4 id="第51条：精简-initialize-与-load-的实现代码"><a href="#第51条：精简-initialize-与-load-的实现代码" class="headerlink" title="第51条：精简 initialize 与 load 的实现代码"></a>第51条：精简 initialize 与 load 的实现代码</h4><p>对于加入runtime系统中的每个类和分类，都会调用这个方法，并且只调用一次。如果分类和类里面都定义了<code>load</code>方法，会先调用类里的，在调用分类里的。<code>load</code>方法再调用前，会加载父类的<code>load</code>方法。执行该<code>load</code>方法时，系统还处于“脆弱状态”(fragile state)，根据某个指定的程序库，却无法判断出其中各个类的载入顺序。因此，在<code>load</code>方法中使用其他类是不安全的。比如说：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@interface EOCClassB</span><br><span class="line">+ (void)load &#123;</span><br><span class="line">  NSLog(@&quot;Loading EOCClassB&quot;);</span><br><span class="line">  // 此处代码不安全，也许 EOCClassA 方法并没有加载</span><br><span class="line">  EOCClassA *obj = [EOCClassA new];</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>该类不能在里面等待锁，也不要调用可能会加锁的方法。凡是在类加载之前执行某些任务的，基本都不太对。其真正的用途是仅仅在调试程序，比如可以在分类里编写此方法，用来判断该分类是否已经正确载入系统中。</p>
+<p>想要执行与类初始化有关的操作，还要覆写<code>+ (void)initialize</code>。它与<code>+ (void)load</code>方法都是由 runtime 调用的，并且只调用一次。但是有一些区别：</p>
+<ul>
+<li><code>initialize</code>是<code>惰性调用的</code>，也就是程序用到相关的类时，才会调用。也就是说应用程序无需将每个类的<code>initialize</code>都执行一遍，这与<code>load</code>方法不同。对于<code>load</code>，应用程序必须阻塞并等着所有类的<code>load</code>都执行完，才能继续。</li>
+<li>runtime 系统在执行该方法时，是处于正常状态的。因此，此时可以安全使用并调用任意类中的任意方法。而且 runtime 系统能确保<code>initialize</code>方法在“线程安全的环境”中执行。也就是说只有执行<code>initialize</code>的那个线程可以操作类或类实例。其他线程都要先阻塞，等着<code>initialize</code>执行完。</li>
+<li><code>initialize</code>与其他消息一样，如果某个类未实现它，其父类实习那了，那么就会运行父类的实现代码。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@interface EOCBaseClass: NSObject</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation EOCBaseClass</span><br><span class="line">+ (void)initialize &#123;</span><br><span class="line">  NSLog(@&quot;%@ initialize&quot;, self);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@interface EOCSubClass: NSObject</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation EOCSubClass</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>首次使用 <code>EOCSubClass</code> 时，会输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">EOCBaseClass initialize</span><br><span class="line">EOCSubClass initialize</span><br></pre></td></tr></table></figure>
+<p>与其他方法一样（load 除外）， initialize 也遵循常用的继承规则。所以在初始化 EOCSubClass 时，由于子类未覆写<code>initialize</code>方法，因此还要把父类的实现代码再运行一遍。鉴于此通常会这样实现 <code>initialize</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+ (void)initialize &#123;</span><br><span class="line">  if (self == [EOCBaseClass class]) &#123;</span><br><span class="line">    NSLog(@&quot;%@ initialize&quot;, self);  </span><br><span class="line"></span><br><span class="line">    // 初始化内部数据，不应该在这里调用其它方法。</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结：</p>
+<ul>
+<li>再加载阶段，如果类实现了 load 方法，那么系统就会调用它。类的 load 方法比分类的要先调用。与其他方法不同，load 方法不参与覆写机制。</li>
+<li>首次使用某个类，系统会向其发送 initialize 消息，此方法遵从普通对象的覆写规则，所以要在初始化方法中判断初始化的是哪个类。</li>
+<li>load、initialize 方法应该实现的更精简一些，避免循环引用。</li>
+<li>常量，基本类型可以在编译期定义。无法编译期设定的全局常量（Objective-C 对象），可以放在 initialize 方法里面初始化。</li>
+</ul>
+<h4 id="第52条：NSTimer-会保留目标对象"><a href="#第52条：NSTimer-会保留目标对象" class="headerlink" title="第52条：NSTimer 会保留目标对象"></a>第52条：NSTimer 会保留目标对象</h4><ul>
+<li>NSTimer 对象会保留其目标对象，直到计数器本身失效位置，调用 <code>invalidate</code> 方法可令计时器失效。另外，一次性的计时器在触发完任务之后也会失效。</li>
+<li>反复执行任务的计时器，容易产生循环引用，因为 NSTimer 保留其目标实例，目标实例变量又持有 NSTimer，导致循环引用。</li>
+<li>扩充 NSTimer 的功能，通过 block 方式来打破循环引用。如下：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">// NSTimer+EOCBlockSupport.h</span><br><span class="line">@interface NSTimer (EOCBlockSupport)</span><br><span class="line">+ (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval</span><br><span class="line">                                          block:(void (^)())block</span><br><span class="line">                                        repeats:(BOOL)repeats;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">// NSTimer+EOCBlockSupport.m</span><br><span class="line">@implementation NSTimer (EOCBlockSupport)</span><br><span class="line">+ (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval</span><br><span class="line">                                          block:(void (^)())block</span><br><span class="line">                                        repeats:(BOOL)repeats &#123;</span><br><span class="line">  return [self scheduledTimerWithTimeInterval:interval</span><br><span class="line">                                       target:self</span><br><span class="line">                                     selector:@selector(eoc_blockInvoke:)</span><br><span class="line">                                     userInfo:[block copy]</span><br><span class="line">                                      repeats:repeats];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (void)eoc_blockInvoke:(NSTimer *)timer &#123;</span><br><span class="line">  void (^block)() = timer.userInfo;</span><br><span class="line">  if (block) &#123;</span><br><span class="line">    block();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// EOCClass.h</span><br><span class="line">@interface NSTimer : NSObject</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">// EOCClass.m</span><br><span class="line">@implementation EOCClass &#123;</span><br><span class="line">  NSTimer *_pollTimer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)startPolling &#123;</span><br><span class="line">  // 通过 wealSelf 来避免实例变量 _pollTimer 持有 NSTimer，NSTimer 又持有 block，block 又持有 self 的三重循环引用。</span><br><span class="line">  __weak EOCClass *wealSelf = self;</span><br><span class="line">  _pollTimer = [NSTimer eoc_scheduledTimerWithTimeInterval:5.0</span><br><span class="line">                                                     block:^&#123;</span><br><span class="line">                                                       EOCClass *strongSelf = wealSelf;</span><br><span class="line">                                                       [strongSelf p_doPoll];</span><br><span class="line">                                                     &#125; repeats:YES];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)p_doPoll &#123;&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-7/" data-id="cjc8teunv000j6ainyjhxu91n" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Effective-Objective-C∂¡ È± º«-6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-6/" class="article-date">
+  <time datetime="2017-03-21T14:27:32.000Z" itemprop="datePublished">2017-03-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/21/Effective-Objective-C∂¡ È± º«-6/">Effective-Objective-C读书笔记(6)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="GCD"><a href="#GCD" class="headerlink" title="GCD"></a>GCD</h3><h4 id="第37条：理解-Block"><a href="#第37条：理解-Block" class="headerlink" title="第37条：理解 Block"></a>第37条：理解 Block</h4><p>block 的语法结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">return_type (^block_name)(parameters)</span><br><span class="line"></span><br><span class="line">int (^addBlock)(int a, int b) = ^(int a, int b)&#123;</span><br><span class="line">  return a + b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 调用方式</span><br><span class="line">int a = addBlock(2 + 5); // 7</span><br></pre></td></tr></table></figure>
+<p>如果 block 定义在 Objective-C 类的实例方法中，除了可以访问类的所有实例变量外，还可以使用 self 变量。block 总能修改实例变量，所以在声明时无需加 <code>_block</code>。不过如果通过读取或写入操作捕获了实例变量，那么也会自动把 self 所只带的实例关联在一起。比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (void)anInstanceMethod &#123;</span><br><span class="line">  __block int additional = 5;</span><br><span class="line">  void (^someBlock)() = ^&#123;</span><br><span class="line">    // block 修改外部变量，需要使用 `__block` 修饰</span><br><span class="line">    additional = 100;</span><br><span class="line">    _anInstanceMethod = @&quot;Something&quot;;</span><br><span class="line">    NSLog(@&quot;_anInstanceMethod = %@&quot;, _anInstanceMethod);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果某个类实例正在执行 <code>anInstanceMethod</code> 方法。那么 self 变量就指向此实例。由于 block 中没有明确使用 self 变量，所以很容易忘记 self 变量被 block 捕获。直接访问实例变量和通过 <code>self-&gt;_anInstanceMethod = @&quot;Something&quot;;</code> 来访问是等效的。一定不能忘记，self 也是对象，block 在捕获它时也会将其保留，如果 self 所指代的对象同时保留了 block，这样就会导致循环引用。</p>
+<p>block 的内部结构：</p>
+<p><img src="/image/Effective-Objective-C-2.0-cahpter6-01.png" alt=""></p>
+<p>在存放 block 内存区域中，首个变量 <code>isa</code> 指针指向 <code>Class</code> 对象的指针。其余内存里含有 block 对象正常运转所需要的信息。详细解释如下：</p>
+<ul>
+<li><code>isa</code>：指向 <code>Class</code> 对象的指针。</li>
+<li><code>invoke</code> 变量，指向 <code>block</code> 的实现代码。函数原型至少接受一个 <code>void *</code> 类型参数，此参数代表 block，<code>void *</code> 其实是一种代替函数指针的语法结构，可以将原来用标准 C 实现的代码封装成简明易用的接口。</li>
+<li><code>descriptor</code>变量，指向结构体指针。每个 block 中都包含结构体，声明了 block 对象的总体大小，<code>copy</code>与<code>dispose</code>辅助函数对应的函数指针。辅助函数在拷贝及丢弃 block 对象时运行，其中还会执行一些操作。比如前者要保留捕获的对象，后者将其释放。 block 对象会所捕获的变量拷贝一份，放在 <code>descriptor</code> 变量的后面，注意，拷贝的不是对象本身，而是对象的指针变量。在执行 block 时，要通过 <code>invoke</code> 函数把内存中捕获的变量读取出来。</li>
+</ul>
+<p>在定义 block 的时候，都是分配在栈内存的，然而等离开相应的作用于之后，编译器有可能把分配的 block 的内存覆写掉，虽然可以编译，但是程序运行起来有时正确，有时错误。可以通过将 block 拷贝到堆上，这样 block 就变成带有引用计数的对象，后续复制就不会真正的复制，只是增加其医用计数。当引用计数为0，堆上的 block 对象，被系统回收。栈上的 block 原本就会被系统自动回收。示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">void ^(block);</span><br><span class="line">if (/* condition */) &#123;</span><br><span class="line">  block = [^&#123;</span><br><span class="line">    NSLog(@&quot;Block A&quot;);</span><br><span class="line">  &#125; copy];</span><br><span class="line">&#125; else &#123;</span><br><span class="line">  block = [^&#123;</span><br><span class="line">    NSLog(@&quot;Block B&quot;);</span><br><span class="line">  &#125; copy];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还有一种是<code>全局 block</code>，这种 block 不会捕捉任何状态(比如外围变量等)，整个 block 所用的内存区域，在编译期间已经确定了。因此全局 block 可以声明在全局内存里，不需要在每次调用的时候于栈中创建，全局 block 的拷贝操作是个空操作，因此这种 block 绝不可能被系统回收。这种 block 相当于单例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void (^block)() = ^ &#123;</span><br><span class="line">  NSLog(@&quot;This is a block&quot;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>由于该 block 所需要的信息在编译期就能确定，就可以把它做成全局 block。使用全局 block 可以优化程序，减少复制、丢弃该 block 时执行的不必要的操作。</p>
+<p>总结：</p>
+<ul>
+<li>block 可以分配在栈上或堆上，也可以是全局的，分配在栈上的 block 可拷贝至堆中，这样就具备引用计数了。全局的 block 对象可以用来优化程序调用。</li>
+</ul>
+<h4 id="第38条：为常用-block-创建-typedef"><a href="#第38条：为常用-block-创建-typedef" class="headerlink" title="第38条：为常用 block 创建 typedef"></a>第38条：为常用 block 创建 typedef</h4><p>使用 typedef 来重新定义 block 结构，可以使代码简洁易懂，此时要避免其名称与别的类型相冲突。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">typedef void(^EOCCompletionHandler)(NSData *data, NSError *error);</span><br><span class="line">- (void)startWithCompletionHandler:(EOCCompletionHandler)completion;</span><br></pre></td></tr></table></figure>
+<h4 id="第39条：使用-handler-block-降低代码分散程度"><a href="#第39条：使用-handler-block-降低代码分散程度" class="headerlink" title="第39条：使用 handler block 降低代码分散程度"></a>第39条：使用 handler block 降低代码分散程度</h4><p>使用 handler block 来作为回调函数，通常比使用委托代理更加简洁清晰。在设计 handler 的时候，建议成功和失败的 handle 分开写，理由是避免全部逻辑写到一起，造成 block 过长。</p>
+<h4 id="第40条：block-引用所属对象时不要出现循环引用"><a href="#第40条：block-引用所属对象时不要出现循环引用" class="headerlink" title="第40条：block 引用所属对象时不要出现循环引用"></a>第40条：block 引用所属对象时不要出现循环引用</h4><p>使用 block 一定要注意循环引用的问题，一定要在适当的时机解除循环引用，而不能把责任推给 API 调用者。有一个办法可以避免破坏代码的封装性，类似于 <code>TWRequest</code> 框架所做的那样，一旦调用 completion handler 之后，就没有必要继续在保留它。比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (void)p_requestCompleted &#123;</span><br><span class="line">  if (_completionHandler) &#123;</span><br><span class="line">    _completionHandler(_downloadedData);</span><br><span class="line">  &#125;</span><br><span class="line">  self._completionHandler = nil;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="第41条：多用-GCD，少用同步锁"><a href="#第41条：多用-GCD，少用同步锁" class="headerlink" title="第41条：多用 GCD，少用同步锁"></a>第41条：多用 GCD，少用同步锁</h4><p>不要滥用 <code>@synchronized(self)</code>，会降低代码效率。可以使用 <code>NSLock</code>、或者 <code>NSRecursiveLock</code>（递归锁，线程能够多次持有该锁，而不会出现死锁现象）。在使用 <code>atomic</code> 修饰属性的时候，setter、getter 方法是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (NSString *)someString &#123;</span><br><span class="line">  @synchronized(self) &#123;</span><br><span class="line">    return _someString;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)setSomeString:(NSString *)someString &#123;</span><br><span class="line">  @synchronized(self) &#123;</span><br><span class="line">    _someString = someString;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方式能保证线程安全，但是无法保证该对象是绝对的线程安全，比如在同一线程上多次调用 getter，在两次访问期间，其他线程也可能会写入新的值。造成获取结果未必相同。</p>
+<p>可以使用<code>串行同步队列</code>将读取操作与写入操作都安排在同一队列里，即可保证数据同步：<br><img src="/image/Effective-Objective-C-2.0-cahpter6-02.png" alt=""></p>
+<p>然而还可以通过 <code>dispatch_barrier_async</code> 来提升同步行为的效率。在队列里面，<code>barrier block</code> 必须单独执行，不能与其他的 block 并发执行。因为串行队列当中的 block 总是按照顺序逐个来执行的。并发队列发现接下来的任务是<code>barrier block</code>，就等当前所有的并发任务处理完毕后，才单独执行 <code>barrier block</code>。等到<code>barrier block</code>执行完毕，才按照正常方式继续向下执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 在并发队列当中，读取操作是普通的 block 实现，写入则是用 `barrier block` 来实现，读取操作可以并行，但写入操作必须单步执行。</span><br><span class="line">_syncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);</span><br><span class="line">- (NSString *)someString &#123;</span><br><span class="line">  __block NSString *localSomeString;</span><br><span class="line">  dispatch_sync(localSomeString, ^&#123;</span><br><span class="line">    localSomeString = _someString;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  return localSomeString;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)setSomeString:(NSString *)someString &#123;</span><br><span class="line">  dispatch_barrier_async(_syncQueue, ^&#123;</span><br><span class="line">    _someSting = someString;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结：将同步与异步操作结合起来，可以实现普通加锁一样的机制，这样做却不会阻塞执行派发的线程。多使用<code>barrier block</code>，可以令同步行为更加高效。</p>
+<h4 id="第42条：多用-GCD，少用-performSelector-系列方法"><a href="#第42条：多用-GCD，少用-performSelector-系列方法" class="headerlink" title="第42条：多用 GCD，少用 performSelector 系列方法"></a>第42条：多用 GCD，少用 performSelector 系列方法</h4><p><img src="/image/Effective-Objective-C-2.0-cahpter6-03.png" alt=""></p>
+<p>总结：</p>
+<ul>
+<li><code>performSelector</code> 在内存管理方面会容易有疏失，因为无法确定要执行的selector具体是什么，ARC 编译器无法插入适当的内存管理方法。</li>
+<li><code>performSelector</code> 系列方法处理 selector 过于局限，方法和参数个数都受到限制。</li>
+<li>最好使用 GCD 来代替 <code>performSelector</code>。</li>
+</ul>
+<h4 id="第43条：掌握-GCD-的使用时机"><a href="#第43条：掌握-GCD-的使用时机" class="headerlink" title="第43条：掌握 GCD 的使用时机"></a>第43条：掌握 GCD 的使用时机</h4><p>在处理多线程与任务管理的问题中，可以使用 GCD、NSOperation 技术。GCD 是基于 C 的 API，NSOperation ，NSOperation 则是 Objective-C 对象。NSOperation 提供了高层的 Objective-C API ，具备实现 GCD 的大多数功能。两者需要具体问题具体分析，每种都有各自的适用场景。比如：NSOperation可以实现取消某个操作、设置操作之间的依赖关系、通过键值观察机制检测 NSOperation 对象属性、指定操作优先级等。GCD 虽然也有优先级，不过这是针对于整个队列来说，而不是针对某个块来说。</p>
+<h4 id="第44条：通过-Dispatch-Group-机制，根据系统资源状况来执行任务"><a href="#第44条：通过-Dispatch-Group-机制，根据系统资源状况来执行任务" class="headerlink" title="第44条：通过 Dispatch Group 机制，根据系统资源状况来执行任务"></a>第44条：通过 Dispatch Group 机制，根据系统资源状况来执行任务</h4><p>一个任务可归为一个 dispatch group 只用，可以在并发队列里同时执行多项任务，此时 GCD 会根据资源情况来调度执行这些并发执行的任务。</p>
+<h4 id="第45条：使用-dispatch-once-来执行只需要运行一次的线程安全代码"><a href="#第45条：使用-dispatch-once-来执行只需要运行一次的线程安全代码" class="headerlink" title="第45条：使用 dispatch_once 来执行只需要运行一次的线程安全代码"></a>第45条：使用 dispatch_once 来执行只需要运行一次的线程安全代码</h4><p>使用 <code>dispatch_once</code> 编写线程安全的代码。标记应该声明在 static、global 作用域中，这样只需执行一次的 block 传给 dispatch_once 函数时，传进去的标记也是相同的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">static dispatch_once_t onceToken;</span><br><span class="line">static EOCClass *sharedInstance = nil;</span><br><span class="line">dispatch_once(&amp;onceToken, ^&#123;</span><br><span class="line">  // code to be executed once</span><br><span class="line">  sharedInstance = [[self alloc] init];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="第46条：不要使用-dispatch-get-current-queue"><a href="#第46条：不要使用-dispatch-get-current-queue" class="headerlink" title="第46条：不要使用 dispatch_get_current_queue"></a>第46条：不要使用 dispatch_get_current_queue</h4><p><code>dispatch_get_current_queue</code> 函数已经废弃，只应做调试使用。由于派发队列是按照层级来组织的，所以无法单用某个队列对象来描述“当前队列”这个概念。为了解决死锁问题，可以用“队列特定数据”来替代<code>dispatch_get_current_queue</code>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-6/" data-id="cjc8teunu000h6ainwhtt28ip" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Effective-Objective-C∂¡ È± º«-5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-5/" class="article-date">
+  <time datetime="2017-03-21T14:27:28.000Z" itemprop="datePublished">2017-03-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/21/Effective-Objective-C∂¡ È± º«-5/">Effective-Objective-C读书笔记(5)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h3><h4 id="第29条：理解引用计数"><a href="#第29条：理解引用计数" class="headerlink" title="第29条：理解引用计数"></a>第29条：理解引用计数</h4><p>通过引用计数来管理内存，当对象使用 <code>new</code>、<code>alloc</code>、<code>retain</code>，创建的时候，其 <code>引用计数+1</code>。当使用<code>release</code>的时候，<code>引用计数-1</code>。当其引用计数为0的时候，对象会被释放，同时需要将指针置 nil，防止出现<code>悬垂指针</code>。</p>
+<p><code>自动释放池</code>：当对象调用 <code>release</code> 会立即递减对象的引用计数，有时候可以不调用它。改为调用 <code>autorelease</code>，此方法会在稍后递减计数，通常会在下一次事件循环的时候递减。此方法可以保证对象在跨越<code>方法调用边界</code>后一定存活。使用 <code>autorelease</code> 可以延长对象生命周期。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (NSString *)stringValue &#123;</span><br><span class="line">  NSString *str = [[NSString alloc] initWithFormat:@&quot;I am this: %@&quot;, self];</span><br><span class="line">  return [str autorelease];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// stringValue 返回调用者时，此对象必然存活。所以可以这样调用</span><br><span class="line">NSString *str = [self stringValue];</span><br></pre></td></tr></table></figure>
+<p>由于返回的 str 对象稍后将自动释放，所以无需再执行内存管理操作。但是如果要持有该对象的话（比如要将其设置给实例变量），那就需要保留，并稍后释放：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_instanceVariable = [[self stringValue] retain];</span><br></pre></td></tr></table></figure>
+<h4 id="第30条：用-ARC-简化引用计数"><a href="#第30条：用-ARC-简化引用计数" class="headerlink" title="第30条：用 ARC 简化引用计数"></a>第30条：用 ARC 简化引用计数</h4><ul>
+<li>在 ARC 环境中，引用计数实际上还是要执行的，只不过引用计数现在是由 ARC 自动添加。</li>
+<li>不能使用 <code>retain</code>、<code>release</code>、<code>autorelease</code>、<code>dealloc</code> 方法。</li>
+<li>若方法名以 <code>alloc</code>、<code>new</code>、<code>copy</code>、<code>mutableCopy</code> 开头，则返回的对象归调用者所有。</li>
+<li>不使用 ARC 情况下，在实现单例类的时候，因为单例不可以释放，所有我们经常个覆写 <code>release</code> 方法，将其替换为 <code>空操作</code>。</li>
+<li>ARC 下会借用 Objective-C++ 中的一项特性来清理对象，回收 Objective-C++ 对象时，待回收对象会调用 C++ 对象的析构函数。编译器如果发现对象里含有 C++ 对象，就会生成 <code>.cxx_destruct</code> 的方法。在此方法中生成清理内存的代码。</li>
+<li>ARC 只负责管理 Objective-C 对象内存，CoreFoundation 对象不归 ARC 管理，开发者必须适时调用 CFRetain/CFRelease。</li>
+</ul>
+<h4 id="第31条：在-dealloc-方法中只释放引用并解除监听"><a href="#第31条：在-dealloc-方法中只释放引用并解除监听" class="headerlink" title="第31条：在 dealloc 方法中只释放引用并解除监听"></a>第31条：在 dealloc 方法中只释放引用并解除监听</h4><ul>
+<li>在 dealloc 方法中，ARC 会通过自动生成 <code>.cxx_destruct</code> 方法，并自动释放所有的 Objective-C 对象。</li>
+<li>在此方法中移除通知</li>
+<li>如果不使用 ARC ，那么最后还需要调用 <code>[super dealloc]</code>。ARC 会自动执行此操作。</li>
+<li>如果对象持有文件描述符等资源，应该撰文写一个方法来释放此种资源。这样的类要和使用者约定：用完资源后必须调用 close 方法。</li>
+<li>执行异步任务的方法不应该在 dealloc 里调用。只能在正常状态下执行的那些方法也不应该在 dealloc 里调用，因为此时对象已处在正在回收的状态了。</li>
+</ul>
+<h4 id="第32条：编写异常安全代码时要注意内存管理问题"><a href="#第32条：编写异常安全代码时要注意内存管理问题" class="headerlink" title="第32条：编写异常安全代码时要注意内存管理问题"></a>第32条：编写<code>异常安全代码</code>时要注意内存管理问题</h4><ul>
+<li>在非 ARC 下，使用<code>@try...@catch</code>来捕获异常，当异常发生时，程序直接执行<code>@catch</code>中的语句。忽略了<code>@try</code>中的内存管理语句。最好的做法是将<code>@try</code>中的内存管理语句放在 <code>@finally</code> 当中。</li>
+<li>默认情况下，ARC 不生成安全处理异常的所需要的清理代码。开启编译器<code>-fobjc-arc-exceptions</code>标志后，可以生成这种代码，不过会导致应用程序变大。降低运行效率。</li>
+</ul>
+<h4 id="第33条：用弱引用避免循环引用"><a href="#第33条：用弱引用避免循环引用" class="headerlink" title="第33条：用弱引用避免循环引用"></a>第33条：用弱引用避免循环引用</h4><ul>
+<li>将某些引用设置为 <code>weak</code>，避免循环引用。</li>
+<li>weak 引用可以自动清空，也可以不自动清空。自动清空是随着 ARC 而引入的新特性，由运行时系统来实习那。在自动清空功能的弱引用上，可以随意读取其数据，因为这种引用不会指向已经回收过的对象。</li>
+</ul>
+<h4 id="第34条：使用-autoreleasepool-来降低内存峰值"><a href="#第34条：使用-autoreleasepool-来降低内存峰值" class="headerlink" title="第34条：使用 autoreleasepool 来降低内存峰值"></a>第34条：使用 <code>autoreleasepool</code> 来降低内存峰值</h4><ul>
+<li>当程序当中需要创建大量的临时对象（比如循环），会造成内存增长，可以考虑将临时代码放在<code>autoreleasepool</code>当中，那么在循环中自动释放的对象就会放在这个池，而不是线程的主池里面。</li>
+<li><code>autoreleasepool</code>存放在栈中，对象收到 <code>autorelease</code> 消息后，系统将其放入最顶端的池里。</li>
+</ul>
+<h4 id="第35条：用僵尸对象调试内存管理问题"><a href="#第35条：用僵尸对象调试内存管理问题" class="headerlink" title="第35条：用僵尸对象调试内存管理问题"></a>第35条：用<code>僵尸对象</code>调试内存管理问题</h4><ul>
+<li>向已经回收的对象发送消息是不安全的，因为这有时可以，有时不行。完全取决于对象所占内存有没有为其他内容所覆写，而这块内存有没有移作他用，又无法确定。此时需要开启僵尸对象进行检查。</li>
+<li>系统在回收对象的时候，可以不将其真的回收，而是把它转化为僵尸对象。通过 <code>NSZombieEnabled</code> 可开启此功能。</li>
+</ul>
+<h4 id="第36条：不要使用-retainCount"><a href="#第36条：不要使用-retainCount" class="headerlink" title="第36条：不要使用 retainCount"></a>第36条：不要使用 retainCount</h4><ul>
+<li>不要使用 retainCount 来查看对象是否还被持有，因为任何给定时间点上 <code>绝对引用计数</code> 都无法反应对象生命周期的全貌。引用计数可能处在自动释放池中，retainCount 可能不准确。</li>
+<li>ARC 后，retainCount 就被废止了。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-5/" data-id="cjc8teunt000f6aindg5ukizh" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Effective-Objective-C∂¡ È± º«-4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-4/" class="article-date">
+  <time datetime="2017-03-21T14:27:24.000Z" itemprop="datePublished">2017-03-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/21/Effective-Objective-C∂¡ È± º«-4/">Effective-Objective-C读书笔记(4)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="协议与分类"><a href="#协议与分类" class="headerlink" title="协议与分类"></a>协议与分类</h3><h4 id="第23条：通过委托与数据源协议进行对象间通信"><a href="#第23条：通过委托与数据源协议进行对象间通信" class="headerlink" title="第23条：通过委托与数据源协议进行对象间通信"></a>第23条：通过委托与数据源协议进行对象间通信</h4><ul>
+<li>如果有必要，可以实现含有<code>位段</code>的结构体，将委托对象能否响应相关协议方法这一信息缓存其中。</li>
+</ul>
+<h4 id="第24条：使用分类来分散代码"><a href="#第24条：使用分类来分散代码" class="headerlink" title="第24条：使用分类来分散代码"></a>第24条：使用分类来分散代码</h4><ul>
+<li>使用分类将类的实现代码划分为易于管理的小块</li>
+<li>将视为“私有”的方法归入叫 <code>Private</code> 的分类中，隐藏实现细节。</li>
+</ul>
+<h4 id="第25条：为第三方分类添加前缀"><a href="#第25条：为第三方分类添加前缀" class="headerlink" title="第25条：为第三方分类添加前缀"></a>第25条：为第三方分类添加前缀</h4><ul>
+<li>向第三方类中添加分类时，应该给其名称、方法名添加专用的前缀。</li>
+</ul>
+<h4 id="第26条：不要在分类中添加属性"><a href="#第26条：不要在分类中添加属性" class="headerlink" title="第26条：不要在分类中添加属性"></a>第26条：不要在分类中添加属性</h4><ul>
+<li>尽量不要在分类中添加属性，因为属性是为了封装数据的。而分类目的在于扩展类的功能，而非封装数据。</li>
+<li>虽然这样定义，但是也可以在分类当中创建只读属性。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@interface NSCalendar (EOCCalandar)</span><br><span class="line">@property (nonatomic, strong, readonly) NSArray *eoc_allMonths;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<h4 id="第27条：使用匿名分类-或者说称为扩展-来隐藏实现细节"><a href="#第27条：使用匿名分类-或者说称为扩展-来隐藏实现细节" class="headerlink" title="第27条：使用匿名分类(或者说称为扩展)来隐藏实现细节"></a>第27条：使用匿名分类(或者说称为扩展)来隐藏实现细节</h4><ul>
+<li>通过匿名分类，把私有的方法、属性声明在匿名分类中。</li>
+<li>若某属性在主接口中声明为 “readonly”，类内部又要用设置方法修改此属性，可以在匿名分类中将其扩展为 “readwrite”。</li>
+</ul>
+<h4 id="第28条：通过协议提供匿名对象"><a href="#第28条：通过协议提供匿名对象" class="headerlink" title="第28条：通过协议提供匿名对象"></a>第28条：通过协议提供匿名对象</h4><ul>
+<li>提供协议来隐藏具体类内部的实现。</li>
+<li>具体的对象类型可以淡化为遵从某协议的 <code>id</code> 类型，协议里规定了对象所应该实现的方法，可以使用匿名对象来表示。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-4/" data-id="cjc8teunr000d6ainga02j8jo" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Effective-Objective-C∂¡ È± º«-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-3/" class="article-date">
+  <time datetime="2017-03-21T14:27:20.000Z" itemprop="datePublished">2017-03-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/21/Effective-Objective-C∂¡ È± º«-3/">Effective-Objective-C读书笔记(3)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="接口与-API-设计"><a href="#接口与-API-设计" class="headerlink" title="接口与 API 设计"></a>接口与 API 设计</h3><h4 id="第15条：用前缀避免命名空间冲突"><a href="#第15条：用前缀避免命名空间冲突" class="headerlink" title="第15条：用前缀避免命名空间冲突"></a>第15条：用前缀避免命名空间冲突</h4><p>选择你的公司、应用程序或二者皆有关联的名称作为类的前缀，并在所有的代码中均使用这一前缀。</p>
+<p>程序中使用到第三方库，则应为其中的名称加上前缀。如果命名出现冲突，会出现以下错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">duplicate symbol _OBJC_METACLASS_$_***Class in:</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<h4 id="第16条：提供“指定初始化方法”"><a href="#第16条：提供“指定初始化方法”" class="headerlink" title="第16条：提供“指定初始化方法”"></a>第16条：提供“指定初始化方法”</h4><p>在类当中提供一个指定初始化方法，并与文档里面说明，其他初始化方法均应该调用此方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">// JYRectangle.h</span><br><span class="line">@interface JYRectangle : NSObject&lt;NSCoding&gt;</span><br><span class="line">@property (nonatomic, assign, readonly) float width;</span><br><span class="line">@property (nonatomic, assign, readonly) float height;</span><br><span class="line"></span><br><span class="line">- (id)initWithWidth:(float)width</span><br><span class="line">          andHeight:(float)height;</span><br><span class="line">- (void)methodMustBeOverride;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">// JYRectangle.m</span><br><span class="line">@implementation JYRectangle</span><br><span class="line">- (id)initWithWidth:(float)width andHeight:(float)height &#123;</span><br><span class="line">  if (self = [super init]) &#123;</span><br><span class="line">    _width = width;</span><br><span class="line">    _height = height;</span><br><span class="line">  &#125;</span><br><span class="line">  return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (instancetype)init &#123;</span><br><span class="line">  return [self initWithWidth:5.0 andHeight:5.0];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCoder:(NSCoder *)aDecoder &#123;</span><br><span class="line">  if (self = [super init]) &#123;</span><br><span class="line">    _width = [aDecoder decodeFloatForKey:@&quot;width&quot;];</span><br><span class="line">    _height = [aDecoder decodeFloatForKey:@&quot;height&quot;];</span><br><span class="line">  &#125;</span><br><span class="line">  return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)encodeWithCoder:(NSCoder *)aCoder &#123;</span><br><span class="line">  [aCoder encodeFloat:_width forKey:@&quot;width&quot;];</span><br><span class="line">  [aCoder encodeFloat:_height forKey:@&quot;height&quot;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)methodMustBeOverride &#123;</span><br><span class="line">  @throw [NSException exceptionWithName:NSInternalInconsistencyException</span><br><span class="line">                                 reason:@&quot;This method must be override !&quot;</span><br><span class="line">                               userInfo:nil];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>如果子类想要提供不同的函数实现，需要覆写父类的方法。父类不提供实现的时候，在其中抛出异常，强制子类覆写此方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// JYSquare.h</span><br><span class="line">@interface JYSquare : JYRectangle</span><br><span class="line">- (id)initWithDimension:(float)dimension;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// JYSquare.m</span><br><span class="line">@implementation JYSquare</span><br><span class="line">- (id)initWithDimension:(float)dimension &#123;</span><br><span class="line">  return [super initWithWidth:dimension andHeight:dimension];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)initWithWidth:(float)width andHeight:(float)height &#123;</span><br><span class="line">  float dimension = MAX(width, height);</span><br><span class="line">  return [self initWithDimension:dimension];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCoder:(NSCoder *)aDecoder &#123;</span><br><span class="line">  if ([super initWithCoder:aDecoder]) &#123;</span><br><span class="line">    // JYSquare&apos;s specific initializer</span><br><span class="line">  &#125;</span><br><span class="line">  return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)methodMustBeOverride &#123;</span><br><span class="line">  // If subclass is not override this method, will throw exception</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<h4 id="第17条：实现-description-方法"><a href="#第17条：实现-description-方法" class="headerlink" title="第17条：实现 description 方法"></a>第17条：实现 description 方法</h4><p>实现 description 方法返回一个有意义的字符串，用来描述实例，也可以通过 debugDescription 方法返回更详细的信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (NSString *)description &#123;</span><br><span class="line">  return [NSString stringWithFormat:@&quot;&lt;%@: %p, %@&gt;&quot;,</span><br><span class="line">          [self class],</span><br><span class="line">          self,</span><br><span class="line">          @&#123;@&quot;title&quot;, _title,</span><br><span class="line">            @&quot;name&quot;, _name,&#125;</span><br><span class="line">          ];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 只有在控制台使用 LLDB 的 po 命令有效</span><br><span class="line">- (NSString *)debugDescription &#123;</span><br><span class="line">  return [NSString stringWithFormat:@&quot;&lt;%@: %p, %@&gt;&quot;, [self class], self, _title];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="第18条：尽量使用不可变对象"><a href="#第18条：尽量使用不可变对象" class="headerlink" title="第18条：尽量使用不可变对象"></a>第18条：尽量使用不可变对象</h4><ul>
+<li>将对外公布的属性设置为 <code>readonly</code>，在<code>匿名分类</code>中将属性重新定义为<code>readwrite</code>。即使属性被声明为<code>readonly</code>，然而在对象外部，还可以通过 KVC 技术来设置属性的值。比如<code>[someProperty setValue:@&quot;abc&quot; forKey:@&quot;someValue&quot;];</code>，KVC 会在类中查找 <code>setSomeProperty:</code> 方法，我们最好不要通过这种 hack 方式来设置属性，不然会造成莫名的问题。</li>
+<li>尽量创建不可变对象。</li>
+<li>不要将 collection 作为属性公开，而是应该提供相关方法，以此修改对象中的不可变对象。</li>
+</ul>
+<h4 id="第19条：清晰的命名"><a href="#第19条：清晰的命名" class="headerlink" title="第19条：清晰的命名"></a>第19条：清晰的命名</h4><ul>
+<li>继承自类，命名应该与类保持一致，比如从 UIView 中继承的子类，其末尾的词必须是个 View。</li>
+<li>方法和变量名都使用驼峰式命名。</li>
+<li>保持与自己代码或集成框架代码相符。</li>
+</ul>
+<h4 id="第20条：为私有方法添加前缀"><a href="#第20条：为私有方法添加前缀" class="headerlink" title="第20条：为私有方法添加前缀"></a>第20条：为私有方法添加前缀</h4><ul>
+<li>私有方法建议使用 <code>p_privateMethodName</code> 开头，与公共方法区分开。</li>
+<li>OC 中没有办法标记私有方法，所有根据这一条命名私有方法，增强代码可读性。</li>
+<li>不要单用下划线作为私有方法的前缀，这种是预留给苹果公司使用的。</li>
+</ul>
+<h4 id="第21条：Objective-C-中的错误类型"><a href="#第21条：Objective-C-中的错误类型" class="headerlink" title="第21条：Objective-C 中的错误类型"></a>第21条：Objective-C 中的错误类型</h4><ul>
+<li>异常只有程序发生严重错误时候才能抛出，比如定义一个抽象类，子类必须覆写父类的方法，可以在父类的方法里面抛出异常。这样子类如果没有覆写父类方法，就会抛出异常。</li>
+<li>其他非致命的错误，Objective-C 中所用的编程范式为：令方法返回 nil/0，或者使用 NSError。</li>
+<li>收到 NSError 消息时，必须优先处理错误。</li>
+</ul>
+<h4 id="第21条：NSCopying-协议"><a href="#第21条：NSCopying-协议" class="headerlink" title="第21条：NSCopying 协议"></a>第21条：NSCopying 协议</h4><p>自己的类想要支持 copy 操作，必须要实现 <code>NSCopying</code> 协议。该协议有以下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// NSZone：以前开发程序会把内存分成不同的区，对象存在某个区里面。现在每个程序只有一个区：默认区，不用担心 zone 参数</span><br><span class="line">- (id)copyWithZone:(nullable NSZone *)zone;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>复制对象时决定采用深拷贝韩式浅拷贝，一般情况下应该尽量执行浅拷贝。</li>
+<li>自定义对象分为可变和不可变版本，需要同时实现 <code>NSCopying</code> 与 <code>NSMutableCopying</code>。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-3/" data-id="cjc8teunq000c6ainjmkau6qj" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">weiter &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cocoa/">Cocoa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 12px;">C++</a> <a href="/tags/Cocoa/" style="font-size: 14px;">Cocoa</a> <a href="/tags/JavaScript/" style="font-size: 12px;">JavaScript</a> <a href="/tags/Objective-C/" style="font-size: 18px;">Objective-C</a> <a href="/tags/Python/" style="font-size: 16px;">Python</a> <a href="/tags/React-Native/" style="font-size: 10px;">React Native</a> <a href="/tags/Swift/" style="font-size: 20px;">Swift</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/数据结构/" style="font-size: 14px;">数据结构</a> <a href="/tags/数据结构与算法/" style="font-size: 10px;">数据结构与算法</a> <a href="/tags/音视频/" style="font-size: 10px;">音视频</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/13/CoreAnimation/">CoreAnimation</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/13/git-proxy/">git proxy</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/09/Darwin-Notification/">Darwin Notification</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/08/map°¢fitter°¢reduce/">map、fitter、reduce、flatMap</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/21/∂¡ È± º«/">读书笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
