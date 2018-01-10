@@ -229,6 +229,130 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/19/Objective-C-2-0‘À–– ±œµÕ≥±‡≥Ã◊‹Ω·/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/03/19/Objective-C-2-0‘À–– ±œµÕ≥±‡≥Ã◊‹Ω·/" itemprop="url">Objective-C 2.0运行时系统编程总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-19T10:47:38+08:00">
+                2016-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Runtime Versions and Platforms<br>Interacting with the Runtime<br>Messaging<br>Dynamic Method Resolution<br>Message Forwarding<br>Type Encodings<br>Declared Properties</p>
+<h3 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h3><ul>
+<li>iPhone 程序和 Mac OS X v10.5 及以后的系统中的 64 位程序使用的都是 Objective-C 运行时系统的现行版本。</li>
+<li>Mac OS X 32位系统中使用的是早期版本。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/04/22/ջ/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -748,7 +872,7 @@
       
         
           
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">//</span><br><span class="line">//  main.cpp</span><br><span class="line">//  Cpp</span><br><span class="line">//</span><br><span class="line">//  Created by mac on 2017/4/17.</span><br><span class="line">//  Copyright © 2017年 JY. All rights reserved.</span><br><span class="line">//</span><br><span class="line"></span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 内存申请与释放</span><br><span class="line">//int *arr = new int[10];</span><br><span class="line">//delete []arr;</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">int *p = new int[100];</span><br><span class="line">if(NULL == P) &#123;</span><br><span class="line">  // 申请成功</span><br><span class="line">&#125;</span><br><span class="line">*/</span><br><span class="line"></span><br><span class="line">// 调用频繁的函数建议写成内联函数</span><br><span class="line">// 内联条件，逻辑简单，不能是递归函数</span><br><span class="line"></span><br><span class="line">int main(int argc, const char * argv[]) &#123;</span><br><span class="line"></span><br><span class="line">  int b = 10;</span><br><span class="line">  const int x = 3;</span><br><span class="line">//  x = 5; error</span><br><span class="line"></span><br><span class="line">  const int *y = &amp;x;</span><br><span class="line">  y = &amp;b;</span><br><span class="line">//  *y = 100; error</span><br><span class="line"></span><br><span class="line">  const int *const z = &amp;x;</span><br><span class="line">//  z = &amp;b;   error</span><br><span class="line">//  *z = 100; error</span><br><span class="line"></span><br><span class="line">  // x 为不可变，所以也不能通过 *y2 来改变指针的值</span><br><span class="line">//  int *y2 = &amp;x;</span><br><span class="line"></span><br><span class="line">  // b 有读写权限，指针为读权限，所以正确，上面的为错误</span><br><span class="line">  const int *y2 = &amp;b;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//  int x = 3;</span><br><span class="line">//  const int &amp;y = x;</span><br><span class="line">//  </span><br><span class="line">//  x = 10;</span><br><span class="line">//  y = 100;</span><br><span class="line"></span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  main.cpp</span></span><br><span class="line"><span class="comment">//  Cpp</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  Created by mac on 2017/4/17.</span></span><br><span class="line"><span class="comment">//  Copyright © 2017年 JY. All rights reserved.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 内存申请与释放</span></span><br><span class="line"><span class="comment">//int *arr = new int[10];</span></span><br><span class="line"><span class="comment">//delete []arr;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">int *p = new int[100];</span></span><br><span class="line"><span class="comment">if(NULL == P) &#123;</span></span><br><span class="line"><span class="comment">  // 申请成功</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用频繁的函数建议写成内联函数</span></span><br><span class="line"><span class="comment">// 内联条件，逻辑简单，不能是递归函数</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> b = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">int</span> x = <span class="number">3</span>;</span><br><span class="line"><span class="comment">//  x = 5; error</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">int</span> *y = &amp;x;</span><br><span class="line">  y = &amp;b;</span><br><span class="line"><span class="comment">//  *y = 100; error</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">int</span> *<span class="keyword">const</span> z = &amp;x;</span><br><span class="line"><span class="comment">//  z = &amp;b;   error</span></span><br><span class="line"><span class="comment">//  *z = 100; error</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// x 为不可变，所以也不能通过 *y2 来改变指针的值</span></span><br><span class="line"><span class="comment">//  int *y2 = &amp;x;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// b 有读写权限，指针为读权限，所以正确，上面的为错误</span></span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">int</span> *y2 = &amp;b;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//  int x = 3;</span></span><br><span class="line"><span class="comment">//  const int &amp;y = x;</span></span><br><span class="line"><span class="comment">//  </span></span><br><span class="line"><span class="comment">//  x = 10;</span></span><br><span class="line"><span class="comment">//  y = 100;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
           
         
@@ -955,7 +1079,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -968,7 +1092,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

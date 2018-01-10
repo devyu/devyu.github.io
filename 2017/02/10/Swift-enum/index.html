@@ -314,7 +314,7 @@
 <p>使用该枚举成员<code>rawValue</code>可访问该枚举成员的原始值：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let earthsOrder = Planet.earth.rawValue // 3</span><br><span class="line">let sunsetDirection = CompassPoint.west.rawValue // &quot;west&quot;</span><br></pre></td></tr></table></figure>
 <p>在定义枚举的时候，会自动获得初始化方法，即可以自动创建一个枚举实例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let possiblePlanet = Planet(rawValue: 7)</span><br><span class="line">// possiblePlanet 类型为 Planet? 值为 Planet.uranus</span><br></pre></td></tr></table></figure>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> possiblePlanet = Planet(rawValue: <span class="number">7</span>)</span><br><span class="line"><span class="comment">// possiblePlanet 类型为 Planet? 值为 Planet.uranus</span></span><br></pre></td></tr></table></figure>
 <h3 id="递归枚举"><a href="#递归枚举" class="headerlink" title="递归枚举"></a>递归枚举</h3><p><code>递归枚举</code>：递归枚举是一种枚举类型，它有一个或多个枚举成员使用该枚举类型的实例作为关联值。使用递归枚举时，编译<br>器会插入一个间接层。你可以在枚举成员前加上 <code>indirect</code> 来表示该成员可递归。这里使用官方文档中的计算表达式(5 + 4) * 2的例子：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">enum ArithmeticExpression &#123;</span><br><span class="line">    case number(Int)</span><br><span class="line">    indirect case addition(ArithmeticExpression, ArithmeticExpression)</span><br><span class="line">    indirect case multiplication(ArithmeticExpression, ArithmeticExpression)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 需要注意这里并不是真正计算表达式(5 + 4) * 2，而是把 five 和 four 作为枚举值的相关值再次创建枚举，然后复制给 sum 和 product</span><br><span class="line">let five = ArithmeticExpression.number(5)</span><br><span class="line">let four = ArithmeticExpression.number(4)</span><br><span class="line">let sum = ArithmeticExpression.addition(five, four)</span><br><span class="line">// 这里就表示了表达式 (5 + 4) * 2。类型为 ArithmeticExpression</span><br><span class="line">let product = ArithmeticExpression.multiplication(sum, ArithmeticExpression.number(2))</span><br><span class="line"></span><br><span class="line">// 计算表达式求值函数</span><br><span class="line">func evaluate(_ expression: ArithmeticExpression) -&gt; Int &#123;</span><br><span class="line">  switch expression &#123;</span><br><span class="line">  case let .number(value):</span><br><span class="line">    return value</span><br><span class="line">  case let .addition(left, right):</span><br><span class="line">    return evaluate(left) + evaluate(right)</span><br><span class="line">  case let .multiplication(left, right):</span><br><span class="line">    return evaluate(left) * evaluate(right)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">print(evaluate(product)) // 18</span><br></pre></td></tr></table></figure>
 <p>另外，也可以再枚举类型开头加上<code>indirect</code>关键字来表明它的所有成员都是可递归的：</p>
@@ -438,7 +438,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -451,7 +451,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

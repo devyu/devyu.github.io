@@ -343,7 +343,7 @@
 <li>在初始化方法及 dealloc 方法中，总是应该直接通过实例变量来读写数据。</li>
 <li>在使用惰性初始化时，通过属性来获取数据</li>
 </ul>
-<h4 id="第8条：理解”对象同等性”"><a href="#第8条：理解”对象同等性”" class="headerlink" title="第8条：理解”对象同等性”"></a>第8条：理解”对象同等性”</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">NSString *foo = @&quot;Badge 123&quot;;</span><br><span class="line">NSString *bar = [NSString stringWithFormat:@&quot;Badge %i&quot;, 123];</span><br><span class="line">BOOL equalA = (foo == bar); // NO</span><br><span class="line">BOOL equalB = [foo isEqual:bar]; // YES</span><br><span class="line">BOOL equalC = [foo isEqualToString:bar]; // YES</span><br></pre></td></tr></table></figure>
+<h4 id="第8条：理解”对象同等性”"><a href="#第8条：理解”对象同等性”" class="headerlink" title="第8条：理解”对象同等性”"></a>第8条：理解”对象同等性”</h4><figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">NSString *foo = <span class="comment">@"Badge 123";</span></span><br><span class="line"><span class="comment">NSString *bar = [NSString stringWithFormat:@</span><span class="string">"Badge %i"</span>, <span class="number">123</span>];</span><br><span class="line"><span class="keyword">BOOL</span> equalA = (foo == <span class="built_in">bar</span>); <span class="comment">// NO</span></span><br><span class="line"><span class="keyword">BOOL</span> equalB = [foo isEqual:<span class="built_in">bar</span>]; <span class="comment">// YES</span></span><br><span class="line"><span class="keyword">BOOL</span> equalC = [foo isEqualToString:<span class="built_in">bar</span>]; <span class="comment">// YES</span></span><br></pre></td></tr></table></figure>
 <p>在判断对象是否相等，需要覆写 <code>isEqual</code>和 <code>isEqualToString</code> 方法：</p>
 <p><img src="/image/Effective-Objective-C-2.0-cahpter2-02.png" alt=""></p>
 <ul>
@@ -554,7 +554,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -567,7 +567,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

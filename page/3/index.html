@@ -229,6 +229,127 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/10/Swift-ObjectIdentifier/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/02/10/Swift-ObjectIdentifier/" itemprop="url">Class中的ObjectIdentifier</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-10T19:37:40+08:00">
+                2017-02-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><code>ObjectIdentifier</code>：用来判断类的标识，只要类实例、元类中才能使用。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Student &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let stuA = Student()</span><br><span class="line">let stuB = stuA</span><br><span class="line"></span><br><span class="line"><span class="comment">// true</span></span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(ObjectIdentifier(stuA)</span></span> == ObjectIdentifier(stuB))</span><br><span class="line"><span class="comment">// true</span></span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(stuA === stuB)</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">let stuC = Student()</span><br><span class="line"><span class="comment">// false</span></span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(ObjectIdentifier(stuA)</span></span> == ObjectIdentifier(stuC))</span><br><span class="line"><span class="comment">// false</span></span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(stuA === stuC)</span></span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/10/Swift-enum/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -314,7 +435,7 @@
 <p>使用该枚举成员<code>rawValue</code>可访问该枚举成员的原始值：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let earthsOrder = Planet.earth.rawValue // 3</span><br><span class="line">let sunsetDirection = CompassPoint.west.rawValue // &quot;west&quot;</span><br></pre></td></tr></table></figure>
 <p>在定义枚举的时候，会自动获得初始化方法，即可以自动创建一个枚举实例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let possiblePlanet = Planet(rawValue: 7)</span><br><span class="line">// possiblePlanet 类型为 Planet? 值为 Planet.uranus</span><br></pre></td></tr></table></figure>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> possiblePlanet = Planet(rawValue: <span class="number">7</span>)</span><br><span class="line"><span class="comment">// possiblePlanet 类型为 Planet? 值为 Planet.uranus</span></span><br></pre></td></tr></table></figure>
 <h3 id="递归枚举"><a href="#递归枚举" class="headerlink" title="递归枚举"></a>递归枚举</h3><p><code>递归枚举</code>：递归枚举是一种枚举类型，它有一个或多个枚举成员使用该枚举类型的实例作为关联值。使用递归枚举时，编译<br>器会插入一个间接层。你可以在枚举成员前加上 <code>indirect</code> 来表示该成员可递归。这里使用官方文档中的计算表达式(5 + 4) * 2的例子：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">enum ArithmeticExpression &#123;</span><br><span class="line">    case number(Int)</span><br><span class="line">    indirect case addition(ArithmeticExpression, ArithmeticExpression)</span><br><span class="line">    indirect case multiplication(ArithmeticExpression, ArithmeticExpression)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 需要注意这里并不是真正计算表达式(5 + 4) * 2，而是把 five 和 four 作为枚举值的相关值再次创建枚举，然后复制给 sum 和 product</span><br><span class="line">let five = ArithmeticExpression.number(5)</span><br><span class="line">let four = ArithmeticExpression.number(4)</span><br><span class="line">let sum = ArithmeticExpression.addition(five, four)</span><br><span class="line">// 这里就表示了表达式 (5 + 4) * 2。类型为 ArithmeticExpression</span><br><span class="line">let product = ArithmeticExpression.multiplication(sum, ArithmeticExpression.number(2))</span><br><span class="line"></span><br><span class="line">// 计算表达式求值函数</span><br><span class="line">func evaluate(_ expression: ArithmeticExpression) -&gt; Int &#123;</span><br><span class="line">  switch expression &#123;</span><br><span class="line">  case let .number(value):</span><br><span class="line">    return value</span><br><span class="line">  case let .addition(left, right):</span><br><span class="line">    return evaluate(left) + evaluate(right)</span><br><span class="line">  case let .multiplication(left, right):</span><br><span class="line">    return evaluate(left) * evaluate(right)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">print(evaluate(product)) // 18</span><br></pre></td></tr></table></figure>
 <p>另外，也可以再枚举类型开头加上<code>indirect</code>关键字来表明它的所有成员都是可递归的：</p>
@@ -439,9 +560,9 @@
         
           
             <p> Swift 通过 <code>Mirror</code> 在运行时检测、访问或者修改类型的行为的特性。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">struct Person &#123;</span><br><span class="line">  let name: String</span><br><span class="line">  let age: Int</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let xiaoMing = Person(name: &quot;XiaoMing&quot;, age: 16)</span><br><span class="line">let r = Mirror(reflecting: xiaoMing)</span><br><span class="line"></span><br><span class="line">print(&quot;属性个数:\(r.children.count)&quot;)</span><br><span class="line">// 通过 Mirror 初始化得到的结果中包含的元素的描述都被集合在 children 属性下</span><br><span class="line">// 其类型是 `public typealias Children = AnyCollection&lt;Mirror.Child&gt;`</span><br><span class="line">for i in r.children &#123;</span><br><span class="line">  print(&quot;属性名:\(i)&quot;)</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line"> 属性名:(Optional(&quot;name&quot;), &quot;XiaoMing&quot;)</span><br><span class="line"> 属性名:(Optional(&quot;age&quot;), 16)</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">// 也可以通过 `dump` 快速输出某个对象</span><br><span class="line">dump(xiaoMing)</span><br><span class="line">/*</span><br><span class="line"> ▿ Person</span><br><span class="line"> - name: &quot;XiaoMing&quot;</span><br><span class="line"> - age: 16</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> name: <span class="type">String</span></span><br><span class="line">  <span class="keyword">let</span> age: <span class="type">Int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> xiaoMing = <span class="type">Person</span>(name: <span class="string">"XiaoMing"</span>, age: <span class="number">16</span>)</span><br><span class="line"><span class="keyword">let</span> r = <span class="type">Mirror</span>(reflecting: xiaoMing)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"属性个数:<span class="subst">\(r.children.<span class="built_in">count</span>)</span>"</span>)</span><br><span class="line"><span class="comment">// 通过 Mirror 初始化得到的结果中包含的元素的描述都被集合在 children 属性下</span></span><br><span class="line"><span class="comment">// 其类型是 `public typealias Children = AnyCollection&lt;Mirror.Child&gt;`</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> r.children &#123;</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">"属性名:<span class="subst">\(i)</span>"</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> 属性名:(Optional("name"), "XiaoMing")</span></span><br><span class="line"><span class="comment"> 属性名:(Optional("age"), 16)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 也可以通过 `dump` 快速输出某个对象</span></span><br><span class="line"><span class="built_in">dump</span>(xiaoMing)</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> ▿ Person</span></span><br><span class="line"><span class="comment"> - name: "XiaoMing"</span></span><br><span class="line"><span class="comment"> - age: 16</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
 <p>也可以使用 Mirror 来达到 Objecttive-C 中 KVC 的效果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">func valueFrom(object: Any, key: String) -&gt; Any? &#123;</span><br><span class="line">  let mirror = Mirror(reflecting: object)</span><br><span class="line"></span><br><span class="line">  for i in mirror.children &#123;</span><br><span class="line">    let (targetKey, targetMirror) = i</span><br><span class="line">    if key == targetKey &#123;</span><br><span class="line">      return targetMirror</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return nil</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if let name = valueFrom(object: xiaoMing, key: &quot;name&quot;) as? String &#123;</span><br><span class="line">  print(&quot;通过 key 得到值: \(name)&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">valueFrom</span><span class="params">(object: Any, key: String)</span></span> -&gt; <span class="type">Any</span>? &#123;</span><br><span class="line">  <span class="keyword">let</span> mirror = <span class="type">Mirror</span>(reflecting: object)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> mirror.children &#123;</span><br><span class="line">    <span class="keyword">let</span> (targetKey, targetMirror) = i</span><br><span class="line">    <span class="keyword">if</span> key == targetKey &#123;</span><br><span class="line">      <span class="keyword">return</span> targetMirror</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> name = valueFrom(object: xiaoMing, key: <span class="string">"name"</span>) <span class="keyword">as</span>? <span class="type">String</span> &#123;</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">"通过 key 得到值: <span class="subst">\(name)</span>"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
 <h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="http://swifter.tips/reflect/" target="_blank" rel="noopener">Swift Mirror</a></p>
 
@@ -564,7 +685,7 @@
         
           
             <p>Swift 当中也可以使用 method swizzle 在运行时进行方法交换，通常在某种情况下很有用，比如统计页面 Button 点击了多少次，可以扩展 UIButton 来实现，</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">extension UIButton&#123;</span><br><span class="line">  class func swipButtonAction()&#123;</span><br><span class="line">    struct T &#123;</span><br><span class="line">      static var swizzle: Bool = &#123;</span><br><span class="line">        let cls: AnyClass = UIButton.self</span><br><span class="line"></span><br><span class="line">        let originalSelector = #selector(UIButton.sendAction(_:to:for:))</span><br><span class="line">        let swizzleSelector = #selector(UIButton.swizzle_sendAction(action:to:forEvent:))</span><br><span class="line"></span><br><span class="line">        let origin_method = class_getInstanceMethod(cls, originalSelector)</span><br><span class="line">        let swizzle_method = class_getInstanceMethod(cls, swizzleSelector)</span><br><span class="line"></span><br><span class="line">        // 交换两个方法实现</span><br><span class="line">        method_exchangeImplementations(origin_method, swizzle_method)</span><br><span class="line"></span><br><span class="line">        return false</span><br><span class="line">      &#125;()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    _ = T.swizzle</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 定义要交换的函数</span><br><span class="line">  public  func swizzle_sendAction(action: Selector,</span><br><span class="line">                                  to: AnyClass!,</span><br><span class="line">                                  forEvent: UIEvent!)&#123;</span><br><span class="line">    // 累加器</span><br><span class="line">    struct button_tap_count&#123;</span><br><span class="line">      static var count = 0</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    button_tap_count.count += 1</span><br><span class="line">    print(button_tap_count.count)</span><br><span class="line">    // 看似好像调用了自己构成死循环,但是 我们其实已经将两个方法名的实现进行了调换 所以 其实我们调用的是 方法sendAction:to:forEvent 的实现 这样就可以在不破环原先方法结构的基础上进行交换实现</span><br><span class="line">    swizzle_sendAction(action: action, to: to, forEvent: forEvent)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">UIButton</span></span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">func</span> <span class="title">swipButtonAction</span>()</span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">T</span> </span>&#123;</span><br><span class="line">      <span class="keyword">static</span> <span class="keyword">var</span> swizzle: <span class="type">Bool</span> = &#123;</span><br><span class="line">        <span class="keyword">let</span> cls: <span class="type">AnyClass</span> = <span class="type">UIButton</span>.<span class="keyword">self</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> originalSelector = #selector(<span class="type">UIButton</span>.sendAction(<span class="number">_</span>:to:<span class="keyword">for</span>:))</span><br><span class="line">        <span class="keyword">let</span> swizzleSelector = #selector(<span class="type">UIButton</span>.swizzle_sendAction(action:to:forEvent:))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> origin_method = class_getInstanceMethod(cls, originalSelector)</span><br><span class="line">        <span class="keyword">let</span> swizzle_method = class_getInstanceMethod(cls, swizzleSelector)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 交换两个方法实现</span></span><br><span class="line">        method_exchangeImplementations(origin_method, swizzle_method)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">      &#125;()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="number">_</span> = <span class="type">T</span>.swizzle</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 定义要交换的函数</span></span><br><span class="line">  <span class="keyword">public</span>  <span class="function"><span class="keyword">func</span> <span class="title">swizzle_sendAction</span><span class="params">(action: Selector,</span></span></span><br><span class="line"><span class="function"><span class="params">                                  to: AnyClass!,</span></span></span><br><span class="line"><span class="function"><span class="params">                                  forEvent: UIEvent!)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 累加器</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">button_tap_count</span></span>&#123;</span><br><span class="line">      <span class="keyword">static</span> <span class="keyword">var</span> <span class="built_in">count</span> = <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    button_tap_count.<span class="built_in">count</span> += <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(button_tap_count.<span class="built_in">count</span>)</span><br><span class="line">    <span class="comment">// 看似好像调用了自己构成死循环,但是 我们其实已经将两个方法名的实现进行了调换 所以 其实我们调用的是 方法sendAction:to:forEvent 的实现 这样就可以在不破环原先方法结构的基础上进行交换实现</span></span><br><span class="line">    swizzle_sendAction(action: action, to: to, forEvent: forEvent)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
 <h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="http://swifter.tips/swizzle/" target="_blank" rel="noopener">swift swizzle</a></p>
 
@@ -687,7 +808,7 @@
         
           
             <p>自定义输出，必须遵循 <code>CustomStringConvertible</code> 协议，实现 <code>description</code> 方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Person: CustomStringConvertible  &#123;</span><br><span class="line">  var name: String</span><br><span class="line">  var age: Int</span><br><span class="line"></span><br><span class="line">  init(name:String, age:Int) &#123;</span><br><span class="line">    self.name = name</span><br><span class="line">    self.age = age</span><br><span class="line">  &#125;</span><br><span class="line">  var description: String&#123;</span><br><span class="line">    return name + String(age)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let person = Person(name: &quot;JY&quot;, age: 25)</span><br><span class="line">print(person)</span><br></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Person: CustomStringConvertible  &#123;</span><br><span class="line">  <span class="selector-tag">var</span> name: String</span><br><span class="line">  <span class="selector-tag">var</span> age: Int</span><br><span class="line"></span><br><span class="line">  init(name:String, age:Int) &#123;</span><br><span class="line">    self<span class="selector-class">.name</span> = name</span><br><span class="line">    self<span class="selector-class">.age</span> = age</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="selector-tag">var</span> description: String&#123;</span><br><span class="line">    return name + String(age)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let person = Person(name: <span class="string">"JY"</span>, age: <span class="number">25</span>)</span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(person)</span></span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -972,11 +1093,11 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">merge_sort</span><span class="params">(ary)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> len(ary) &lt;= <span class="number">1</span>: <span class="keyword">return</span> ary</span><br><span class="line">    <span class="comment"># 二分分解</span></span><br><span class="line">    num = int(len(ary) / <span class="number">2</span>)</span><br><span class="line">    left = merge_sort(ary[:num])</span><br><span class="line">    right = merge_sort(ary[num:])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 合并数组</span></span><br><span class="line">    <span class="keyword">return</span> merge(left, right)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">merge</span><span class="params">(left, right)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'left = '</span>, left)</span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'right = '</span>, right)</span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    将两个有序数组left[]和right[]合并成一个大的有序数组</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="comment"># left和right数组的下标指针</span></span><br><span class="line">    l,r = <span class="number">0</span>,<span class="number">0</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">while</span> l&lt;len(left) <span class="keyword">and</span> r&lt;len(right) :</span><br><span class="line">        <span class="keyword">if</span> left[l] &lt; right[r]:</span><br><span class="line">            result.append(left[l])</span><br><span class="line">            l += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            result.append(right[r])</span><br><span class="line">            r += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    result += left[l:]</span><br><span class="line">    result += right[r:]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    s = merge_sort([<span class="number">5</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>])</span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'sort result = '</span>, s)</span><br></pre></td></tr></table></figure>
 <h3 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h3><p>希尔排序的基本思想是：将数组中的数据列在一个按照一定的增量列在一个表当中，然后分别进行插入排序。一直重复这个过程，每次都改变这个增量的长度。最后这个表只有一列。</p>
 <p>思路：有以下的数组<code>[3, 2, 4, 5, 1, 6, 8, 7]</code>，将增量列为数组长度的一半，那么得到的表为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">3  2  4  5</span><br><span class="line">1  6  8  7</span><br></pre></td></tr></table></figure>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">3 </span> <span class="number">2</span>  <span class="number">4</span>  <span class="number">5</span></span><br><span class="line"><span class="symbol">1 </span> <span class="number">6</span>  <span class="number">8</span>  <span class="number">7</span></span><br></pre></td></tr></table></figure>
 <p>然后对每列进行排序，如下表：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1  2  4  5</span><br><span class="line">3  6  8  7</span><br></pre></td></tr></table></figure>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">1 </span> <span class="number">2</span>  <span class="number">4</span>  <span class="number">5</span></span><br><span class="line"><span class="symbol">3 </span> <span class="number">6</span>  <span class="number">8</span>  <span class="number">7</span></span><br></pre></td></tr></table></figure>
 <p>再次将增量依次折半，并按照下表进行排序，如下表：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1  2</span><br><span class="line">3  5</span><br><span class="line">4  6</span><br><span class="line">8  7</span><br></pre></td></tr></table></figure>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">1 </span> <span class="number">2</span></span><br><span class="line"><span class="symbol">3 </span> <span class="number">5</span></span><br><span class="line"><span class="symbol">4 </span> <span class="number">6</span></span><br><span class="line"><span class="symbol">8 </span> <span class="number">7</span></span><br></pre></td></tr></table></figure>
 <p>当增量为1的时候，就是插入排序了，重复多次后，当<code>增量为小于0</code>的时候，排序完成，就得到排序后的数组列表。代码如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">shell_sort</span><span class="params">(ary)</span>:</span></span><br><span class="line">    n = len(ary)</span><br><span class="line">    <span class="comment"># 初始增量，round四舍五入取整</span></span><br><span class="line">    gap = int(round(n / <span class="number">2</span>))</span><br><span class="line">    <span class="keyword">while</span> gap &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(gap, n):</span><br><span class="line">            temp = ary[i]</span><br><span class="line">            j = i</span><br><span class="line">            <span class="keyword">while</span> (j &gt;= gap <span class="keyword">and</span> ary[j - gap] &gt; temp):</span><br><span class="line">                <span class="comment"># 插入排序</span></span><br><span class="line">                ary[j] = ary[j - gap]</span><br><span class="line">                j = j - gap</span><br><span class="line">            ary[j] = temp</span><br><span class="line">        gap = int(round(gap / <span class="number">2</span>))</span><br><span class="line">    <span class="keyword">return</span> ary</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    s = shell_sort([<span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">7</span>])</span><br><span class="line">    <span class="keyword">print</span> (s)</span><br></pre></td></tr></table></figure>
 <h3 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h3><p>堆排序是采用二叉堆来的数据结构实现的，实质上还是一维数组。二叉堆是一个近似完全二叉树。</p>
@@ -1399,167 +1520,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/22/Python÷–IO±‡≥Ã/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JY's Den">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/12/22/Python÷–IO±‡≥Ã/" itemprop="url">Python中IO编程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-22T17:07:17+08:00">
-                2016-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h3><p>Python封装操作系统读写文件的API，用法与C兼容。进行文件读写的时候，由于操作磁盘上文件的行为都是由操作系统完成的，所以需要请求操作系统打开文件对象（也称之为文件描述符），接着通过操作系统提供的接口从文件对象中读取或写入数据。</p>
-<h4 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h4><p>Python内置<code>open()</code>函数可以读取文件，如果文件不存在则抛出<code>IOError</code>：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># r 表示 只读</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = open(<span class="string">'/User/1.txt'</span>, <span class="string">'r'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果文件不存在，则抛出错误，并说明出错原因</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">FileNotFoundError: [Errno <span class="number">2</span>] No such file <span class="keyword">or</span> directory: <span class="string">'/User/1.txt'</span></span><br></pre></td></tr></table></figure>
-<p>如果文件打开成功，接着可以调用<code>read()</code>函数一次读取文件全部内容，并返回一个<code>str</code>对象。要记住：<code>在文件使用完毕后必须要进行关闭</code>：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.read()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.close()</span><br></pre></td></tr></table></figure>
-<p>在进行文件操作的时候，都有可能产生<code>IOError</code>错误，我们也可以捕获这个错误：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">  f = open(<span class="string">'/User/1.txt'</span>, <span class="string">'r'</span>)</span><br><span class="line">  print(f.read())</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">  <span class="keyword">if</span> f:</span><br><span class="line">    f.close()</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">  print(e)</span><br></pre></td></tr></table></figure>
-<p>Python中使用<code>with</code>语句来简化调用形式，可以自动调用<code>close()</code>方法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">'/User/1.txt'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">  print(f.read())</span><br></pre></td></tr></table></figure>
-<p>常用的读取文件的函数：</p>
-<ul>
-<li><code>read()</code>函数一次性读取文件全部内容</li>
-<li><code>read(size)</code>函数每次最多读取 size 个字节</li>
-<li><code>readline()</code>函数每次读取一行内容</li>
-<li><code>readlines()</code>函数一次读取所有内容并按行返回<code>list</code></li>
-</ul>
-<p>读取二进制文件：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 读取视频、图片等二进制文件</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = open(<span class="string">'/Users/test.jpg'</span>, <span class="string">'rb'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.read()</span><br><span class="line"></span><br><span class="line"><span class="string">b'\x00\xd7...'</span> <span class="comment"># 十六进制</span></span><br></pre></td></tr></table></figure>
-<p>字符串编码：</p>
-<p><code>open()</code>函数还可以接受两个参数，第一个参数是将读取的字符编码进行编码，如果文件中出现非法编码的字符串，会抛出<code>UnicodeDecodeError</code>错误。这种情况，还可以接受第二个参数：<code>errors</code>。可以直接忽略编码出现的错误：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f = open(<span class="string">'/Users/1.txt'</span>, <span class="string">'r'</span>, encoding=<span class="string">'gbk'</span>, errors=<span class="string">'ignore'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="写文件"><a href="#写文件" class="headerlink" title="写文件"></a>写文件</h3><p>写操作和读操作差不多，主要区别是<code>open()</code>函数的文件权限标示符不一致：<code>w</code>或<code>wb</code>表示写文本文件或写二进制文件。当然，写操作完成一定要调用<code>close()</code>来关闭文件，也可以像上面那样使用<code>with</code>语句。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">'/Users/test.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="string">'Hello, world!'</span>)</span><br></pre></td></tr></table></figure>
-<p>如果想写入特定编码的文本，可以给<code>open()</code>函数传入<code>encoding</code>参数将字符串转为指定编码。</p>
-<h3 id="读写内存中的文件"><a href="#读写内存中的文件" class="headerlink" title="读写内存中的文件"></a>读写内存中的文件</h3><h4 id="StringIO"><a href="#StringIO" class="headerlink" title="StringIO"></a>StringIO</h4><p>在内当中读写字符串：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = StringIO()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.write(<span class="string">'hello'</span>)</span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.write(<span class="string">' '</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.write(<span class="string">'world!'</span>)</span><br><span class="line"><span class="number">6</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取写入的字符串</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(f.getvalue())</span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
-<p>也可以用字符串初始化一个StringIO，然后，像读文件一样读取：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = StringIO(<span class="string">'Hello world!'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line"><span class="meta">... </span>    s = f.readline()</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">if</span> s == <span class="string">''</span>:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">break</span></span><br><span class="line"><span class="meta">... </span>    print(s.strip())</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Hello world!</span><br></pre></td></tr></table></figure>
-<h4 id="BytesIO"><a href="#BytesIO" class="headerlink" title="BytesIO"></a>BytesIO</h4><p>读取内存中的二进制数据：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> io <span class="keyword">import</span> BytesIO</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = BytesIO()</span><br><span class="line"><span class="comment"># 这里写入的是 utf-8 编码的二进制数据</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.write(<span class="string">'中文'</span>.encode(<span class="string">'utf-8'</span>))</span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(f.getvalue())</span><br><span class="line"><span class="string">b'\xe4\xb8\xad\xe6\x96\x87'</span></span><br></pre></td></tr></table></figure>
-<p>用bytes初始化BytesIO，然后读取它：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> io <span class="keyword">import</span> BytesIO</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = BytesIO(<span class="string">b'\xe4\xb8\xad\xe6\x96\x87'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.read()</span><br><span class="line"><span class="string">b'\xe4\xb8\xad\xe6\x96\x87'</span></span><br></pre></td></tr></table></figure>
-<h3 id="操作文件"><a href="#操作文件" class="headerlink" title="操作文件"></a>操作文件</h3><p>Python内置的<code>os</code>模块可以直接调用操作系统提供的接口，只需要<code>import os</code>模块：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> os</span><br><span class="line"><span class="comment"># 操作系统类型：mac OS 是 posix，windows 是 nt</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.name</span><br><span class="line"><span class="comment"># 获取系统信息，windows上没有</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.uname()</span><br><span class="line"><span class="comment"># 获取操作系统环境变量</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.environ</span><br><span class="line"><span class="comment"># 获取某个环境变量(PATH)的值</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.environ.get(<span class="string">'PATH'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="操作文件和目录"><a href="#操作文件和目录" class="headerlink" title="操作文件和目录"></a>操作文件和目录</h3><p>操作文件和目录一般在<code>os</code>和<code>os.path</code>模块中。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看蛋清目录的绝对路径</span></span><br><span class="line"><span class="comment"># 查看当前目录的绝对路径:</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.path.abspath(<span class="string">'.'</span>)</span><br><span class="line"><span class="string">'/Users/mac'</span></span><br><span class="line"><span class="comment"># 在某个目录下创建一个新目录，并返回完整路径，在合成两个路径的时候，推荐使用这种方式合成路径</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.path.join(<span class="string">'/Users/mac/Desktop'</span>, <span class="string">'TestDir'</span>)</span><br><span class="line"><span class="string">'/Users/mac/Desktop/TestDir'</span></span><br><span class="line"><span class="comment"># 在当前路径创建一个目录:</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.mkdir(<span class="string">'/Users/mac/Desktop/TestDir'</span>)</span><br><span class="line"><span class="comment"># 删掉一个目录:</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.rmdir(<span class="string">'/Users/mac/Desktop/TestDir'</span>)</span><br><span class="line"><span class="comment"># 拆分路径。最后一部分是最后级别的目录或者文件名（拆分、合并路径并不要求文件或者目录存在，只对字符串进行操作）</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.path.split(<span class="string">'/Users/mac/Desktop/TestDir'</span>)</span><br><span class="line">(<span class="string">'/Users/mac/Desktop'</span>, <span class="string">'TestDir'</span>)</span><br><span class="line"><span class="comment"># 获取文件扩展名</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.path.splitext(<span class="string">'/path/to/1.txt'</span>)</span><br><span class="line">(<span class="string">'/path/to/1'</span>, <span class="string">'.txt'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重命名文件</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.rename(<span class="string">'test.txt'</span>, <span class="string">'test.py'</span>)</span><br><span class="line"><span class="comment"># 删除文件:</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.remove(<span class="string">'test.py'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h3><p>Python中的<code>pickle</code>模块提供对象序列化功能</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> pickle</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = dict(name=<span class="string">'Tom'</span>, age=<span class="number">20</span>)</span><br><span class="line"><span class="comment"># pickle.dumps() 方法将对象序列化成 bytes 。然后将这个 bytes 写入文件</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pickle.dumps(d)</span><br><span class="line"><span class="string">b'\x80\x03&#125;q\x00(X\x04\x00\x00\x00nameq\x01X\x03\x00\x00\x00Tomq\x02X\x03\x00\x00\x00ageq\x03K\x14u.'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者直接使用 pickle.dump() 直接将对象序列化后写入 file-like Object</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = open(<span class="string">'/Users/mac/Desktop/dump.txt'</span>, <span class="string">'wb'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pickle.dump(d, f)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.close()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取刚才写入的内容，读出文件的内容(bytes)，用 pickle.loads() 函数反序列化成对象，也可以用 pickle.load() 方法从 file-like Object 反序列化对象</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = open(<span class="string">'/Users/mac/Desktop/dump.txt'</span>, <span class="string">'rb'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pickle.load(f)</span><br><span class="line">&#123;<span class="string">'name'</span>: <span class="string">'Tom'</span>, <span class="string">'age'</span>: <span class="number">20</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.close()</span><br><span class="line"><span class="comment"># 注意：由于不同版本Python不兼容，因此这种方法只能保存不重要的数据。</span></span><br></pre></td></tr></table></figure>
-<p>在序列化 JSON 的时候，我们也可以这样做：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 序列化 JSON</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> json</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = dict(name=<span class="string">'Tom'</span>, age=<span class="number">20</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>json.dumps(d)</span><br><span class="line"><span class="string">'&#123;"age": 20, "name": "Tom"&#125;'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 反序列化</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>json_str = <span class="string">'&#123;"age": 20, "name": "Tom"&#125;'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>json.loads(json_str)</span><br><span class="line">&#123;<span class="string">'age'</span>: <span class="number">20</span>, <span class="string">'name'</span>: <span class="string">'Tom'</span>&#125;</span><br></pre></td></tr></table></figure>
-<p>dump()函数还接受不同的参数，来序列化自定义的对象：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></span><br><span class="line">    self.name = name</span><br><span class="line">    self.age = age</span><br><span class="line"></span><br><span class="line">s = Student(<span class="string">'Tom'</span>, <span class="number">20</span>)</span><br><span class="line"><span class="comment"># 把任意 class 的实例变为 dict，通常每个 class 实例都有一个 __dict__ 属性，用来存储实例变量。</span></span><br><span class="line">print(json.dumps(s, default=<span class="keyword">lambda</span> obj: obj.__dict__))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 同样也可以通过 loads() 方法将 json 反序列化成对象</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dict2Student</span><span class="params">(obj)</span>:</span></span><br><span class="line">  <span class="keyword">return</span> Student(d[<span class="string">'name'</span>], d[<span class="string">'age'</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>json_str = <span class="string">'&#123;"age": 20, "name": "Tom"&#125;'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(json.loads(json_str, object_hook=dict2Student))</span><br><span class="line">&lt;__main__.Student object at <span class="number">0x10cd3c190</span>&gt;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1610,7 +1570,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1623,7 +1583,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
