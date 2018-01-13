@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -83,18 +83,18 @@
 <meta name="keywords" content="Objective-C">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Effective Objective-C读书笔记(1)">
-<meta property="og:url" content="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-1/index.html">
+<meta property="og:url" content="http://devyu.github.io/2017/03/21/Effective-Objective-C∂¡ È± º«-1/index.html">
 <meta property="og:site_name" content="JY&#39;s Den">
 <meta property="og:description" content="熟悉 Objective-CObjective-C 中的消息Objective-C 起源于 Smalltalk，所以借鉴了 Smalltalk 的消息结构(messaging structure)，而非像 C++ 那样的函数调用(function calling)。主要区别：使用消息结构的语言，其运行时所应执行的代码由运行环境来决定。而使用函数调用的语言，由编译器决定。如果示例代码是多态的，那么在">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/image/Effective-Objective-C-2.0-cahpter1-01.png">
-<meta property="og:image" content="http://yoursite.com/image/Effective-Objective-C-2.0-cahpter1-02.png">
-<meta property="og:image" content="http://yoursite.com/image/Effective-Objective-C-2.0-cahpter1-03.png">
+<meta property="og:image" content="http://devyu.github.io/image/Effective-Objective-C-2.0-cahpter1-01.png">
+<meta property="og:image" content="http://devyu.github.io/image/Effective-Objective-C-2.0-cahpter1-02.png">
+<meta property="og:image" content="http://devyu.github.io/image/Effective-Objective-C-2.0-cahpter1-03.png">
 <meta property="og:updated_time" content="2017-08-12T02:21:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Effective Objective-C读书笔记(1)">
 <meta name="twitter:description" content="熟悉 Objective-CObjective-C 中的消息Objective-C 起源于 Smalltalk，所以借鉴了 Smalltalk 的消息结构(messaging structure)，而非像 C++ 那样的函数调用(function calling)。主要区别：使用消息结构的语言，其运行时所应执行的代码由运行环境来决定。而使用函数调用的语言，由编译器决定。如果示例代码是多态的，那么在">
-<meta name="twitter:image" content="http://yoursite.com/image/Effective-Objective-C-2.0-cahpter1-01.png">
+<meta name="twitter:image" content="http://devyu.github.io/image/Effective-Objective-C-2.0-cahpter1-01.png">
 
 
 
@@ -102,7 +102,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Mist',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -124,7 +124,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-1/"/>
+  <link rel="canonical" href="http://devyu.github.io/2017/03/21/Effective-Objective-C∂¡ È± º«-1/"/>
 
 
 
@@ -195,6 +195,26 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -237,7 +257,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-1/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/21/Effective-Objective-C∂¡ È± º«-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -279,6 +299,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/03/21/Effective-Objective-C∂¡ È± º«-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -407,6 +438,16 @@
           
 
   
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
 
 
 
@@ -454,7 +495,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -466,10 +507,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">11</span>
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
-                
+                </a>
               </div>
             
 
@@ -548,7 +589,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
 
 
 
@@ -666,6 +707,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://devyu-github-io.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://devyu.github.io/2017/03/21/Effective-Objective-C∂¡ È± º«-1/';
+          this.page.identifier = '2017/03/21/Effective-Objective-C∂¡ È± º«-1/';
+          this.page.title = 'Effective Objective-C读书笔记(1)';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://devyu-github-io.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -678,10 +739,6 @@
   
 
 
-
-
-
-  
 
 
 

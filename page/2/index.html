@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -81,7 +81,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="JY&#39;s Den">
-<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta property="og:url" content="http://devyu.github.io/page/2/index.html">
 <meta property="og:site_name" content="JY&#39;s Den">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
@@ -93,7 +93,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Mist',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -115,7 +115,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/page/2/"/>
+  <link rel="canonical" href="http://devyu.github.io/page/2/"/>
 
 
 
@@ -187,6 +187,26 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -229,7 +249,330 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-3/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/21/Effective-Objective-C∂¡ È± º«-5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/21/Effective-Objective-C∂¡ È± º«-5/" itemprop="url">Effective-Objective-C读书笔记(5)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T22:27:28+08:00">
+                2017-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-5/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/03/21/Effective-Objective-C∂¡ È± º«-5/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h3><h4 id="第29条：理解引用计数"><a href="#第29条：理解引用计数" class="headerlink" title="第29条：理解引用计数"></a>第29条：理解引用计数</h4><p>通过引用计数来管理内存，当对象使用 <code>new</code>、<code>alloc</code>、<code>retain</code>，创建的时候，其 <code>引用计数+1</code>。当使用<code>release</code>的时候，<code>引用计数-1</code>。当其引用计数为0的时候，对象会被释放，同时需要将指针置 nil，防止出现<code>悬垂指针</code>。</p>
+<p><code>自动释放池</code>：当对象调用 <code>release</code> 会立即递减对象的引用计数，有时候可以不调用它。改为调用 <code>autorelease</code>，此方法会在稍后递减计数，通常会在下一次事件循环的时候递减。此方法可以保证对象在跨越<code>方法调用边界</code>后一定存活。使用 <code>autorelease</code> 可以延长对象生命周期。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (NSString *)stringValue &#123;</span><br><span class="line">  NSString *str = [[NSString alloc] initWithFormat:@&quot;I am this: %@&quot;, self];</span><br><span class="line">  return [str autorelease];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// stringValue 返回调用者时，此对象必然存活。所以可以这样调用</span><br><span class="line">NSString *str = [self stringValue];</span><br></pre></td></tr></table></figure>
+<p>由于返回的 str 对象稍后将自动释放，所以无需再执行内存管理操作。但是如果要持有该对象的话（比如要将其设置给实例变量），那就需要保留，并稍后释放：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_instanceVariable = [[self stringValue] retain];</span><br></pre></td></tr></table></figure>
+<h4 id="第30条：用-ARC-简化引用计数"><a href="#第30条：用-ARC-简化引用计数" class="headerlink" title="第30条：用 ARC 简化引用计数"></a>第30条：用 ARC 简化引用计数</h4><ul>
+<li>在 ARC 环境中，引用计数实际上还是要执行的，只不过引用计数现在是由 ARC 自动添加。</li>
+<li>不能使用 <code>retain</code>、<code>release</code>、<code>autorelease</code>、<code>dealloc</code> 方法。</li>
+<li>若方法名以 <code>alloc</code>、<code>new</code>、<code>copy</code>、<code>mutableCopy</code> 开头，则返回的对象归调用者所有。</li>
+<li>不使用 ARC 情况下，在实现单例类的时候，因为单例不可以释放，所有我们经常个覆写 <code>release</code> 方法，将其替换为 <code>空操作</code>。</li>
+<li>ARC 下会借用 Objective-C++ 中的一项特性来清理对象，回收 Objective-C++ 对象时，待回收对象会调用 C++ 对象的析构函数。编译器如果发现对象里含有 C++ 对象，就会生成 <code>.cxx_destruct</code> 的方法。在此方法中生成清理内存的代码。</li>
+<li>ARC 只负责管理 Objective-C 对象内存，CoreFoundation 对象不归 ARC 管理，开发者必须适时调用 CFRetain/CFRelease。</li>
+</ul>
+<h4 id="第31条：在-dealloc-方法中只释放引用并解除监听"><a href="#第31条：在-dealloc-方法中只释放引用并解除监听" class="headerlink" title="第31条：在 dealloc 方法中只释放引用并解除监听"></a>第31条：在 dealloc 方法中只释放引用并解除监听</h4><ul>
+<li>在 dealloc 方法中，ARC 会通过自动生成 <code>.cxx_destruct</code> 方法，并自动释放所有的 Objective-C 对象。</li>
+<li>在此方法中移除通知</li>
+<li>如果不使用 ARC ，那么最后还需要调用 <code>[super dealloc]</code>。ARC 会自动执行此操作。</li>
+<li>如果对象持有文件描述符等资源，应该撰文写一个方法来释放此种资源。这样的类要和使用者约定：用完资源后必须调用 close 方法。</li>
+<li>执行异步任务的方法不应该在 dealloc 里调用。只能在正常状态下执行的那些方法也不应该在 dealloc 里调用，因为此时对象已处在正在回收的状态了。</li>
+</ul>
+<h4 id="第32条：编写异常安全代码时要注意内存管理问题"><a href="#第32条：编写异常安全代码时要注意内存管理问题" class="headerlink" title="第32条：编写异常安全代码时要注意内存管理问题"></a>第32条：编写<code>异常安全代码</code>时要注意内存管理问题</h4><ul>
+<li>在非 ARC 下，使用<code>@try...@catch</code>来捕获异常，当异常发生时，程序直接执行<code>@catch</code>中的语句。忽略了<code>@try</code>中的内存管理语句。最好的做法是将<code>@try</code>中的内存管理语句放在 <code>@finally</code> 当中。</li>
+<li>默认情况下，ARC 不生成安全处理异常的所需要的清理代码。开启编译器<code>-fobjc-arc-exceptions</code>标志后，可以生成这种代码，不过会导致应用程序变大。降低运行效率。</li>
+</ul>
+<h4 id="第33条：用弱引用避免循环引用"><a href="#第33条：用弱引用避免循环引用" class="headerlink" title="第33条：用弱引用避免循环引用"></a>第33条：用弱引用避免循环引用</h4><ul>
+<li>将某些引用设置为 <code>weak</code>，避免循环引用。</li>
+<li>weak 引用可以自动清空，也可以不自动清空。自动清空是随着 ARC 而引入的新特性，由运行时系统来实习那。在自动清空功能的弱引用上，可以随意读取其数据，因为这种引用不会指向已经回收过的对象。</li>
+</ul>
+<h4 id="第34条：使用-autoreleasepool-来降低内存峰值"><a href="#第34条：使用-autoreleasepool-来降低内存峰值" class="headerlink" title="第34条：使用 autoreleasepool 来降低内存峰值"></a>第34条：使用 <code>autoreleasepool</code> 来降低内存峰值</h4><ul>
+<li>当程序当中需要创建大量的临时对象（比如循环），会造成内存增长，可以考虑将临时代码放在<code>autoreleasepool</code>当中，那么在循环中自动释放的对象就会放在这个池，而不是线程的主池里面。</li>
+<li><code>autoreleasepool</code>存放在栈中，对象收到 <code>autorelease</code> 消息后，系统将其放入最顶端的池里。</li>
+</ul>
+<h4 id="第35条：用僵尸对象调试内存管理问题"><a href="#第35条：用僵尸对象调试内存管理问题" class="headerlink" title="第35条：用僵尸对象调试内存管理问题"></a>第35条：用<code>僵尸对象</code>调试内存管理问题</h4><ul>
+<li>向已经回收的对象发送消息是不安全的，因为这有时可以，有时不行。完全取决于对象所占内存有没有为其他内容所覆写，而这块内存有没有移作他用，又无法确定。此时需要开启僵尸对象进行检查。</li>
+<li>系统在回收对象的时候，可以不将其真的回收，而是把它转化为僵尸对象。通过 <code>NSZombieEnabled</code> 可开启此功能。</li>
+</ul>
+<h4 id="第36条：不要使用-retainCount"><a href="#第36条：不要使用-retainCount" class="headerlink" title="第36条：不要使用 retainCount"></a>第36条：不要使用 retainCount</h4><ul>
+<li>不要使用 retainCount 来查看对象是否还被持有，因为任何给定时间点上 <code>绝对引用计数</code> 都无法反应对象生命周期的全貌。引用计数可能处在自动释放池中，retainCount 可能不准确。</li>
+<li>ARC 后，retainCount 就被废止了。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/21/Effective-Objective-C∂¡ È± º«-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/21/Effective-Objective-C∂¡ È± º«-4/" itemprop="url">Effective-Objective-C读书笔记(4)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T22:27:24+08:00">
+                2017-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-4/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/03/21/Effective-Objective-C∂¡ È± º«-4/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="协议与分类"><a href="#协议与分类" class="headerlink" title="协议与分类"></a>协议与分类</h3><h4 id="第23条：通过委托与数据源协议进行对象间通信"><a href="#第23条：通过委托与数据源协议进行对象间通信" class="headerlink" title="第23条：通过委托与数据源协议进行对象间通信"></a>第23条：通过委托与数据源协议进行对象间通信</h4><ul>
+<li>如果有必要，可以实现含有<code>位段</code>的结构体，将委托对象能否响应相关协议方法这一信息缓存其中。</li>
+</ul>
+<h4 id="第24条：使用分类来分散代码"><a href="#第24条：使用分类来分散代码" class="headerlink" title="第24条：使用分类来分散代码"></a>第24条：使用分类来分散代码</h4><ul>
+<li>使用分类将类的实现代码划分为易于管理的小块</li>
+<li>将视为“私有”的方法归入叫 <code>Private</code> 的分类中，隐藏实现细节。</li>
+</ul>
+<h4 id="第25条：为第三方分类添加前缀"><a href="#第25条：为第三方分类添加前缀" class="headerlink" title="第25条：为第三方分类添加前缀"></a>第25条：为第三方分类添加前缀</h4><ul>
+<li>向第三方类中添加分类时，应该给其名称、方法名添加专用的前缀。</li>
+</ul>
+<h4 id="第26条：不要在分类中添加属性"><a href="#第26条：不要在分类中添加属性" class="headerlink" title="第26条：不要在分类中添加属性"></a>第26条：不要在分类中添加属性</h4><ul>
+<li>尽量不要在分类中添加属性，因为属性是为了封装数据的。而分类目的在于扩展类的功能，而非封装数据。</li>
+<li>虽然这样定义，但是也可以在分类当中创建只读属性。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@interface NSCalendar (EOCCalandar)</span><br><span class="line">@property (nonatomic, strong, readonly) NSArray *eoc_allMonths;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<h4 id="第27条：使用匿名分类-或者说称为扩展-来隐藏实现细节"><a href="#第27条：使用匿名分类-或者说称为扩展-来隐藏实现细节" class="headerlink" title="第27条：使用匿名分类(或者说称为扩展)来隐藏实现细节"></a>第27条：使用匿名分类(或者说称为扩展)来隐藏实现细节</h4><ul>
+<li>通过匿名分类，把私有的方法、属性声明在匿名分类中。</li>
+<li>若某属性在主接口中声明为 “readonly”，类内部又要用设置方法修改此属性，可以在匿名分类中将其扩展为 “readwrite”。</li>
+</ul>
+<h4 id="第28条：通过协议提供匿名对象"><a href="#第28条：通过协议提供匿名对象" class="headerlink" title="第28条：通过协议提供匿名对象"></a>第28条：通过协议提供匿名对象</h4><ul>
+<li>提供协议来隐藏具体类内部的实现。</li>
+<li>具体的对象类型可以淡化为遵从某协议的 <code>id</code> 类型，协议里规定了对象所应该实现的方法，可以使用匿名对象来表示。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/21/Effective-Objective-C∂¡ È± º«-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -273,6 +616,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/03/21/Effective-Objective-C∂¡ È± º«-3/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -382,7 +736,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-2/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/21/Effective-Objective-C∂¡ È± º«-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -426,6 +780,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/03/21/Effective-Objective-C∂¡ È± º«-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -627,7 +992,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/21/Effective-Objective-C∂¡ È± º«-1/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/21/Effective-Objective-C∂¡ È± º«-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -671,6 +1036,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/03/21/Effective-Objective-C∂¡ È± º«-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -777,7 +1153,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/17/ ”∆µH-264—πÀı∏Ò Ω/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/17/ ”∆µH-264—πÀı∏Ò Ω/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -821,6 +1197,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/17/ ”∆µH-264—πÀı∏Ò Ω/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/03/17/ ”∆µH-264—πÀı∏Ò Ω/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -908,7 +1295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/14/Swift÷–◊‘∂Ø“˝”√º∆ ˝/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/14/Swift÷–◊‘∂Ø“˝”√º∆ ˝/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -952,6 +1339,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/14/Swift÷–◊‘∂Ø“˝”√º∆ ˝/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/03/14/Swift÷–◊‘∂Ø“˝”√º∆ ˝/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -1052,7 +1450,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/10/Swift÷–µƒ±’∞¸/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/10/Swift÷–µƒ±’∞¸/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -1096,6 +1494,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/10/Swift÷–µƒ±’∞¸/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/03/10/Swift÷–µƒ±’∞¸/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -1212,7 +1621,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/12/Founctors”ÎMonad/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/02/12/Founctors”ÎMonad/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -1256,6 +1665,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/12/Founctors”ÎMonad/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/02/12/Founctors”ÎMonad/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -1343,7 +1763,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/10/Swift-Equatable/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/02/10/Swift-Equatable/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -1388,6 +1808,17 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/10/Swift-Equatable/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/02/10/Swift-Equatable/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -1416,250 +1847,6 @@
           
             <p>判断两个实例的值、或者实例是否相等，必须遵循 <code>Equatable</code> 协议</p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IntegerRef</span>: <span class="title">Equatable</span> </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> value: <span class="type">Int</span></span><br><span class="line">  <span class="keyword">init</span>(<span class="number">_</span> value: <span class="type">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">self</span>.value = value</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> == <span class="params">(lhs: IntegerRef, rhs: IntegerRef)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> lhs.value == rhs.value</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> a = <span class="type">IntegerRef</span>(<span class="number">100</span>)</span><br><span class="line"><span class="keyword">let</span> b = <span class="type">IntegerRef</span>(<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(a == a, a == b, separator: <span class="string">", "</span>)</span><br><span class="line"><span class="comment">// Prints "true, true"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="built_in">c</span> = a</span><br><span class="line"><span class="built_in">print</span>(a === <span class="built_in">c</span>, b === <span class="built_in">c</span>, separator: <span class="string">", "</span>)</span><br><span class="line"><span class="comment">// Prints "true, false"</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/10/Swift-NSCopying/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JY's Den">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/02/10/Swift-NSCopying/" itemprop="url">Swift-NSCopying</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-10T20:24:55+08:00">
-                2017-02-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>自定义类想要支持拷贝，必须遵循 <code>NSCopying</code> 协议：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span>: <span class="title">NSCopying</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> name: <span class="type">String</span></span><br><span class="line">  <span class="comment">// required 只能修饰类初始化方法，当子类初始化方法与父类的不同，子类必须实现初始化方法，并且要使用 required 而不是 overide</span></span><br><span class="line">  <span class="keyword">required</span> <span class="keyword">init</span>(name: <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="keyword">self</span>.name = name</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">copy</span><span class="params">(with zone: NSZone? = <span class="literal">nil</span>)</span></span> -&gt; <span class="type">Any</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> student = <span class="type">Student</span>(name: <span class="keyword">self</span>.name)</span><br><span class="line">    <span class="keyword">return</span> student</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> stu1 = <span class="type">Student</span>(name: <span class="string">"JY"</span>)</span><br><span class="line"><span class="keyword">let</span> stu2 = stu1.copy() <span class="keyword">as</span>! <span class="type">Student</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// false</span></span><br><span class="line"><span class="type">ObjectIdentifier</span>(stu1) == <span class="type">ObjectIdentifier</span>(stu2)</span><br><span class="line">stu2.name = <span class="string">"YU"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// JY</span></span><br><span class="line">stu1.name</span><br><span class="line"><span class="comment">// YU</span></span><br><span class="line">stu2.name</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/10/Swift-AnyClass/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JY's Den">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/02/10/Swift-AnyClass/" itemprop="url">Swift AnyClass</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-10T19:42:15+08:00">
-                2017-02-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><code>AnyClass</code>：是所有类都隐式遵循的协议，当你用<code>AnyClass</code>作为实例的具体类型，所有已知的<code>@objc</code>类的方法和属性都作为隐式解包的可选方法或者属性。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span>&#123;</span><br><span class="line">  <span class="meta">@objc</span> <span class="keyword">static</span> <span class="keyword">let</span> describe = <span class="string">"class description"</span></span><br><span class="line">  <span class="meta">@objc</span> <span class="class"><span class="keyword">class</span> <span class="title">func</span> <span class="title">getDefaultValue</span>() -&gt; <span class="title">Int</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">100</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getDefaultValue</span><span class="params">(<span class="number">_</span> <span class="built_in">c</span>: AnyClass)</span></span> -&gt; <span class="type">Int</span>? &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">c</span>.getDefaultValue?()</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getDescribeValue</span><span class="params">(<span class="number">_</span> <span class="built_in">c</span>: AnyClass)</span></span> -&gt; <span class="type">String</span>? &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">c</span>.describe</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ptional(100)</span></span><br><span class="line"><span class="built_in">print</span>(getDefaultValue(<span class="type">Student</span>.<span class="keyword">self</span>))</span><br><span class="line"><span class="comment">// Optional("class description")</span></span><br><span class="line"><span class="built_in">print</span>(getDescribeValue(<span class="type">Student</span>.<span class="keyword">self</span>))</span><br></pre></td></tr></table></figure>
-<p>还可以作为类型检测：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">SomeDelegate</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span>: <span class="title">SomeDelegate</span></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> instance = <span class="type">SomeClass</span>.<span class="keyword">self</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">isSomeDelegate</span><span class="params">(<span class="number">_</span> type: AnyClass)</span></span> -&gt; <span class="type">Bool</span>&#123;</span><br><span class="line">  <span class="keyword">if</span> type <span class="keyword">is</span> <span class="type">SomeDelegate</span>.<span class="type">Type</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// true</span></span><br><span class="line"><span class="built_in">print</span>(isSomeDelegate(instance))</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1745,7 +1932,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1757,10 +1944,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">11</span>
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
-                
+                </a>
               </div>
             
 
@@ -1823,7 +2010,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
 
 
 
@@ -1937,6 +2124,14 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://devyu-github-io.disqus.com/count.js" async></script>
+    
+
+    
+
+  
+
 
 
 
@@ -1949,10 +2144,6 @@
   
 
 
-
-
-
-  
 
 
 

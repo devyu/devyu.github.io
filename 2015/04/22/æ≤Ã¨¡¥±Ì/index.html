@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -83,18 +83,18 @@
 <meta name="keywords" content="数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="静态链表">
-<meta property="og:url" content="http://yoursite.com/2015/04/22/æ≤Ã¨¡¥±Ì/index.html">
+<meta property="og:url" content="http://devyu.github.io/2015/04/22/æ≤Ã¨¡¥±Ì/index.html">
 <meta property="og:site_name" content="JY&#39;s Den">
 <meta property="og:description" content="静态链表可以给没有指针的编程语言设计一种实现单链表功能的方法。思想非常巧妙。其每个数组中的元素结构是由数据域data和游标cur组成，数据域就是需要存放的数据，游标相当于单链表中的 next 指针。cur中存放该元素的后继在数组中的下标。这种数组描述的链表叫做静态链表。 静态链表必须满足下面两个规则：  数组的第一个元素，即下标为0的元素的cur就存放备用链表的第一个结点的下标。 数组的最后一个元">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2015/04/22/image/ListNode/static-list-01.png">
-<meta property="og:image" content="http://yoursite.com/2015/04/22/image/ListNode/static-list-02.png">
-<meta property="og:image" content="http://yoursite.com/2015/04/22/image/ListNode/static-list-03.png">
+<meta property="og:image" content="http://devyu.github.io/2015/04/22/image/ListNode/static-list-01.png">
+<meta property="og:image" content="http://devyu.github.io/2015/04/22/image/ListNode/static-list-02.png">
+<meta property="og:image" content="http://devyu.github.io/2015/04/22/image/ListNode/static-list-03.png">
 <meta property="og:updated_time" content="2017-08-12T02:21:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="静态链表">
 <meta name="twitter:description" content="静态链表可以给没有指针的编程语言设计一种实现单链表功能的方法。思想非常巧妙。其每个数组中的元素结构是由数据域data和游标cur组成，数据域就是需要存放的数据，游标相当于单链表中的 next 指针。cur中存放该元素的后继在数组中的下标。这种数组描述的链表叫做静态链表。 静态链表必须满足下面两个规则：  数组的第一个元素，即下标为0的元素的cur就存放备用链表的第一个结点的下标。 数组的最后一个元">
-<meta name="twitter:image" content="http://yoursite.com/2015/04/22/image/ListNode/static-list-01.png">
+<meta name="twitter:image" content="http://devyu.github.io/2015/04/22/image/ListNode/static-list-01.png">
 
 
 
@@ -102,7 +102,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Mist',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -124,7 +124,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2015/04/22/æ≤Ã¨¡¥±Ì/"/>
+  <link rel="canonical" href="http://devyu.github.io/2015/04/22/æ≤Ã¨¡¥±Ì/"/>
 
 
 
@@ -195,6 +195,26 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -237,7 +257,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/04/22/æ≤Ã¨¡¥±Ì/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2015/04/22/æ≤Ã¨¡¥±Ì/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -279,6 +299,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/04/22/æ≤Ã¨¡¥±Ì/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/04/22/æ≤Ã¨¡¥±Ì/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -398,6 +429,16 @@
           
 
   
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
 
 
 
@@ -445,7 +486,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -457,10 +498,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">11</span>
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
-                
+                </a>
               </div>
             
 
@@ -539,7 +580,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
 
 
 
@@ -657,6 +698,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://devyu-github-io.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://devyu.github.io/2015/04/22/æ≤Ã¨¡¥±Ì/';
+          this.page.identifier = '2015/04/22/æ≤Ã¨¡¥±Ì/';
+          this.page.title = '静态链表';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://devyu-github-io.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -669,10 +730,6 @@
   
 
 
-
-
-
-  
 
 
 

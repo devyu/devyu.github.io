@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -81,7 +81,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="JY&#39;s Den">
-<meta property="og:url" content="http://yoursite.com/page/5/index.html">
+<meta property="og:url" content="http://devyu.github.io/page/5/index.html">
 <meta property="og:site_name" content="JY&#39;s Den">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
@@ -93,7 +93,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Mist',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -115,7 +115,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/page/5/"/>
+  <link rel="canonical" href="http://devyu.github.io/page/5/"/>
 
 
 
@@ -187,6 +187,26 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -229,7 +249,339 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/19/Objective-C-2-0‘À–– ±œµÕ≥±‡≥Ã◊‹Ω·/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2016/05/10/bind°¢call°¢apply/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/05/10/bind°¢call°¢apply/" itemprop="url">bind、call、apply</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-10T15:08:17+08:00">
+                2016-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/05/10/bind°¢call°¢apply/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/05/10/bind°¢call°¢apply/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>JS中的函数也是一种对象，但是并不是所有的对象都是函数。函数中拥有 call、apply、bind三个原型方法。<code>call()</code>、<code>apply()</code>可以看作为某个对象的方法，通过调用方法的形式来间接调用函数。</p>
+<p>如果函数挂载在一个对象上，作为对象的一个属性，就称它为对象的方法。当通过这个对象来调用函数时，该对象就是此次调用的上下文， 也就是该函数的this的值。</p>
+<p>每一个函数都包含一个prototype属性，这个属性是指向一个对象的引用，这个对象称作“原型对象”。 每一个函数都包含不同的原型对象。当将函数用作构造函数的时候，新创建的对象会从原型对象上继承属性。</p>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>将函数绑定到某个对象，将返回一个新的对象。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.x = <span class="number">9</span>;</span><br><span class="line"><span class="keyword">var</span> <span class="built_in">module</span> = &#123;</span><br><span class="line">  x: <span class="number">81</span>,</span><br><span class="line">  getX: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.x; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 此时 this 的指向是 module</span></span><br><span class="line"><span class="built_in">module</span>.getX(); <span class="comment">// 返回 81</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 在这种情况下，"this"指向全局作用域</span></span><br><span class="line"><span class="keyword">var</span> retrieveX = <span class="built_in">module</span>.getX;</span><br><span class="line">retrieveX(); <span class="comment">// 返回 9,</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个新函数，将"this"绑定到module对象</span></span><br><span class="line"><span class="comment">// 新手可能会被全局的x变量和module里的属性x所迷惑</span></span><br><span class="line"><span class="keyword">var</span> boundGetX = retrieveX.bind(<span class="built_in">module</span>);</span><br><span class="line">boundGetX(); <span class="comment">// 返回 81</span></span><br></pre></td></tr></table></figure></p>
+<p>再来看一个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Foo = &#123;</span><br><span class="line">  count: <span class="number">1</span>,</span><br><span class="line"></span><br><span class="line">  getCount: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.count;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(Foo.getCount()); <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 此时 func 指向全局变量</span></span><br><span class="line"><span class="keyword">var</span> func = Foo.getCount;</span><br><span class="line"><span class="built_in">console</span>.log(func()); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+<p>那么进行多次 bind() 呢？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> bar = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> foo = &#123; <span class="attr">x</span>:<span class="number">3</span> &#125;</span><br><span class="line"><span class="keyword">var</span> sed = &#123; <span class="attr">x</span>:<span class="number">4</span> &#125;</span><br><span class="line"><span class="keyword">var</span> fiv = &#123; <span class="attr">x</span>:<span class="number">5</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> func = bar.bind(foo).bind(sed);</span><br><span class="line">func(); <span class="comment">//?</span></span><br><span class="line"><span class="keyword">var</span> func = bar.bind(foo).bind(sed).bind(fiv);</span><br><span class="line">func(); <span class="comment">//?</span></span><br></pre></td></tr></table></figure>
+<p>以上输出什么？答案是，两次都仍将输出 3 ，而非期待中的 4 和 5 。原因是，在Javascript中，多次 bind() 是无效的。更深层次的原因， bind() 的实现，相当于使用函数在内部包了一个 call / apply ，第二次 bind() 相当于再包住第一次 bind() ,故第二次以后的 bind 是无法生效的。</p>
+<p>其实真的没什么大不了的，看看 bind 的实现就明白了：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind = <span class="built_in">Function</span>.prototype.bind || <span class="function"><span class="keyword">function</span>(<span class="params">context</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> self = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> self.apply(context, <span class="built_in">arguments</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="call-与-apply"><a href="#call-与-apply" class="headerlink" title="call 与 apply"></a>call 与 apply</h3><p>在 JavaScript 中 <code>call</code>、<code>apply</code> 都是为了改变函数运行时的上下文而存在的，也就是说为了改变函数体内部 <code>this</code> 的指向。其语法：<code>fun.call(thisArg[, arg1[, arg2[, ...]]])</code>。可以让 <code>call()</code> 中的对象调用当前对象所拥有的function，可以用这种方法来实现继承：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">Foo.prototype = &#123;</span><br><span class="line">  color: <span class="string">'red'</span>,</span><br><span class="line">  say: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'this color is: '</span> + <span class="keyword">this</span>.color);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> foo = <span class="keyword">new</span> Foo;</span><br><span class="line">foo.say();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 此方法也想调用 say()，又不想从新定义 say 方法。可以 通过 call、apply 来实现。</span></span><br><span class="line">bar = &#123;</span><br><span class="line">  color: <span class="string">'cyan'</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以看出，call、apply 是为了动态改变 this 而出现的。</span></span><br><span class="line">foo.say.call(bar);</span><br><span class="line">foo.say.apply(bar);</span><br></pre></td></tr></table></figure>
+<p><code>call</code> 与 <code>apply</code> 的功能是一样的，唯一的不同是接收参数方式不一样：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">func.call(<span class="keyword">this</span>, arg1, arg2);</span><br><span class="line">func.apply(<span class="keyword">this</span>, [arg1, arg2]);</span><br></pre></td></tr></table></figure></p>
+<p>在<code>func</code>函数运行时指定 <code>this</code>。该 <code>this</code> 并不是真正的 this 值，在严格模式下为全局对象(在浏览器中为window)。非严格模式下为 <code>undefined</code>。</p>
+<h3 id="三者区别"><a href="#三者区别" class="headerlink" title="三者区别"></a>三者区别</h3><p>apply、call、bind比较：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123; <span class="attr">x</span>: <span class="number">10</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">  getX: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.x;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(foo.getX.bind(obj)()); <span class="comment">// 10</span></span><br><span class="line"><span class="built_in">console</span>.log(foo.getX.call(obj));   <span class="comment">// 10</span></span><br><span class="line"><span class="built_in">console</span>.log(foo.getX.apply(obj));  <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+<p>三个输出的都是10，但是注意看使用 bind() 方法的，他后面多了对括号。</p>
+<p>也就是说，区别是，当你希望改变上下文环境之后并非立即执行，而是回调执行的时候，使用 bind() 方法。而 apply/call 则会立即执行函数。</p>
+<p>再总结一下：</p>
+<p>apply 、 call 、bind 三者都是用来改变函数的this对象的指向的；<br>apply 、 call 、bind 三者第一个参数都是this要指向的对象，也就是想指定的上下文；<br>apply 、 call 、bind 三者都可以利用后续参数传参；<br>bind 是返回对应函数，便于稍后调用；apply 、call 则是立即调用 。</p>
+<hr>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/call</a><br><a href="https://segmentfault.com/a/1190000000375138?page=1" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000375138?page=1</a><br><a href="http://web.jobbole.com/83642/" target="_blank" rel="noopener">http://web.jobbole.com/83642/</a><br><a href="http://yanhaijing.com/basejs/index.html#sect_var_scope_closures" target="_blank" rel="noopener">http://yanhaijing.com/basejs/index.html#sect_var_scope_closures</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2016/05/02/Runtime◊‹Ω·/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/05/02/Runtime◊‹Ω·/" itemprop="url">Runtime总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-02T15:30:41+08:00">
+                2016-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/05/02/Runtime◊‹Ω·/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/05/02/Runtime◊‹Ω·/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h3><p>文件：<code>objc.h</code></p>
+<p><code>Class</code> 是一个 <code>objc_class</code> 类型的结构体指针，也就是类。<code>id</code> 是 <code>objc_object</code> 类型的指针。如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#if !OBJC_TYPES_DEFINED</span><br><span class="line">/// An opaque type that represents an Objective-C class.</span><br><span class="line">typedef struct objc_class *Class;</span><br><span class="line"></span><br><span class="line">/// Represents an instance of a class.</span><br><span class="line">struct objc_object &#123;</span><br><span class="line">    Class isa  OBJC_ISA_AVAILABILITY;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">/// A pointer to an instance of a class.</span><br><span class="line">typedef struct objc_object *id;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<p><code>objc_class</code> 定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">struct objc_class &#123;</span><br><span class="line">    Class isa                                 OBJC_ISA_AVAILABILITY;  // 元类    </span><br><span class="line"></span><br><span class="line">#if !__OBJC2__</span><br><span class="line">    Class super_class                         OBJC2_UNAVAILABLE;  // 指向父类，如果该类是 NSObject 或者是 NSProxy，那么 super_class 为 nil。</span><br><span class="line">    const char *name                          OBJC2_UNAVAILABLE;  // 类名</span><br><span class="line">    long version                              OBJC2_UNAVAILABLE;  // 类的版本信息（默认为0，可通过 class_setVersion、class_getVersion）进行修改、读取</span><br><span class="line">    long info                                 OBJC2_UNAVAILABLE;  // 类信息（运行时期使用的一些位标识，如CLS_CLASS (0x1L) 表示该类为普通 class，其中包含实例方法和变量;CLS_META (0x2L) 表示该类为 metaclass，其中包含类方法）</span><br><span class="line">    long instance_size                        OBJC2_UNAVAILABLE;  // 该类的实例变量大小（包括从父类继承下来的实例变量）</span><br><span class="line">    struct objc_ivar_list *ivars              OBJC2_UNAVAILABLE;  // 该类成员变量地址</span><br><span class="line">    struct objc_method_list **methodLists     OBJC2_UNAVAILABLE;  // 方法地址列表，与 info 的一些标志位有关。（如CLS_CLASS (0x1L)，则存储实例方法，如CLS_META (0x2L)，则存储类方法;）</span><br><span class="line">    struct objc_cache *cache                  OBJC2_UNAVAILABLE;  // 缓存方法表，用来提高方法表的查找速度</span><br><span class="line">    struct objc_protocol_list *protocols      OBJC2_UNAVAILABLE;  // 该类声明遵守的协议的列表</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">&#125; OBJC2_UNAVAILABLE;</span><br></pre></td></tr></table></figure>
+<p>由此可见，类也是一个对象。也就是说类和对象都是对象，分别被称为 <code>类对象</code>、<code>实例对象</code>。</p>
+<p><code>isa</code>：<code>objc_object</code>（实例对象）中的 <code>isa</code> 指针指向类的结构体称为 <code>class</code>（也就是该对象所属的类）。其中存放着普通成员变量与动态方法实例方法(“-“开头)。<code>objc_class</code> 中的 <code>isa</code> 指针指向类结构体称之为 <code>metaclass</code>，其中存放着 <code>static</code> 类型的成员变量与 <code>static</code> 类型的方法(“+” 开头的方法)。</p>
+<p>一图胜千言：</p>
+<p><img src="../image/Runtime/class-diagram.jpg" alt=""></p>
+<p>所有实例对象的 <code>isa</code> 指针都指向它所属的类，所属的类的 <code>isa</code> 指针指向其 <code>metaclass</code>。所有的 <code>metaclass</code> 都指向其之神。<code>root metaclass</code>是通过继承根类产生的，与根 class 结构体成员一致，不同的是<code>root metaclass</code> 的 <code>isa</code> 指针指向自身。</p>
+<h3 id="Objective-C-中的元素"><a href="#Objective-C-中的元素" class="headerlink" title="Objective-C 中的元素"></a>Objective-C 中的元素</h3><h4 id="SEL"><a href="#SEL" class="headerlink" title="SEL"></a>SEL</h4><p><code>SEL</code> 是 <code>selector</code> 在 Objective-C 中的表示类型。<code>selector</code> 可以理解为区别方法的 ID。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef struct objc_selector *SEL;</span><br></pre></td></tr></table></figure>
+<p>其定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct objc_selector &#123;</span><br><span class="line">    char *name;                       OBJC2_UNAVAILABLE;  // 名称</span><br><span class="line">    char *types;                      OBJC2_UNAVAILABLE;  // 类型</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="IMP"><a href="#IMP" class="headerlink" title="IMP"></a>IMP</h4><p><code>IMP</code> 是编译器生成的函数指针。该类型决定调用具体函数的实现。</p>
+<p>其定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/// A pointer to the function of a method implementation.</span><br><span class="line">#if !OBJC_OLD_DISPATCH_PROTOTYPES</span><br><span class="line">typedef void (*IMP)(void /* id, SEL, ... */ );</span><br><span class="line">#else</span><br><span class="line">typedef id (*IMP)(id, SEL, ...);</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><code>Method</code> 代表类中的某个方法的类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef struct objc_method *Method;</span><br></pre></td></tr></table></figure>
+<p>其定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct objc_method &#123;</span><br><span class="line">    SEL method_name                   OBJC2_UNAVAILABLE; // 方法名</span><br><span class="line">    char *method_types                OBJC2_UNAVAILABLE; // 方法类型</span><br><span class="line">    IMP method_imp                    OBJC2_UNAVAILABLE; // 方法实现</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Ivar"><a href="#Ivar" class="headerlink" title="Ivar"></a>Ivar</h4><p><code>Ivar</code> 代表类中实例变量的类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef struct objc_ivar *Ivar;</span><br></pre></td></tr></table></figure>
+<p>其定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">struct objc_ivar &#123;</span><br><span class="line">    char *ivar_name                   OBJC2_UNAVAILABLE; // 变量名</span><br><span class="line">    char *ivar_type                   OBJC2_UNAVAILABLE; // 变量类型</span><br><span class="line">    int ivar_offset                   OBJC2_UNAVAILABLE; // 基地址偏移字节</span><br><span class="line">#ifdef __LP64__</span><br><span class="line">    int space                         OBJC2_UNAVAILABLE; // 占用空间</span><br><span class="line">#endif</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="objc-property-t"><a href="#objc-property-t" class="headerlink" title="objc_property_t"></a>objc_property_t</h4><p><code>objc_property_t</code> 是内置类型属性，其定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef struct objc_property *objc_property_t;</span><br></pre></td></tr></table></figure>
+<p>还有一个关联属性 <code>objc_property_attribute_t</code> 类型，它是属性的 <code>attribute</code>，包含属性名称、属性编码类型、原子类型/非原子类型等。其定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">    const char *name;   // 名称</span><br><span class="line">    const char *value;  // 值</span><br><span class="line">&#125; objc_property_attribute_t;</span><br></pre></td></tr></table></figure>
+<h4 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h4><p><code>Cache</code>：缓存方法表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef struct objc_cache *Cache</span><br></pre></td></tr></table></figure>
+<p>其定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct objc_cache &#123;</span><br><span class="line">    unsigned int mask                   OBJC2_UNAVAILABLE;  // 指定分配的 cache buckets，在方法查找中，Runtime使用这个字段确定数组的索引位置。</span><br><span class="line">    unsigned int occupied               OBJC2_UNAVAILABLE;  // 实际占用cache buckets的总数。（bucket 等于 NULL，表示缓存没有被占用，被占用的 bucket 可能是不连续的额，这个数组可能会随着时间而增长）</span><br><span class="line">    Method buckets[1]                   OBJC2_UNAVAILABLE;  // objc_msgSend 发送消息的函数。</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="Catagory"><a href="#Catagory" class="headerlink" title="Catagory"></a>Catagory</h4><p><code>Catagory</code>：可以动态为已经存在的类添加新的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef struct objc_category *Category;</span><br></pre></td></tr></table></figure>
+<p>其定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct objc_category &#123;</span><br><span class="line">    char *category_name                           OBJC2_UNAVAILABLE; // 类别名称</span><br><span class="line">    char *class_name                              OBJC2_UNAVAILABLE; // 类名</span><br><span class="line">    struct objc_method_list *instance_methods     OBJC2_UNAVAILABLE; // 实例方法列表</span><br><span class="line">    struct objc_method_list *class_methods        OBJC2_UNAVAILABLE; // 类方法列表</span><br><span class="line">    struct objc_protocol_list *protocols          OBJC2_UNAVAILABLE; // 协议列表</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="消息传递"><a href="#消息传递" class="headerlink" title="消息传递"></a>消息传递</h3><p>在 Objective-C 中，调用某个方法，相当于发送一条消息。会调用 runtime 模块中的 <code>objc_msgSend</code> 函数调用，比如 <code>[self someMethod];</code> 方法，会转换成 <code>objc_msgSend(self, someMethod)</code>。</p>
+<p>消息调用类型还包括以下几种：</p>
+<ul>
+<li>objc_msgSend_stret：如果带发送的消息返回结构体，可交由此函数处理。</li>
+<li>objc_msgSend_fpret：消息返回浮点数，</li>
+<li>objc_msgSend_Super：给父类发送消息，如 [super message:parameter]</li>
+</ul>
+<p>更多解释可以查看<a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-2/" target="_blank" rel="noopener">这里</a></p>
+<h3 id="消息转发"><a href="#消息转发" class="headerlink" title="消息转发"></a>消息转发</h3><p>第一步：通过 <code>resolveInstanceMethod:</code> 方法决定是否能在本类中动态添加方法，返回 YES 可以通过 <code>class_addMethod</code> 来动态添加方法，消息得到处理。如果返回 NO，则会启动将消息转发给其他对象。<br>第二步：通过 <code>forwardingTargetForSelector:</code>，当前接收者有第二次机会处理这个未知的消息，runtime 会询问能否将消息转给其他的接收者来处理。如果返回某个对象则会调用对象的方法，然后结束。反之返回 nil，则进入第三步。<br>第三步：通过 <code>methodSignatureForSelector:</code>方法签名，如果返回 nil，则消息无法处理。如果返回 <code>methodSignature</code> 则进入下一步。<br>第四步：通过 <code>forwardInvocation:</code>方法，可以通过 <code>NSInvocation</code> 对象做很多处理，比如修改方法的实现，修改响应对象等。如果方法调用成功，则结束。如果失败，则调用 <code>doesNotRecognizeSelector</code> 方法，如果没有实现这个方法，则程序会崩溃。</p>
+<p>完整流程图：</p>
+<p><img src="../image/Runtime/objective-runtime-01.png" alt=""></p>
+<p>地方</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2016/03/19/Objective-C-2-0‘À–– ±œµÕ≥±‡≥Ã◊‹Ω·/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -273,6 +625,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/03/19/Objective-C-2-0‘À–– ±œµÕ≥±‡≥Ã◊‹Ω·/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/03/19/Objective-C-2-0‘À–– ±œµÕ≥±‡≥Ã◊‹Ω·/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -353,7 +716,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/04/22/ջ/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2015/04/22/ջ/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -397,6 +760,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/04/22/ջ/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/04/22/ջ/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -476,7 +850,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/04/22/œﬂ–‘¡¥±Ì/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2015/04/22/œﬂ–‘¡¥±Ì/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -520,6 +894,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/04/22/œﬂ–‘¡¥±Ì/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/04/22/œﬂ–‘¡¥±Ì/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -660,7 +1045,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/04/22/æ≤Ã¨¡¥±Ì/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2015/04/22/æ≤Ã¨¡¥±Ì/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -704,6 +1089,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/04/22/æ≤Ã¨¡¥±Ì/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/04/22/æ≤Ã¨¡¥±Ì/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -801,7 +1197,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/04/18/C++ const/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2015/04/18/C++ const/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -845,6 +1241,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/04/18/C++ const/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/04/18/C++ const/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -921,7 +1328,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/04/17/C++ “˝”√/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2015/04/17/C++ “˝”√/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -965,6 +1372,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/04/17/C++ “˝”√/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/04/17/C++ “˝”√/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -1079,7 +1497,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1091,10 +1509,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">11</span>
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
-                
+                </a>
               </div>
             
 
@@ -1157,7 +1575,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
 
 
 
@@ -1271,6 +1689,14 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://devyu-github-io.disqus.com/count.js" async></script>
+    
+
+    
+
+  
+
 
 
 
@@ -1283,10 +1709,6 @@
   
 
 
-
-
-
-  
 
 
 

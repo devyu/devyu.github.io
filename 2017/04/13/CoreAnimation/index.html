@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -83,18 +83,18 @@
 <meta name="keywords" content="Cocoa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CoreAnimation">
-<meta property="og:url" content="http://yoursite.com/2017/04/13/CoreAnimation/index.html">
+<meta property="og:url" content="http://devyu.github.io/2017/04/13/CoreAnimation/index.html">
 <meta property="og:site_name" content="JY&#39;s Den">
 <meta property="og:description" content="简介Core Animation 是一个复合引擎，它的职责就是尽可能快地组合屏幕上不同的可视内容，这个内容是被分解成独立的图层，存储在一个叫做图层树的体系之中。于是这个树形成了UIKit以及在iOS应用程序当中你所能在屏幕上看见的一切的基础。 图层与视图在iOS当中，所有的视图都从一个叫做UIVIew的派生而来，UIView可以处理触摸事件和一些简单的动画。而 CALayer 是继承自 NSObj">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2017/04/13/image/CoreAnimation/core-animation-cahpter2-01.png">
-<meta property="og:image" content="http://yoursite.com/2017/04/13/image/CoreAnimation/core-animation-cahpter2-02.png">
+<meta property="og:image" content="http://devyu.github.io/2017/04/13/image/CoreAnimation/core-animation-cahpter2-01.png">
+<meta property="og:image" content="http://devyu.github.io/2017/04/13/image/CoreAnimation/core-animation-cahpter2-02.png">
 <meta property="og:image" content="https://zsisme.gitbooks.io/ios-/content/chapter12/instruments.html">
 <meta property="og:updated_time" content="2017-08-12T02:21:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CoreAnimation">
 <meta name="twitter:description" content="简介Core Animation 是一个复合引擎，它的职责就是尽可能快地组合屏幕上不同的可视内容，这个内容是被分解成独立的图层，存储在一个叫做图层树的体系之中。于是这个树形成了UIKit以及在iOS应用程序当中你所能在屏幕上看见的一切的基础。 图层与视图在iOS当中，所有的视图都从一个叫做UIVIew的派生而来，UIView可以处理触摸事件和一些简单的动画。而 CALayer 是继承自 NSObj">
-<meta name="twitter:image" content="http://yoursite.com/2017/04/13/image/CoreAnimation/core-animation-cahpter2-01.png">
+<meta name="twitter:image" content="http://devyu.github.io/2017/04/13/image/CoreAnimation/core-animation-cahpter2-01.png">
 
 
 
@@ -102,7 +102,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Mist',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -124,7 +124,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/04/13/CoreAnimation/"/>
+  <link rel="canonical" href="http://devyu.github.io/2017/04/13/CoreAnimation/"/>
 
 
 
@@ -195,6 +195,26 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -237,7 +257,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/13/CoreAnimation/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/04/13/CoreAnimation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -279,6 +299,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/13/CoreAnimation/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/04/13/CoreAnimation/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -508,6 +539,16 @@
           
 
   
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
 
 
 
@@ -555,7 +596,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -567,10 +608,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">11</span>
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
-                
+                </a>
               </div>
             
 
@@ -649,7 +690,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
 
 
 
@@ -767,6 +808,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://devyu-github-io.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://devyu.github.io/2017/04/13/CoreAnimation/';
+          this.page.identifier = '2017/04/13/CoreAnimation/';
+          this.page.title = 'CoreAnimation';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://devyu-github-io.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -779,10 +840,6 @@
   
 
 
-
-
-
-  
 
 
 

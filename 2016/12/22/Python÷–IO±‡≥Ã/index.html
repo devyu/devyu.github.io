@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -83,7 +83,7 @@
 <meta name="keywords" content="Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python中IO编程">
-<meta property="og:url" content="http://yoursite.com/2016/12/22/Python÷–IO±‡≥Ã/index.html">
+<meta property="og:url" content="http://devyu.github.io/2016/12/22/Python÷–IO±‡≥Ã/index.html">
 <meta property="og:site_name" content="JY&#39;s Den">
 <meta property="og:description" content="文件操作Python封装操作系统读写文件的API，用法与C兼容。进行文件读写的时候，由于操作磁盘上文件的行为都是由操作系统完成的，所以需要请求操作系统打开文件对象（也称之为文件描述符），接着通过操作系统提供的接口从文件对象中读取或写入数据。 读取文件Python内置open()函数可以读取文件，如果文件不存在则抛出IOError： 1234567# r 表示 只读&amp;gt;&amp;gt;&amp;gt; f =">
 <meta property="og:locale" content="zh-Hans">
@@ -98,7 +98,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Mist',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/12/22/Python÷–IO±‡≥Ã/"/>
+  <link rel="canonical" href="http://devyu.github.io/2016/12/22/Python÷–IO±‡≥Ã/"/>
 
 
 
@@ -191,6 +191,26 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -233,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/22/Python÷–IO±‡≥Ã/">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2016/12/22/Python÷–IO±‡≥Ã/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JY">
@@ -275,6 +295,17 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/22/Python÷–IO±‡≥Ã/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/12/22/Python÷–IO±‡≥Ã/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -414,6 +445,16 @@
           
 
   
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
 
 
 
@@ -461,7 +502,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -473,10 +514,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">11</span>
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
-                
+                </a>
               </div>
             
 
@@ -555,7 +596,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
 
 
 
@@ -673,6 +714,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://devyu-github-io.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://devyu.github.io/2016/12/22/Python÷–IO±‡≥Ã/';
+          this.page.identifier = '2016/12/22/Python÷–IO±‡≥Ã/';
+          this.page.title = 'Python中IO编程';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://devyu-github-io.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -685,10 +746,6 @@
   
 
 
-
-
-
-  
 
 
 
