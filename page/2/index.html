@@ -249,6 +249,461 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/04/08/map°¢fitter°¢reduce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/08/map°¢fitter°¢reduce/" itemprop="url">map、fitter、reduce、flatMap</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-08T10:14:06+08:00">
+                2017-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/08/map°¢fitter°¢reduce/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/04/08/map°¢fitter°¢reduce/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在 Swift 高阶使用中，map、fitter、reduce 是很常见的操作，能使代码干净整洁。在理解其概念之前，先要明白泛型的概念。</p>
+<h3 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h3><p>定义 <code>computeIntArray</code> 函数，接收一个数组，并返回其元素的2倍组成的另一个新的数组。但此函数只支持 <code>Int</code> 类型。如果换成其他类型则不适用，所以这里考虑用泛型来解决。<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">computeIntArray</span><span class="params">(xs: [Int], transform: <span class="params">(Int)</span></span></span> -&gt; <span class="type">Int</span>) -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="keyword">var</span> result: [<span class="type">Int</span>] = []</span><br><span class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</span><br><span class="line">    result.append(transform(x))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">doubleArray</span><span class="params">(xs: [Int])</span></span> -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="keyword">return</span> computeIntArray(xs: xs) &#123; x <span class="keyword">in</span> x * <span class="number">2</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">doubleArray(xs: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 换成 bool，则会出现编译错误</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">isEvenArray</span><span class="params">(xs: [Int])</span></span> -&gt; [<span class="type">Bool</span>] &#123;</span><br><span class="line">  <span class="keyword">return</span> computeIntArray(xs: xs) &#123; x <span class="keyword">in</span>  x % <span class="number">2</span> == <span class="number">0</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用泛型支持各种类型，进行抽象，对于任何 Element 的数组和 transform: Element -&gt; T 函数，它都会生成一个 T 类型数组</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;Element, T&gt;<span class="params">(xs: [Element], transform: <span class="params">(Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">  <span class="keyword">var</span> result: [<span class="type">T</span>] = []</span><br><span class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</span><br><span class="line">    result.append(transform(x))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">genericComputeArray</span>&lt;T&gt;<span class="params">(xs: [Int], transform: <span class="params">(Int)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">map</span>(xs: xs, transform: transform)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">genericComputeArray(xs: [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]) &#123; x <span class="keyword">in</span> x * <span class="number">2</span> &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p><code>map</code>函数能够被数组调用，还接收一个闭包参数，将数组中的每一个元素依次作用于该闭包，并返回一个新的数组。</p>
+<p>上面的例子中，将泛型函数写成全局函数固然能够完成任务，但是为了避免写入顶层函数实现。将此函数定义为 Array 的扩展更合适。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;T&gt;<span class="params">(tranform: <span class="params">(Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">    <span class="keyword">var</span> result: [<span class="type">T</span>] = []</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">      result.append(tranform(x))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].<span class="built_in">map</span> &#123; x <span class="keyword">in</span> x * x &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="fitter"><a href="#fitter" class="headerlink" title="fitter"></a>fitter</h3><p>与 <code>map</code> 函数类似，<code>fitter</code> 函数也可以接收一个闭包作为参数，同样可以避免函数为顶层实现：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">filter</span><span class="params">(includeElement: <span class="params">(Element)</span></span></span> -&gt; <span class="type">Bool</span>) -&gt; [<span class="type">Element</span>] &#123;</span><br><span class="line">    <span class="keyword">var</span> result: [<span class="type">Element</span>] = []</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> <span class="keyword">where</span> includeElement(x) &#123;</span><br><span class="line">      result.append(x)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ["HelloWorld.swift"]</span></span><br><span class="line">[<span class="string">"HelloWorld.swift"</span>, <span class="string">"HelloWorld.md"</span>].<span class="built_in">filter</span> &#123;x <span class="keyword">in</span> x.hasSuffix(<span class="string">"swift"</span>)&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="reduce"><a href="#reduce" class="headerlink" title="reduce"></a>reduce</h3><p><code>reduce</code> 函数将变量初始化为某个值，对数组中的每一项进行遍历，最后一某种方式更新结果。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">reduce</span>&lt;T&gt;<span class="params">(initial: T, combine: <span class="params">(T, Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; <span class="type">T</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> result = initial</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">      result = combine(result, x)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出：1</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="built_in">reduce</span>(initial: <span class="number">0</span>) &#123; result, x <span class="keyword">in</span> result + x &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 也可以用运算符作为最后一个参数。这里初始化值为：1</span></span><br><span class="line"><span class="comment">// 输出：7</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="built_in">reduce</span>(initial: <span class="number">1</span>, combine: +)</span><br></pre></td></tr></table></figure>
+<h3 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h3><p><code>flatMap</code> 与 <code>map</code> 类似，区别是若元素值不为 nil 的情况下，<code>flatMap</code> 能将可选类型转换为非可选类型：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> array = [<span class="string">"123"</span>, <span class="string">""</span>, <span class="string">"4567"</span>]</span><br><span class="line"><span class="keyword">let</span> anotherArray = array.<span class="built_in">map</span> &#123; (string: <span class="type">String</span>) -&gt; <span class="type">Int</span>? <span class="keyword">in</span></span><br><span class="line">  <span class="keyword">let</span> length = string.characters.<span class="built_in">count</span></span><br><span class="line">  <span class="keyword">guard</span> length &gt; <span class="number">0</span> <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> string.characters.<span class="built_in">count</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// [Optional(3), nil, Optional(4)]</span></span><br><span class="line"><span class="built_in">print</span>(anotherArray)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> anotherArray2 = array.flatMap&#123; (string: <span class="type">String</span>) -&gt; <span class="type">Int</span>? <span class="keyword">in</span></span><br><span class="line">  <span class="keyword">let</span> length = string.characters.<span class="built_in">count</span></span><br><span class="line">  <span class="keyword">guard</span> length &gt; <span class="number">0</span> <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> string.characters.<span class="built_in">count</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// [3, 4]</span></span><br><span class="line"><span class="built_in">print</span>(anotherArray2)</span><br></pre></td></tr></table></figure>
+<h3 id="Any-与-泛型"><a href="#Any-与-泛型" class="headerlink" title="Any 与 泛型"></a>Any 与 泛型</h3><p>尽量避免使用 <code>Any</code> 类型，因为使用 <code>Any</code> 类型会避开 swift 的类型系统。比如将 <code>noOp</code> 函数返回值设为 0 会导致类型错误。此外，任何调用 <code>noOpAny</code> 的函数都不知道返回值会被转换为何种类型。而结果就是可能导致各种各样的运行时错误。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">noOp</span>&lt;T&gt;<span class="params">(x: T)</span></span> -&gt; <span class="type">T</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">noOpAny</span><span class="params">(x: Any)</span></span> -&gt; <span class="type">Any</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> result = noOp(x: <span class="number">3</span>)</span><br><span class="line"><span class="keyword">let</span> ret = noOpAny(x: <span class="string">"3"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// oOp中，我们可以清楚返回值和输入值完全一样，而 noOpAny 则不一样，返回是任意类型。甚至和原来输入值不同的类型。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">noOpWrong</span><span class="params">(x: Any)</span></span> -&gt; <span class="type">Any</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> s = noOpWrong(x: <span class="string">"string"</span>)</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/21/∂¡ È± º«/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/21/∂¡ È± º«/" itemprop="url">读书笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T23:56:40+08:00">
+                2017-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/21/∂¡ È± º«/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/03/21/∂¡ È± º«/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这篇文章合集是整理了一些读书笔记，做了一些目录索引。</p>
+<hr>
+<h4 id="《Effective-Objective-C-2-0》"><a href="#《Effective-Objective-C-2-0》" class="headerlink" title="《Effective Objective-C 2.0》"></a>《Effective Objective-C 2.0》</h4><p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-1/" target="_blank" rel="noopener">Effective Objective-C 2.0 第一章</a></p>
+<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-2/" target="_blank" rel="noopener">Effective Objective-C 2.0 第二章</a></p>
+<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-3/" target="_blank" rel="noopener">Effective Objective-C 2.0 第三章</a></p>
+<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-4/" target="_blank" rel="noopener">Effective Objective-C 2.0 第四章</a></p>
+<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-5/" target="_blank" rel="noopener">Effective Objective-C 2.0 第五章</a></p>
+<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-6/" target="_blank" rel="noopener">Effective Objective-C 2.0 第六章</a></p>
+<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-7/" target="_blank" rel="noopener">Effective Objective-C 2.0 第七章</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/21/Effective-Objective-C∂¡ È± º«-7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/21/Effective-Objective-C∂¡ È± º«-7/" itemprop="url">Effective-Objective-C读书笔记(7)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T22:29:08+08:00">
+                2017-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-7/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/03/21/Effective-Objective-C∂¡ È± º«-7/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="系统框架"><a href="#系统框架" class="headerlink" title="系统框架"></a>系统框架</h3><h4 id="第47条：熟悉系统框架"><a href="#第47条：熟悉系统框架" class="headerlink" title="第47条：熟悉系统框架"></a>第47条：熟悉系统框架</h4><p>Fundation、CoreFundation、CFNetwork(封装 BSD socket，抽象成易于使用的网络接口)、CoreAudio、AVFoundation、CoreData、CoreText 等。</p>
+<h4 id="第48条：多用-block-枚举，少用-for-循环"><a href="#第48条：多用-block-枚举，少用-for-循环" class="headerlink" title="第48条：多用 block 枚举，少用 for 循环"></a>第48条：多用 block 枚举，少用 for 循环</h4><p>遍历 collection 可以使用 <code>for 循环</code>、<code>NSEnumerator</code>、<code>快速遍历法</code>。<code>block 枚举</code>本身通过 GCD 来并发这行遍历操作，无需另外编写代码。而其它遍历方式无法轻易实现这一点。如果已知待遍历的 collection 含有何种对象，则应该修改签名，指出对象的具体类型。</p>
+<h4 id="第49条：对自定义内存管理语句-collection-使用无缝桥接"><a href="#第49条：对自定义内存管理语句-collection-使用无缝桥接" class="headerlink" title="第49条：对自定义内存管理语句 collection 使用无缝桥接"></a>第49条：对自定义内存管理语句 collection 使用无缝桥接</h4><p>使用<code>__bridge</code>进行桥接 Foundation 与 CoreFoundation 框架中的 C 怨言数据结构之间转换：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NSArray *anArray = @[@1, @2, @3];</span><br><span class="line">CFArrayRef aCFArray = (__bridge CFArrayRef)(anArray);</span><br></pre></td></tr></table></figure></p>
+<p>转换涉及到的内存管理：</p>
+<ul>
+<li><code>__bridge</code>：告诉ARC 如何处理 Objective-C 对象，ARC 仍然具备这个对象的所有权。</li>
+<li><code>__bridge_retained</code>：ARC 将交出对象的所有权。</li>
+<li><code>__bridge_transfer</code>：反向转换，比如将 <code>CFArrayRef</code> 转换为 <code>NSArray *</code>。并令 ARC 获得对象所有权。</li>
+<li>使用 <code>CoreFoundation</code> 框架最后一定要调用与之对应的<code>CFRelease()</code>。</li>
+</ul>
+<h4 id="第50条：构建缓存时选用-NSCache-而非-NSDictionary"><a href="#第50条：构建缓存时选用-NSCache-而非-NSDictionary" class="headerlink" title="第50条：构建缓存时选用 NSCache 而非 NSDictionary"></a>第50条：构建缓存时选用 NSCache 而非 NSDictionary</h4><p>对比：</p>
+<ul>
+<li>当系统资源耗尽，可以自动删减缓存。使用NSDictionary需要自己 hook，在内存低警告的时候手动删减缓存。NSCache 是线程安全的，NSDictionary 不具备这种优势。</li>
+<li>可以给 NSCache 对象设置上限，用于限制缓存中的对象总个数。</li>
+<li>将 <code>NSPurgeableData</code> 对象与 <code>NSCache</code> 搭配使用，可以实现自动清除数据的功能。也就是说，当 <code>NSPurgeableData</code> 对象锁斩内存被系统所丢弃，该对象自身也可会从缓存中移除。</li>
+</ul>
+<h4 id="第51条：精简-initialize-与-load-的实现代码"><a href="#第51条：精简-initialize-与-load-的实现代码" class="headerlink" title="第51条：精简 initialize 与 load 的实现代码"></a>第51条：精简 initialize 与 load 的实现代码</h4><p>对于加入runtime系统中的每个类和分类，都会调用这个方法，并且只调用一次。如果分类和类里面都定义了<code>load</code>方法，会先调用类里的，在调用分类里的。<code>load</code>方法再调用前，会加载父类的<code>load</code>方法。执行该<code>load</code>方法时，系统还处于“脆弱状态”(fragile state)，根据某个指定的程序库，却无法判断出其中各个类的载入顺序。因此，在<code>load</code>方法中使用其他类是不安全的。比如说：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@interface EOCClassB</span><br><span class="line">+ (void)load &#123;</span><br><span class="line">  NSLog(@&quot;Loading EOCClassB&quot;);</span><br><span class="line">  // 此处代码不安全，也许 EOCClassA 方法并没有加载</span><br><span class="line">  EOCClassA *obj = [EOCClassA new];</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>该类不能在里面等待锁，也不要调用可能会加锁的方法。凡是在类加载之前执行某些任务的，基本都不太对。其真正的用途是仅仅在调试程序，比如可以在分类里编写此方法，用来判断该分类是否已经正确载入系统中。</p>
+<p>想要执行与类初始化有关的操作，还要覆写<code>+ (void)initialize</code>。它与<code>+ (void)load</code>方法都是由 runtime 调用的，并且只调用一次。但是有一些区别：</p>
+<ul>
+<li><code>initialize</code>是<code>惰性调用的</code>，也就是程序用到相关的类时，才会调用。也就是说应用程序无需将每个类的<code>initialize</code>都执行一遍，这与<code>load</code>方法不同。对于<code>load</code>，应用程序必须阻塞并等着所有类的<code>load</code>都执行完，才能继续。</li>
+<li>runtime 系统在执行该方法时，是处于正常状态的。因此，此时可以安全使用并调用任意类中的任意方法。而且 runtime 系统能确保<code>initialize</code>方法在“线程安全的环境”中执行。也就是说只有执行<code>initialize</code>的那个线程可以操作类或类实例。其他线程都要先阻塞，等着<code>initialize</code>执行完。</li>
+<li><code>initialize</code>与其他消息一样，如果某个类未实现它，其父类实习那了，那么就会运行父类的实现代码。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@interface EOCBaseClass: NSObject</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation EOCBaseClass</span><br><span class="line">+ (void)initialize &#123;</span><br><span class="line">  NSLog(@&quot;%@ initialize&quot;, self);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@interface EOCSubClass: NSObject</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation EOCSubClass</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>首次使用 <code>EOCSubClass</code> 时，会输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">EOCBaseClass initialize</span><br><span class="line">EOCSubClass initialize</span><br></pre></td></tr></table></figure>
+<p>与其他方法一样（load 除外）， initialize 也遵循常用的继承规则。所以在初始化 EOCSubClass 时，由于子类未覆写<code>initialize</code>方法，因此还要把父类的实现代码再运行一遍。鉴于此通常会这样实现 <code>initialize</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+ (void)initialize &#123;</span><br><span class="line">  if (self == [EOCBaseClass class]) &#123;</span><br><span class="line">    NSLog(@&quot;%@ initialize&quot;, self);  </span><br><span class="line"></span><br><span class="line">    // 初始化内部数据，不应该在这里调用其它方法。</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结：</p>
+<ul>
+<li>再加载阶段，如果类实现了 load 方法，那么系统就会调用它。类的 load 方法比分类的要先调用。与其他方法不同，load 方法不参与覆写机制。</li>
+<li>首次使用某个类，系统会向其发送 initialize 消息，此方法遵从普通对象的覆写规则，所以要在初始化方法中判断初始化的是哪个类。</li>
+<li>load、initialize 方法应该实现的更精简一些，避免循环引用。</li>
+<li>常量，基本类型可以在编译期定义。无法编译期设定的全局常量（Objective-C 对象），可以放在 initialize 方法里面初始化。</li>
+</ul>
+<h4 id="第52条：NSTimer-会保留目标对象"><a href="#第52条：NSTimer-会保留目标对象" class="headerlink" title="第52条：NSTimer 会保留目标对象"></a>第52条：NSTimer 会保留目标对象</h4><ul>
+<li>NSTimer 对象会保留其目标对象，直到计数器本身失效位置，调用 <code>invalidate</code> 方法可令计时器失效。另外，一次性的计时器在触发完任务之后也会失效。</li>
+<li>反复执行任务的计时器，容易产生循环引用，因为 NSTimer 保留其目标实例，目标实例变量又持有 NSTimer，导致循环引用。</li>
+<li>扩充 NSTimer 的功能，通过 block 方式来打破循环引用。如下：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">// NSTimer+EOCBlockSupport.h</span><br><span class="line">@interface NSTimer (EOCBlockSupport)</span><br><span class="line">+ (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval</span><br><span class="line">                                          block:(void (^)())block</span><br><span class="line">                                        repeats:(BOOL)repeats;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">// NSTimer+EOCBlockSupport.m</span><br><span class="line">@implementation NSTimer (EOCBlockSupport)</span><br><span class="line">+ (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval</span><br><span class="line">                                          block:(void (^)())block</span><br><span class="line">                                        repeats:(BOOL)repeats &#123;</span><br><span class="line">  return [self scheduledTimerWithTimeInterval:interval</span><br><span class="line">                                       target:self</span><br><span class="line">                                     selector:@selector(eoc_blockInvoke:)</span><br><span class="line">                                     userInfo:[block copy]</span><br><span class="line">                                      repeats:repeats];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (void)eoc_blockInvoke:(NSTimer *)timer &#123;</span><br><span class="line">  void (^block)() = timer.userInfo;</span><br><span class="line">  if (block) &#123;</span><br><span class="line">    block();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// EOCClass.h</span><br><span class="line">@interface NSTimer : NSObject</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">// EOCClass.m</span><br><span class="line">@implementation EOCClass &#123;</span><br><span class="line">  NSTimer *_pollTimer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)startPolling &#123;</span><br><span class="line">  // 通过 wealSelf 来避免实例变量 _pollTimer 持有 NSTimer，NSTimer 又持有 block，block 又持有 self 的三重循环引用。</span><br><span class="line">  __weak EOCClass *wealSelf = self;</span><br><span class="line">  _pollTimer = [NSTimer eoc_scheduledTimerWithTimeInterval:5.0</span><br><span class="line">                                                     block:^&#123;</span><br><span class="line">                                                       EOCClass *strongSelf = wealSelf;</span><br><span class="line">                                                       [strongSelf p_doPoll];</span><br><span class="line">                                                     &#125; repeats:YES];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)p_doPoll &#123;&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/21/Effective-Objective-C∂¡ È± º«-6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1457,479 +1912,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/14/Swift÷–◊‘∂Ø“˝”√º∆ ˝/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JY's Den">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/03/14/Swift÷–◊‘∂Ø“˝”√º∆ ˝/" itemprop="url">Swift中自动引用计数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-14T14:11:01+08:00">
-                2017-03-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/03/14/Swift÷–◊‘∂Ø“˝”√º∆ ˝/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/03/14/Swift÷–◊‘∂Ø“˝”√º∆ ˝/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Swift 使用自动引用计数来管理内存，当每次创建一个新的类的实例的时候，ARC 会分配一块内存来存储该实例信息。内存中会包含实例的类型信息，以及这个实例所有相关的存储类型属性的值。看一个简单的例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">class Person &#123;</span><br><span class="line">  let name: String</span><br><span class="line">  init(name: String) &#123;</span><br><span class="line">    self.name = name</span><br><span class="line">    print(&quot;\(name) is being initialized&quot;)</span><br><span class="line">  &#125;</span><br><span class="line">  deinit &#123;</span><br><span class="line">    print(&quot;\(name) is being deinitialized&quot;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 可选类型被自动初始化为 nil</span><br><span class="line">var reference1: Person?</span><br><span class="line">var reference2: Person?</span><br><span class="line">var reference3: Person?</span><br><span class="line"></span><br><span class="line">// John Appleseed is being initialized</span><br><span class="line">// 此时 Person 的引用计数为 3</span><br><span class="line">reference1 = Person(name: &quot;John Appleseed&quot;)</span><br><span class="line">reference2 = reference1</span><br><span class="line">reference3 = reference1</span><br><span class="line"></span><br><span class="line">reference1 = nil</span><br><span class="line">reference2 = nil</span><br><span class="line">// 当最后一个强引用的被断开时，ARC 会销毁它</span><br><span class="line">// John Appleseed is being deinitialized</span><br><span class="line">reference3 = nil</span><br></pre></td></tr></table></figure>
-<p>如果出现两个类实例之间的循环强引用，比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Person &#123;</span><br><span class="line">  let name: String</span><br><span class="line">  init(name: String) &#123; self.name = name &#125;</span><br><span class="line">  var apartment: Apartment?</span><br><span class="line">  deinit &#123; print(&quot;\(name) is being deinitialized&quot;) &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Apartment &#123;</span><br><span class="line">  let unit: String</span><br><span class="line">  init(unit: String) &#123; self.unit = unit &#125;</span><br><span class="line">  var tenant: Person?</span><br><span class="line">  deinit &#123; print(&quot;Apartment \(unit) is being deinitialized&quot;) &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 两个可选的变量，并初始化为 nil</span><br><span class="line">var john: Person?</span><br><span class="line">var unit4A: Apartment?</span><br><span class="line"></span><br><span class="line">// 创建实例</span><br><span class="line">john = Person(name: &quot;John Appleseed&quot;)</span><br><span class="line">unit4A = Apartment(unit: &quot;4A&quot;)</span><br><span class="line"></span><br><span class="line">// 将两个实例进行关联，这样就出现了强引用</span><br><span class="line">john!.apartment = unit4A</span><br><span class="line">unit4A!.tenant = john</span><br><span class="line"></span><br><span class="line">// 即使断开两个变量的引用，引用计数也并不会为 0，实例也不会被销毁。造成内存泄露</span><br><span class="line">john = nil</span><br><span class="line">unit4A = nil</span><br></pre></td></tr></table></figure>
-<p>Swift 提供两种方式来解决实例间的强引用：<code>弱引用</code>和<code>无主引用</code>。它们都允许循环引用中的一个实例引用另外一个实例不保持强引用。这样就相互引用就不会产生循环强引用。</p>
-<h3 id="弱引用（weak）"><a href="#弱引用（weak）" class="headerlink" title="弱引用（weak）"></a>弱引用（weak）</h3><p><code>弱引用</code>：不会对其引用的实例保持强引用，这样就组织了引用变为循环强引用。在声明属性或者变量时，在前面加上<code>weak</code>关键字表明这是一个弱引用。因为弱引用不会保持所引用的实例，即使引用存在，实例也有可能被销毁。因此，ARC 会在引用的实例被销毁后自动将其赋值为 nil 。并且因为弱引用可以允许它们的值在运行时被赋值为 nil ，所以<code>它们会被定义为可选类型 变量，而不是常量</code>。需要注意的是：<code>当 ARC 设置弱引用为 nil 时，属性观察不会被触发。</code></p>
-<p>将上面<code>Apartment</code>类中的<code>tenant</code>属性前面使用<code>weak</code>来修饰，像这样：<code>weak var tenant: Person?</code>，就会打破循环强引用。</p>
-<h3 id="无主引用（unowned）"><a href="#无主引用（unowned）" class="headerlink" title="无主引用（unowned）"></a>无主引用（<code>unowned</code>）</h3><p><code>无主引用</code>：和弱引用类似，无主引用不会牢牢保持住引用的实例。<code>和弱引用不同的是，无主引用在其他实例有相同或者更长的生命周期时使用</code>。你可以在声明属性或者变量时，在前面加上关键字 <code>unowned</code> 表示这是一个无主引用。无主引用通常都被期望拥有值。不过 ARC 无法在实例被销毁后将无主引用设为 nil ，因为非可选类型的变量不允许被赋值为 nil 。</p>
-<p><code>注意</code>：在使用无主引用时，必须确保引用始终指向一个未销毁的实例。如果视图在实例销毁后，访问实例的无主引用，会触发运行时错误。</p>
-<p>举个例子，个客户可能有或者没有信用卡，但是一张信用卡总是关联着一个客户。下面表示这种关系，<code>Customer</code> 类有 一个可选类型的 <code>card</code> 属性，但是 <code>CreditCard</code> 类有一个非可选类型的 <code>customer</code> 属性。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">import UIKit</span><br><span class="line"></span><br><span class="line">class Customer &#123;</span><br><span class="line">  let name: String</span><br><span class="line">  var card: CreditCard?</span><br><span class="line">  init(name: String) &#123;</span><br><span class="line">    self.name = name</span><br><span class="line">  &#125;</span><br><span class="line">  deinit &#123; print(&quot;\(name) is being deinitialized&quot;) &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class CreditCard &#123;</span><br><span class="line">  let number: UInt64</span><br><span class="line">  // 这里的属性 customer 不允许被赋值为 nil</span><br><span class="line">  unowned let customer: Customer</span><br><span class="line">  init(number: UInt64, customer: Customer) &#123;</span><br><span class="line">    self.number = number</span><br><span class="line">    self.customer = customer</span><br><span class="line">  &#125;</span><br><span class="line">  deinit &#123; print(&quot;Card #\(number) is being deinitialized&quot;) &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var john: Customer?</span><br><span class="line">john = Customer(name: &quot;John Appleseed&quot;)</span><br><span class="line">john!.card = CreditCard(number: 1234_5678_9012_3456, customer: john!)</span><br><span class="line"></span><br><span class="line">john = nil</span><br><span class="line">// 由于 customer 为 unowned，当断开 john 变量持有的强引用，再也没有指向 Customer 实例的强引用了</span><br><span class="line">// John Appleseed is being deinitialized</span><br><span class="line">// Card #1234567890123456 is being deinitialized</span><br></pre></td></tr></table></figure>
-<p><code>注意</code>：上面的例子展示了如何使用安全的无主引用。对于需要禁用运行时的安全检查的情况(例如，出于性能方面的原因)，Swift还提供了不安全的无主引用。与所有不安全的操作一样，你需要负责检查代码以确保其安全性。你 可以通过 unowned(unsafe) 来声明不安全无主引用。如果你试图在实例被销毁后，访问该实例的不安全无主引 用，你的程序会尝试访问该实例之前所在的内存地址，这是一个不安全的操作。</p>
-<p>那么什么时候使用 weak 或者 unowned 呢？</p>
-<p>当其他的实例有更短的生命周期时，使用弱引用，也就是说，当其他实例析构在先时。在上面公寓的例子中，很显然一个公寓在它的生命周期内会在某个时间段没有它的主人，所以一个弱引用就加在公寓类里面，避免循环引用。相比之下，当其他实例有相同的或者更长生命周期时，请使用无主引用。也就是：</p>
-<p>Person 和 Apartment 的例子展示了两个属性的值都允许为 nil ，并会潜在的产生循环强引用。这种场景最适合用 弱引用来解决。<br>å<br>Customer 和 CreditCard 的例子展示了一个属性的值允许为 nil ，而另一个属性的值不允许为 nil ，这也可能会 产生循环强引用。这种场景最适合通过无主引用来解决。</p>
-<h3 id="无主引用以及隐式解析可选属性"><a href="#无主引用以及隐式解析可选属性" class="headerlink" title="无主引用以及隐式解析可选属性"></a>无主引用以及隐式解析可选属性</h3><p>当两个属性都必须有值，并且初始化完成后永远不会为 nil 。在这种场 景中，需要一个类使用无主属性，而另外一个类使用隐式解析可选属性。这使两个属性在初始化完成后能被直接访问(不需要可选展开)，同时避免了循环引用。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Country</span> </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> name: <span class="type">String</span></span><br><span class="line">  <span class="comment">// 注意这里：将 Country 的 capitalCity 属性声明为隐式解析可选类型的属性。这意味着像其他可选类型一样， capitalCity 属性的默认值为 nil ，但是不需要展开它的值就能访问它。</span></span><br><span class="line">  <span class="keyword">var</span> capitalCity: <span class="type">City</span>!</span><br><span class="line">  <span class="keyword">init</span>(name: <span class="type">String</span>, capitalName: <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="keyword">self</span>.name = name</span><br><span class="line">    <span class="keyword">self</span>.capitalCity = <span class="type">City</span>(name: capitalName, country: <span class="keyword">self</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">City</span> </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> name: <span class="type">String</span></span><br><span class="line">  <span class="keyword">unowned</span> <span class="keyword">let</span> country: <span class="type">Country</span></span><br><span class="line">  <span class="keyword">init</span>(name: <span class="type">String</span>, country: <span class="type">Country</span>) &#123;</span><br><span class="line">    <span class="keyword">self</span>.name = name</span><br><span class="line">    <span class="keyword">self</span>.country = country</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Country 的实例在给构造函数中给 name 属性赋完值后，整个初始化过程就完成了。 同时将 self 作为参数传递给  City 的构造函数</span></span><br><span class="line"><span class="comment">// capitalCity 属性能够被直接访问，不需要通过感叹号来展开它的可选值。</span></span><br><span class="line"><span class="keyword">var</span> country = <span class="type">Country</span>(name: <span class="string">"Canada"</span>, capitalName: <span class="string">"Ottawa"</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"<span class="subst">\(country.name)</span>'s capital city is called <span class="subst">\(country.capitalCity.name)</span>"</span>)</span><br><span class="line"><span class="comment">// Canada's capital city is called Ottawa</span></span><br></pre></td></tr></table></figure>
-<h3 id="闭包引起的循环强引用"><a href="#闭包引起的循环强引用" class="headerlink" title="闭包引起的循环强引用"></a>闭包引起的循环强引用</h3><p>通过<code>捕获值列表</code>作为闭包的一部分，通过这种方式可以解决闭包和类实例之间的循环强引用。捕获列表定义了闭包体内捕获一个或者多个引用类型的规则。跟解决两个类实例间的循环强引用一样，声明每个捕获的引用为弱引用或无主引用，而不是强引用。应当根据代码关系来决定使用弱引用还是无主引用。下面看一个例子：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HTMLElement</span> </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> name: <span class="type">String</span></span><br><span class="line">  <span class="keyword">let</span> text: <span class="type">String</span>?</span><br><span class="line">  <span class="comment">// 闭包当中使用了 self，它捕获了 HTMLElement 的实例 text，并对 self 强引用</span></span><br><span class="line">  <span class="comment">// 虽然闭包多次使用 self，它只捕获 HTMLElement 实例的一个强引用</span></span><br><span class="line">  <span class="built_in">lazy</span> <span class="keyword">var</span> asHTML: (<span class="type">Void</span>) -&gt; <span class="type">String</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> text = <span class="keyword">self</span>.text &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"&lt;<span class="subst">\(<span class="keyword">self</span>.name)</span>&gt;<span class="subst">\(text)</span>&lt;/<span class="subst">\(<span class="keyword">self</span>.name)</span>&gt;"</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"&lt;<span class="subst">\(<span class="keyword">self</span>.name)</span> /&gt;"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">init</span>(name: <span class="type">String</span>, text: <span class="type">String</span>? = <span class="literal">nil</span>) &#123;</span><br><span class="line">    <span class="keyword">self</span>.name = name</span><br><span class="line">    <span class="keyword">self</span>.text = text</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">deinit</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"<span class="subst">\(name)</span> is being deinitialized"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> heading = <span class="type">HTMLElement</span>(name: <span class="string">"h1"</span>)</span><br><span class="line"><span class="keyword">let</span> defaultText = <span class="string">"some default text"</span></span><br><span class="line">heading.asHTML = &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"&lt;<span class="subst">\(heading.name)</span>&gt;<span class="subst">\(heading.text ?? defaultText)</span>&lt;/<span class="subst">\(heading.name)</span>&gt;"</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(heading.asHTML())</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例的 asHTML 属性持有闭包的强引用，此时在闭包内部，闭包又强引用 self。造成循环强引用</span></span><br><span class="line"><span class="keyword">var</span> paragraph: <span class="type">HTMLElement</span>? = <span class="type">HTMLElement</span>(name: <span class="string">"p"</span>, text: <span class="string">"hello, world"</span>)</span><br><span class="line"><span class="built_in">print</span>(paragraph!.asHTML())</span><br></pre></td></tr></table></figure>
-<p><code>注意</code>：只要在闭包内使用 self 的成员，就要用 <code>self.someProperty</code> 或者 <code>self.someMethod()</code> (而 不只是 someProperty 或 someMethod() )。这提醒你可能会一不小心就捕获了 self 。</p>
-<h3 id="解决闭包引起的强引用"><a href="#解决闭包引起的强引用" class="headerlink" title="解决闭包引起的强引用"></a>解决闭包引起的强引用</h3><p>如果闭包有参数列表和返回类型，把捕获值列表放在它们的前面：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">lazy var someClosure: (Int, String) -&gt; String = &#123;</span><br><span class="line">  [unowned self, weak delegate = self.delegate!] (index: Int, stringToProcess: String) -&gt; String in</span><br><span class="line">  // 这里是闭包的函数体</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 如果闭包没有指明参数列表或者返回类型，即它们会通过上下文推断，那么可以把捕获列表和关键字 in 放在闭包 最开始的地方:</span><br><span class="line">lazy var someClosure: Void -&gt; String = &#123;</span><br><span class="line">  [unowned self, weak delegate = self.delegate!] in</span><br><span class="line">  // 这里是闭包的函数体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果闭包和捕获的实例总是相互引用并同时销毁的时候，将闭包内的捕获定义为<code>无主引用</code>。相反，如果被捕获的引用可能会变为 <code>nil</code>时，将闭包内的捕获定义为<code>弱引用</code>。弱引用总是可选类型，并且当引用 的实例被销毁后，弱引用的值会自动置为 nil 。这使我们可以在闭包体内检查它们是否存在。</p>
-<p><code>注意</code>：如果被捕获的引用绝对不会变为 nil ，应该用无主引用，而不是弱引用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">class HTMLElement &#123;</span><br><span class="line">  let name: String</span><br><span class="line">  let text: String?</span><br><span class="line">  lazy var asHTML: (Void) -&gt; String = &#123;</span><br><span class="line">    // 捕获值列表是 [unowned self]，表示将 self 捕获为无主引用而不是强引用。</span><br><span class="line">    // 实例被销毁，最终会看到析构函数被调用</span><br><span class="line">    [unowned self] in</span><br><span class="line">    if let text = self.text &#123;</span><br><span class="line">      return &quot;&lt;\(self.name)&gt;\(text)&lt;/\(self.name)&gt;&quot;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      return &quot;&lt;\(self.name) /&gt;&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  init(name: String, text: String? = nil) &#123;</span><br><span class="line">    self.name = name</span><br><span class="line">    self.text = text</span><br><span class="line">  &#125;</span><br><span class="line">  deinit &#123;</span><br><span class="line">    print(&quot;\(name) is being deinitialized&quot;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/10/Swift÷–µƒ±’∞¸/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JY's Den">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/03/10/Swift÷–µƒ±’∞¸/" itemprop="url">Swift中的闭包总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-10T11:33:39+08:00">
-                2017-03-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/03/10/Swift÷–µƒ±’∞¸/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/03/10/Swift÷–µƒ±’∞¸/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>闭包是自包含的函数代码块，Swift 中的闭包与 C 和 Objective-C 中的代码块(b<br>locks)以及其他一些编程语言中的匿名函数比较相似。Swift 会为你管理在捕获过程中涉及到的所有内存操作。</p>
-<p>闭包表达式的语法：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; (parameters) -&gt; returnType <span class="keyword">in</span></span><br><span class="line">    statements</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>闭包表达式参数 可以是 in-out 参数，但不能设定默认值。也可以使用具名的可变参数。闭包的函数体部分由关键字 <code>in</code> 引入，表示闭包的参数和返回值类型定义已经完成，闭包函数体即将开始。</p>
-<p>举个例子，<code>sorted(by:)</code>方法接收一个闭包，接收两个参数，返回一个 Bool 值：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> names = [<span class="string">"Chris"</span>, <span class="string">"Alex"</span>, <span class="string">"Ewa"</span>, <span class="string">"Barry"</span>, <span class="string">"Daniella"</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> reversedNames = names.sorted(by: &#123; (s1: <span class="type">String</span>, s2: <span class="type">String</span>) -&gt; <span class="type">Bool</span> <span class="keyword">in</span></span><br><span class="line">  <span class="keyword">return</span> s1 &gt; s2</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// reversedNames 为 ["Ewa", "Daniella", "Chris", "Barry", "Alex"]</span></span><br></pre></td></tr></table></figure>
-<p>上面的闭包函数体也可以改写成一行代码，一对圆括号仍然包裹住了方法的整个参数。然而，参数现在变成了<code>内联闭包</code>。：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames = names.sorted(by: &#123; (s1: <span class="type">String</span>, s2: <span class="type">String</span>) -&gt; <span class="type">Bool</span> <span class="keyword">in</span> <span class="keyword">return</span> s1 &gt; s2 &#125; )</span><br></pre></td></tr></table></figure>
-<p>由于 Swift 可以推断其参数和返回值类型，所以其参数<code>(String, String) -&gt; Bool</code>类型的函数并不需要作为闭包表达式定义的一部分。因为所有类型都可以被推断，所以<code>-&gt;</code>和围绕在参数周围的括号也可以被省略：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames = names.sorted(by: &#123; s1, s2 <span class="keyword">in</span> <span class="keyword">return</span> s1 &gt; s2 &#125; )</span><br></pre></td></tr></table></figure>
-<p><code>单表达式闭包</code>(这里闭包函数体只包含了一个单一表达式( s1 &gt; s2 ))可以通过省略<code>return</code>关键字来隐式返回单行表达式的结果：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames = names.sorted(by: &#123; s1, s2 <span class="keyword">in</span> s1 &gt; s2 &#125; )</span><br></pre></td></tr></table></figure>
-<p>Swift 为<code>内联闭包</code>提供<code>参数名称缩写功能</code>，你可以通过<code>$0</code>，<code>$1</code>，<code>$2</code>来顺序调用闭包的参数，以此类推。如果闭包表达式中使用参数名称缩写，也可以在闭包定义中省略参数列表，并且对应参数名称缩写的类型会通过函数类型进行推断。<code>in</code> 关键字也同样可以被省略，因为此时闭包表达式完全由闭包函数体构成（<code>$0</code>、<code>$1</code>分别表示闭包的第一个和第二个参数）。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames = names.sorted(by: &#123; $<span class="number">0</span> &gt; $<span class="number">1</span> &#125; )</span><br></pre></td></tr></table></figure>
-<p> <code>运算符方法</code>：<code>String</code>类型定义了关于<code>&gt;</code>的字符串实现，其作为一个函数接受两个<code>String</code>类型的参数并返回<code>Bool</code>类型。这恰好与<code>sorted(by:)</code>方法的参数需要函数类型相符合。所以可以自动推断出<code>&gt;</code>的字符串函数实现。</p>
- <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames = names.sorted(by: &gt;)</span><br></pre></td></tr></table></figure>
-<h3 id="尾随闭包"><a href="#尾随闭包" class="headerlink" title="尾随闭包"></a>尾随闭包</h3><p>如果你需要将一个很长的闭包表达式作为最后一个参数传递给函数，可以使用尾随闭包来增强函数的可读性。<code>尾随闭包是一个书写在函数括号之后的闭包表达式函数支持将其作为最后一个参数调用</code>。在使用尾随闭包时，你不用写出它的参数标签：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">someFunctionThatTakesAClosure</span><span class="params">(closure: <span class="params">()</span></span></span> -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">  <span class="comment">// 函数体部分</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 以下是不使用尾随闭包进行函数调用</span></span><br><span class="line">someFunctionThatTakesAClosure(closure: &#123;</span><br><span class="line">  <span class="comment">// 闭包主体部分</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 以下是使用尾随闭包进行函数调用</span></span><br><span class="line">someFunctionThatTakesAClosure() &#123;</span><br><span class="line">  <span class="comment">// 闭包主体部分</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面的例子可改写为：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames = names.sorted() &#123; $<span class="number">0</span> &gt; $<span class="number">1</span> &#125;</span><br></pre></td></tr></table></figure>
-<p><code>如果闭包表达式是函数或方法的唯一参数，可以省略（）</code>：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames = names.sorted &#123; $<span class="number">0</span> &gt; $<span class="number">1</span> &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="值捕获"><a href="#值捕获" class="headerlink" title="值捕获"></a>值捕获</h3><p>闭包可以在其被定义的上下文中捕获常量或变量。即使定义这些常量和变量的原作用域已经不存在，闭包仍然可以在闭包函数体内引用和修改这些值。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">makeIncrementer</span><span class="params">(forIncrement amount: Int)</span></span> -&gt; () -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> runningTotal = <span class="number">0</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">incrementer</span><span class="params">()</span></span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">        runningTotal += amount</span><br><span class="line">        <span class="keyword">return</span> runningTotal</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> incrementer</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 无论你是将函数或闭包赋值给一个常量还是变量，实际上都是将常量或者变量的值设置为对应行数或者闭包的引用</span></span><br><span class="line"><span class="keyword">let</span> incrementByTen = makeIncrementor(forIncrement: <span class="number">10</span>)</span><br></pre></td></tr></table></figure>
-<p>闭包捕获了<code>amount</code>、<code>runningTotal</code>两个变量的引用，捕获引用保证了 <code>runningTotal</code> 和 <code>amount</code> 变量在调用完 <code>makeIncrementer</code> 后不会消失，并且保证了在下一次执行 <code>incrementer</code> 函数时，<code>runningTotal</code> 依旧存在。Swift 负责被捕获变量的所有内存管理工作，包括释放不再需要的变量。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">incrementByTen() <span class="comment">// 10</span></span><br><span class="line">incrementByTen() <span class="comment">// 20</span></span><br></pre></td></tr></table></figure>
-<p><code>注意：</code>如果你将闭包赋值给一个类实例的属性，并且该闭包通过访问该实例或其成员而捕获了该实例，你将在闭包和该 实例间创建一个循环强引用</p>
-<h3 id="逃逸闭包"><a href="#逃逸闭包" class="headerlink" title="逃逸闭包"></a>逃逸闭包</h3><p><code>逃逸闭包</code>：当一个闭包作为参数传到一个函数中，但是这个闭包在函数返回之后才被执行，我们称该闭包从函数中逃逸。可以在参数名之前标注<code>@escaping</code>，来指明这个闭包时允许“逃逸”出这个函数的。</p>
-<p>一种能使闭包“逃逸”出函数的方法是，<code>将这个闭包保存在一个函数外部定义的变量中</code>。比如常用的回调函数，这类函数会在异步操作开始之后立刻返回，但是闭包直到异步操作结束后才会被调用。在这种情况下，闭包需要“逃逸”出函数，因为闭包需要在函数返回之后被调用。例如：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// someFunctionWithEscapingClosure(_:)中的闭包是一个逃逸闭包，该闭包被添加到一个函数外定义的数组中。如果不显示将参数标记为 @escaping ，会得到编译错误</span></span><br><span class="line"><span class="keyword">var</span> completionHandlers: [() -&gt; <span class="type">Void</span>] = []</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">someFunctionWithEscapingClosure</span><span class="params">(completionHandler: @escaping <span class="params">()</span></span></span> -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">  completionHandlers.append(completionHandler)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>注意</code>：标记为<code>@escaping</code>的闭包必须在闭包中显式的引用<code>self</code>，而非逃逸闭包，它可以隐式的引用<code>self</code>。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">someFunctionWithNonescapingClosure</span><span class="params">(closure: <span class="params">()</span></span></span> -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">  closure()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> x = <span class="number">10</span></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">doSomething</span><span class="params">()</span></span> &#123;</span><br><span class="line">    someFunctionWithEscapingClosure &#123; <span class="keyword">self</span>.x = <span class="number">100</span> &#125;</span><br><span class="line">    someFunctionWithNonescapingClosure &#123; x = <span class="number">200</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> instance = <span class="type">SomeClass</span>()</span><br><span class="line">instance.doSomething()</span><br><span class="line"><span class="built_in">print</span>(instance.x) <span class="comment">// 200</span></span><br><span class="line"></span><br><span class="line">completionHandlers.first?()</span><br><span class="line"><span class="built_in">print</span>(instance.x) <span class="comment">// 100</span></span><br></pre></td></tr></table></figure>
-<h3 id="自动闭包"><a href="#自动闭包" class="headerlink" title="自动闭包"></a>自动闭包</h3><p><code>自动闭包</code>是一种自动创建的闭包，用于包装传递给函数作为参数的表达式。这种闭包不接受任何参数，当它被调用的时候，会返回被包装在其中的表达式的值这种便利语法让你能够省略闭包的花括号，用一个普通的表达式来代替显式的闭包。</p>
-<p>自动闭包能够延延迟求职，因为知道你调用这个闭包，代码段才会被执行。延迟求值对于高计算成本的代码来说很有用。举个例子表示如何延时求值：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> customersInLine = [<span class="string">"Chris"</span>, <span class="string">"Alex"</span>, <span class="string">"Ewa"</span>, <span class="string">"Barry"</span>, <span class="string">"Daniella"</span>]</span><br><span class="line"><span class="built_in">print</span>(customersInLine.<span class="built_in">count</span>) <span class="comment">// 5</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// customerProvider 的类型不是 String，而是 () -&gt; String</span></span><br><span class="line"><span class="keyword">let</span> customerProvider = &#123; customersInLine.remove(at: <span class="number">0</span>) &#125;</span><br><span class="line"><span class="built_in">print</span>(customersInLine.<span class="built_in">count</span>) <span class="comment">// 5</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"Now serving <span class="subst">\(customerProvider()</span>)!"</span>) <span class="comment">// "Now serving Chris!"</span></span><br><span class="line"><span class="built_in">print</span>(customersInLine.<span class="built_in">count</span>) <span class="comment">// 4</span></span><br></pre></td></tr></table></figure>
-<p>将闭包作为参数传递给函数时，同样能获取延时求值行为。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> customersInLine = [<span class="string">"Alex"</span>, <span class="string">"Ewa"</span>, <span class="string">"Barry"</span>, <span class="string">"Daniella"</span>]</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">serve</span><span class="params">(customer customerProvider: <span class="params">()</span></span></span> -&gt; <span class="type">String</span>) &#123;</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">"Now serving <span class="subst">\(customerProvider()</span>)!"</span>)</span><br><span class="line">&#125;</span><br><span class="line">serve(customer: &#123; customersInLine.remove(at: <span class="number">0</span>) &#125; ) <span class="comment">// Now serving Alex!</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(customersInLine) <span class="comment">// ["Ewa", "Barry", "Daniella"]</span></span><br></pre></td></tr></table></figure>
-<p>也可以将参数标记为 <code>@autoclosure</code> 来接收一个自动闭包。现在可以将该函数当做接受<code>String</code>类型参数（而非闭包）的函数来调用。<code>customerProvider</code>参数将自动转化为一个闭包，因为该参数被标记了<code>@autoclosure</code>特性。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> customersInLine = [<span class="string">"Alex"</span>, <span class="string">"Ewa"</span>, <span class="string">"Barry"</span>, <span class="string">"Daniella"</span>]</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">serve</span><span class="params">(customer customerProvider: @autoclosure <span class="params">()</span></span></span> -&gt; <span class="type">String</span>) &#123;</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">"Now serving <span class="subst">\(customerProvider()</span>)!"</span>)</span><br><span class="line">&#125;</span><br><span class="line">serve(customer: customersInLine.remove(at: <span class="number">0</span>)) <span class="comment">// Now serving Alex!</span></span><br><span class="line"><span class="built_in">print</span>(customersInLine) <span class="comment">// ["Ewa", "Barry", "Daniella"]</span></span><br></pre></td></tr></table></figure>
-<p>如果想让一个闭包自动“逃逸”，则应该同时使用<code>@autoclosure</code>和<code>@escaping</code>。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> customersInLine = [<span class="string">"Alex"</span>, <span class="string">"Ewa"</span>, <span class="string">"Barry"</span>, <span class="string">"Daniella"</span>]</span><br><span class="line"><span class="keyword">var</span> customerProviders: [() -&gt; <span class="type">String</span>] = []</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">collectCustomerProviders</span><span class="params">(<span class="number">_</span> customerProvider: @autoclosure @escaping <span class="params">()</span></span></span> -&gt; <span class="type">String</span>) &#123;</span><br><span class="line">  customerProviders.append(customerProvider)</span><br><span class="line">&#125;</span><br><span class="line">collectCustomerProviders(customersInLine.remove(at: <span class="number">0</span>))</span><br><span class="line">collectCustomerProviders(customersInLine.remove(at: <span class="number">0</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"Collected <span class="subst">\(customerProviders.<span class="built_in">count</span>)</span> closures."</span>) <span class="comment">// Collected 2 closures.</span></span><br><span class="line"><span class="keyword">for</span> customerProvider <span class="keyword">in</span> customerProviders &#123;</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">"Now serving <span class="subst">\(customerProvider()</span>)!"</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Now serving Alex!</span></span><br><span class="line"><span class="comment">// Now serving Ewa!</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(customersInLine) <span class="comment">// ["Barry", "Daniella"]</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/02/12/Founctors”ÎMonad/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JY's Den">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/02/12/Founctors”ÎMonad/" itemprop="url">Founctors与Monad</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-12T10:23:31+08:00">
-                2017-02-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/02/12/Founctors”ÎMonad/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/02/12/Founctors”ÎMonad/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Founctor（函子）"><a href="#Founctor（函子）" class="headerlink" title="Founctor（函子）"></a>Founctor（函子）</h3><p>函子包含以下定义：</p>
-<ul>
-<li>包装了另一种类型，就像 <code>Array&lt;T&gt;</code>、<code>Optional&lt;T&gt;</code>，它们都包装了 <code>T</code> 类型。</li>
-<li>有一个函数签名为 <code>(T-&gt;U) -&gt; Type&lt;U&gt;</code> 的 <code>map</code> 方法。</li>
-</ul>
-<h3 id="Monad（单子）"><a href="#Monad（单子）" class="headerlink" title="Monad（单子）"></a>Monad（单子）</h3><ul>
-<li>是一个函子（包含了内部类型 <code>T</code> 并且拥有 <code>map</code> 方法）。</li>
-<li>同时有函数签名为 <code>(T -&gt; Type&lt;U&gt;) -&gt; Type&lt;U&gt;</code> 的 <code>flatMap</code> 方法。</li>
-</ul>
-<p><a href="http://swift.gg/2015/10/30/lets-talk-about-monads/" target="_blank" rel="noopener">http://swift.gg/2015/10/30/lets-talk-about-monads/</a></p>
-<hr>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><img src="http://alisoftware.github.io/swift/2015/10/17/lets-talk-about-monads/" alt="Let&#39;s talk about Monads"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1975,7 +1962,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1988,7 +1975,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2035,7 +2022,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

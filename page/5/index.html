@@ -249,6 +249,479 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2016/12/06/Python÷–µƒ“Ï≥£¥¶¿Ì/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/12/06/Python÷–µƒ“Ï≥£¥¶¿Ì/" itemprop="url">Python中的异常处理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-06T23:55:29+08:00">
+                2016-12-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/06/Python÷–µƒ“Ï≥£¥¶¿Ì/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/12/06/Python÷–µƒ“Ï≥£¥¶¿Ì/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>Python中使用<code>try...except...finally...</code>来处理异常。简单的栗子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    print(<span class="string">'try...'</span>)</span><br><span class="line"><span class="keyword">except</span> ZeroDivisionError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">'except:'</span>, e)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    print(<span class="string">'finally...'</span>)</span><br></pre></td></tr></table></figure>
+<p>如果某段代码出现错误，可以使用<code>try</code>来包含这段代码，如果执行出错，则后续代码则不会被执行，而是直接跳转到错误处理代码，即<code>except</code>语句块。如果有<code>finally</code>语句块，则执行<code>finally</code>语句块。</p>
+<p>在异常处理的流程当中，<code>try</code>语句中如果没有错误，则<code>except</code>一定不会被执行，如果有<code>finally</code>语句块（也可以没有），一定会会执行<code>finally</code>语句块。</p>
+<p>可以有多个<code>except</code>语句，来处理不同类型的错误，如下面int()函数可能会抛出<code>ValueError</code>错误，所以使用<code>except</code>捕获<code>ValueError</code>。如果没有错误发生，可以再<code>except</code>语句块后面添加一个<code>else</code>，当没有错误发生时，自动执行<code>else</code>语句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    r = <span class="number">10</span> / int(<span class="string">'2'</span>)</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">'ValueError:'</span>, e)</span><br><span class="line"><span class="keyword">except</span> ZeroDivisionError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">'ZeroDivisionError:'</span>, e)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'no error!'</span>)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    print(<span class="string">'finally...'</span>)</span><br><span class="line">print(<span class="string">'END'</span>)</span><br></pre></td></tr></table></figure>
+<p>Python的错误类型都继承自<code>BaseException</code>，它不仅仅能捕获该类型错误，还能将其子类也捕获。比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    foo()</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">'ValueError'</span>)</span><br><span class="line"><span class="keyword">except</span> UnicodeError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">'UnicodeError'</span>)</span><br></pre></td></tr></table></figure>
+<p>第二个<code>except</code>永远也不会执行，因为<code>UnicodeError</code>是<code>ValueError</code>的子类。该错误只能被第一个<code>except</code>捕获。<a href="https://docs.python.org/3/library/exceptions.html#exception-hierarchy" target="_blank" rel="noopener">官方文档</a>描述了有关错误类型的继承关系。</p>
+<p><code>try...except...</code>可以跨多层调用，比如下面：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span> / int(s)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> foo(s) * <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        bar(<span class="string">'0'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">'Error:'</span>, e)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        print(<span class="string">'finally...'</span>)</span><br></pre></td></tr></table></figure>
+<p>不需要再每个地方都捕获错误，只要在合适的层次去捕获错误就可以了。</p>
+<p>如果没有捕获错误，它就会一直上抛，最后被Python解释器捕获，打印一个错误信息，然后程序退出。</p>
+<p>Python内置的logging模块可以非常容易的记录错误信息，同时，让程序继续执行下去。程序打印完错误信息后会继续执行，并正常退出。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span> / int(s)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> foo(s) * <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        bar(<span class="string">'0'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        logging.exception(e)</span><br><span class="line"></span><br><span class="line">main()</span><br><span class="line">print(<span class="string">'END'</span>)</span><br></pre></td></tr></table></figure>
+<p>log:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ python3 err_logging.py</span><br><span class="line">ERROR:root:division by zero</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"err_logging.py"</span>, line <span class="number">13</span>, <span class="keyword">in</span> main</span><br><span class="line">    bar(<span class="string">'0'</span>)</span><br><span class="line">  File <span class="string">"err_logging.py"</span>, line <span class="number">9</span>, <span class="keyword">in</span> bar</span><br><span class="line">    <span class="keyword">return</span> foo(s) * <span class="number">2</span></span><br><span class="line">  File <span class="string">"err_logging.py"</span>, line <span class="number">6</span>, <span class="keyword">in</span> foo</span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span> / int(s)</span><br><span class="line">ZeroDivisionError: division by zero</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>抛出错误：Python内置函数会抛出很多错误，也可以自己编写函数抛出错误。可以定义一个错误的class，选择继承关系，使用<code>raise</code>语句抛出一个错误的实例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FooError</span><span class="params">(ValueError)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(s)</span>:</span></span><br><span class="line">    n = int(s)</span><br><span class="line">    <span class="keyword">if</span> n==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> FooError(<span class="string">'invalid value: %s'</span> % s)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span> / n</span><br><span class="line"></span><br><span class="line">foo(<span class="string">'0'</span>)</span><br></pre></td></tr></table></figure>
+<p>另外一种处理错误的方式：在捕获错误的时候，打印<code>ValueError!</code>后，又将错误抛出。这是由于这个函数不知道怎么处理这个错误，所以，最恰当的方式是继续上抛，让顶层调用者去处理。<code>raise</code>语句如果不带参数，就会把当前的错误按照原样抛出。此外还可以将<code>except</code>中的<code>raise</code>一个Error，将一种错误转换成另外一种类型：<code>raise ValueError(&#39;input error!&#39;)</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(s)</span>:</span></span><br><span class="line">    n = int(s)</span><br><span class="line">    <span class="keyword">if</span> n==<span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'invalid value: %s'</span> % s)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span> / n</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        foo(<span class="string">'0'</span>)</span><br><span class="line">    <span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">'ValueError!'</span>)</span><br><span class="line">        <span class="keyword">raise</span></span><br><span class="line"></span><br><span class="line">bar()</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2016/12/05/Python÷–µƒ÷™ ∂µ„/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/12/05/Python÷–µƒ÷™ ∂µ„/" itemprop="url">Python中容易混淆的知识点</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-05T23:32:39+08:00">
+                2016-12-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/05/Python÷–µƒ÷™ ∂µ„/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/12/05/Python÷–µƒ÷™ ∂µ„/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h3 id="匿名函数"><a href="#匿名函数" class="headerlink" title="匿名函数"></a>匿名函数</h3><p>匿名函数就是不需要指定函数的名字，比如<code>lambda x: x * x</code>。相当与：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ':'前的x为函数参数，后面的为返回值</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> x * x</span><br><span class="line"><span class="comment"># 同样可以将匿名函数作为返回值返回</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">b</span><span class="params">(x, y)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">lambda</span>: x * x + y * y</span><br></pre></td></tr></table></figure>
+<h3 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h3><p>可变参数：可以接受所有参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calc</span><span class="params">(*numbers)</span>:</span></span><br><span class="line">    sum = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> numbers:</span><br><span class="line">        sum = sum + n * n</span><br><span class="line">    <span class="keyword">return</span> sum</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>calc(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="number">14</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 参数如果是list、tuple、可以直接在前面加 *</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>calc(*nums)</span><br><span class="line"><span class="number">14</span></span><br></pre></td></tr></table></figure>
+<p>关键字参数：使用<code>**</code>来定义，允许传入0个或者任意个含参数名的参数，在内部自动组装成dict</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">person</span><span class="params">(name, age, **kw)</span>:</span></span><br><span class="line">    print(<span class="string">'name:'</span>, name, <span class="string">'age:'</span>, age, <span class="string">'other:'</span>, kw)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>person(<span class="string">'Jim'</span>, <span class="number">18</span>, city=<span class="string">'Beijing'</span>)</span><br><span class="line">name: Jim age: <span class="number">18</span> other: &#123;<span class="string">'city'</span>: <span class="string">'Beijing'</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>命名关键字参数：可以限制关键字参数的名字，比如只接受某个参数名为关键字参数。命名关键字参数需要用<code>*</code>进行分隔开，<code>*</code>后面的参数被视为关键字参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 只接收city和job作为关键字参数。</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">person</span><span class="params">(name, age, *, city, job)</span>:</span></span><br><span class="line">    print(name, age, city, job)</span><br><span class="line">    </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>person(<span class="string">'Jack'</span>, <span class="number">24</span>, city=<span class="string">'Beijing'</span>, job=<span class="string">'Engineer'</span>)</span><br><span class="line">Jack <span class="number">24</span> Beijing Engineer</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果函数定义中已经有了一个可变参数，后面跟着的命名关键字参数就不再需要一个特殊分隔符'*'了：</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">person</span><span class="params">(name, age, *args, city, job)</span>:</span></span><br><span class="line">    print(name, age, args, city, job)</span><br><span class="line">    </span><br><span class="line">命名关键字参数必须传入参数名，这和位置参数不同。如果没有传入参数名，调用将报错：</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>person(<span class="string">'Jack'</span>, <span class="number">24</span>, <span class="string">'Beijing'</span>, <span class="string">'Engineer'</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: person() takes <span class="number">2</span> positional arguments but <span class="number">4</span> were given</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 命名关键字参数可以有缺省值，从而简化调用：</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">person</span><span class="params">(name, age, *, city=<span class="string">'Beijing'</span>, job)</span>:</span></span><br><span class="line">    print(name, age, city, job)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 由于命名关键字参数city具有默认值，调用时，可不传入city参数：</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>person(<span class="string">'Jack'</span>, <span class="number">24</span>, job=<span class="string">'Engineer'</span>)</span><br><span class="line">Jack <span class="number">24</span> Beijing Engineer</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用命名关键字参数时，要特别注意，如果没有可变参数，就必须加一个'*'作为特殊分隔符。如果缺少*，Python解释器将无法识别位置参数和命名关键字参数：</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">person</span><span class="params">(name, age, city, job)</span>:</span></span><br><span class="line">    <span class="comment"># 缺少 *，city和job被视为位置参数</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<h3 id="递归函数："><a href="#递归函数：" class="headerlink" title="递归函数："></a>递归函数：</h3><p>在函数内部，可以调用其他函数，如果一个函数在内部调用自身，那么就称作递归函数。</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">def fact(n):</span><br><span class="line">    if n==1:</span><br><span class="line">        return 1</span><br><span class="line">    return n * fact(n - 1)</span><br><span class="line">    </span><br><span class="line">=<span class="ruby">==&gt; fact(<span class="number">5</span>)</span></span><br><span class="line"><span class="ruby">===&gt; <span class="number">5</span> * fact(<span class="number">4</span>)</span></span><br><span class="line"><span class="ruby">===&gt; <span class="number">5</span> * (<span class="number">4</span> * fact(<span class="number">3</span>))</span></span><br><span class="line"><span class="ruby">===&gt; <span class="number">5</span> * (<span class="number">4</span> * (<span class="number">3</span> * fact(<span class="number">2</span>)))</span></span><br><span class="line"><span class="ruby">===&gt; <span class="number">5</span> * (<span class="number">4</span> * (<span class="number">3</span> * (<span class="number">2</span> * fact(<span class="number">1</span>))))</span></span><br><span class="line"><span class="ruby">===&gt; <span class="number">5</span> * (<span class="number">4</span> * (<span class="number">3</span> * (<span class="number">2</span> * <span class="number">1</span>)))</span></span><br><span class="line"><span class="ruby">===&gt; <span class="number">5</span> * (<span class="number">4</span> * (<span class="number">3</span> * <span class="number">2</span>))</span></span><br><span class="line"><span class="ruby">===&gt; <span class="number">5</span> * (<span class="number">4</span> * <span class="number">6</span>)</span></span><br><span class="line"><span class="ruby">===&gt; <span class="number">5</span> * <span class="number">24</span></span></span><br><span class="line"><span class="ruby">===&gt; <span class="number">120</span></span></span><br></pre></td></tr></table></figure>
+<p>递归函数的优点：逻辑清晰，但是使用尾递归要注意防止栈溢出。（函数是通过栈这种数据结构来实现的。所以递归调用的次数越多，会导致栈溢出） 解决这个办法是通过尾递归优化。</p>
+<p><code>尾递归优化</code>：当函数返回的时候，调用自身本身，并且return语句不能包含表达式。这样编译器或者就是去就可以把尾递归做优化，使得尾递归不论本身调用多少次，都只占用了一个栈。不会出现栈溢出的情况。上面的例子return n * fact(n - 1)不是一个尾递归。</p>
+<p>一个尾递归的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这个函数是一个递归调用，所以并不会导致栈溢出。但是由于Python解释器并没有做尾递归优化，所以仍然会导致栈溢出。</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fact</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> fact_iter(n, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fact_iter</span><span class="params">(num, product)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> num == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> product</span><br><span class="line">    <span class="keyword">return</span> fact_iter(num - <span class="number">1</span>, num * product)</span><br></pre></td></tr></table></figure>
+<h3 id="列表生成式："><a href="#列表生成式：" class="headerlink" title="列表生成式："></a>列表生成式：</h3><p>如果想要生成一个list，可以使用<code>list(range(1, 11))</code>，也可使用for循环，然而使用<code>列表生成式</code>可以很方便的生成list：把要生成的元素<code>x * x</code>放到前面，后面跟着for循环，就可以把list创建出来</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[x * x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">11</span>)]</span><br></pre></td></tr></table></figure>
+<p>后面还可以跟<code>if</code>语句，求偶数的平方：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x * x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">11</span>) <span class="keyword">if</span> x % <span class="number">2</span> == <span class="number">0</span>]</span><br><span class="line">[<span class="number">4</span>, <span class="number">16</span>, <span class="number">36</span>, <span class="number">64</span>, <span class="number">100</span>]</span><br></pre></td></tr></table></figure>
+<p>使用两层循环，使用两个变量来生成list：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[m + n <span class="keyword">for</span> m <span class="keyword">in</span> <span class="string">'ABC'</span> <span class="keyword">for</span> n <span class="keyword">in</span> <span class="string">'XYZ'</span>]</span><br><span class="line">[<span class="string">'AX'</span>, <span class="string">'AY'</span>, <span class="string">'AZ'</span>, <span class="string">'BX'</span>, <span class="string">'BY'</span>, <span class="string">'BZ'</span>, <span class="string">'CX'</span>, <span class="string">'CY'</span>, <span class="string">'CZ'</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="string">'x'</span>: <span class="string">'A'</span>, <span class="string">'y'</span>: <span class="string">'B'</span>, <span class="string">'z'</span>: <span class="string">'C'</span> &#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[k + <span class="string">'='</span> + v <span class="keyword">for</span> k, v <span class="keyword">in</span> d.items()]</span><br><span class="line">[<span class="string">'y=B'</span>, <span class="string">'x=A'</span>, <span class="string">'z=C'</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="生成器与迭代器"><a href="#生成器与迭代器" class="headerlink" title="生成器与迭代器"></a>生成器与迭代器</h2><h3 id="生成器"><a href="#生成器" class="headerlink" title="生成器:"></a>生成器:</h3><p>Python中，一边循环一边计算的机制，称为生成器（generator），只要把一个列表生成式的<code>[]</code>改成<code>()</code>，就创建了generator。</p>
+<p>有两种方式创建生成器：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列表生成式</span></span><br><span class="line">[x * x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10</span>)]</span><br><span class="line"><span class="comment"># generator</span></span><br><span class="line">g =（x * x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10</span>)）</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每次调用 next(g)，就可以计算出g的下一个元素的值，直到最后抛出 StopIteration 错误。由于generator是可迭代对象。所以可以用for循环来遍历。</span></span><br><span class="line">g = (x * x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10</span>))</span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> g:</span><br><span class="line">    print(n)</span><br></pre></td></tr></table></figure>
+<p>第二种方法创建生成器，如果函数定义中包含<code>yield</code>关键字，那么这个函数就是一个生成器。在<code>generator</code>当中，每次调用<code>next()</code>的时候执行，遇到<code>yield</code>语句返回，再次执行时从上次返回的<code>yield</code>语句处继续执行，举个简单的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">odd</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'step 1'</span>)</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line">    print(<span class="string">'step 2'</span>)</span><br><span class="line">    <span class="keyword">yield</span>(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'step 3'</span>)</span><br><span class="line">    <span class="keyword">yield</span>(<span class="number">5</span>)</span><br><span class="line">    </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>o = odd()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(o)</span><br><span class="line">step <span class="number">1</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(o)</span><br><span class="line">step <span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(o)</span><br><span class="line">step <span class="number">3</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(o)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure>
+<p>在使用for循环调用<code>generator</code>时，如果想要拿到返回值，必须捕获错误，返回值包含在<code>StopIteration</code>的<code>value</code>中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>g = fib(<span class="number">6</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">try</span>:</span><br><span class="line"><span class="meta">... </span>        x = next(g)</span><br><span class="line"><span class="meta">... </span>        print(<span class="string">'g:'</span>, x)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">except</span> StopIteration <span class="keyword">as</span> e:</span><br><span class="line"><span class="meta">... </span>        print(<span class="string">'Generator return value:'</span>, e.value)</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">break</span></span><br><span class="line">...</span><br><span class="line">g: <span class="number">1</span></span><br><span class="line">g: <span class="number">1</span></span><br><span class="line">g: <span class="number">2</span></span><br><span class="line">g: <span class="number">3</span></span><br><span class="line">g: <span class="number">5</span></span><br><span class="line">g: <span class="number">8</span></span><br><span class="line">Generator <span class="keyword">return</span> value: done</span><br></pre></td></tr></table></figure>
+<p>###迭代器：</p>
+<p>Python 中可以直接作用于for循环的对象统称为可迭代对象：<code>Iterable</code>。使用 <code>isinstance()</code> 判断一个对象是否是可迭代对象<code>Iterable</code></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from collections import Iterable</span><br><span class="line"><span class="function"><span class="title">isinstance</span><span class="params">([], Iterable)</span></span>    </span><br><span class="line"><span class="function"><span class="title">isinstance</span><span class="params">(&#123;&#125;, Iterable)</span></span></span><br><span class="line"><span class="function"><span class="title">isinstance</span><span class="params">(<span class="number">100</span>, Iterable)</span></span> <span class="comment">// False</span></span><br></pre></td></tr></table></figure>
+<p>生成器不但可以作用于 for 循环，而且可以被 next() 函数不断调用返回下一个值，直到最后抛出StopIteration错误，这样可以被next()函数不断返回下一个值得对象称为迭代器：<code>Iterator</code>。</p>
+<p>生成器都是<code>Iterator</code>对象，但是<code>list</code>、<code>dict</code>、<code>str</code>是可迭代对象（<code>Iterable</code>），但是不是迭代器<code>Iterator</code>。需要把以上类型变成可迭代对象可以使用 <code>iter()</code> 函数。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">isinstance</span><span class="params">(iter([])</span></span>, Iterator)</span><br><span class="line"><span class="comment">// True</span></span><br></pre></td></tr></table></figure>
+<p><code>list</code>、<code>dict</code>、<code>str</code> 等数据不是<code>Iterator</code>的原因是：Python 中的<code>Iterator</code>对象表示的是一个数据流，<code>Iterator</code>对象可以被<code>next()</code>函数不断调用返回下一个数据，直到没有数据时抛出<code>StopIterator</code>错误。可以把这个数据流看做是一个有序的序列，但我们却不能提前直到这个序列的长度，只能不断的调用<code>next()</code>函数事项按需计算下一个数据，所以<code>Iterator</code>的计算是惰性的，只有在需要返回下一个数据的时候才会计算，<code>Iterator</code>甚至可以表示出一个无限大的数据流，例如全体自然数，而使用list是完全不可能存储全体自然数的。</p>
+<p>总结：<br>凡是可以作用于 for 循环的对象都是 <code>Iterable</code>类型。<br>凡是可以作用于 <code>next()</code>函数的对象都是 <code>Iterator</code>类型，表示一种惰性计算。<br>集合数据类型如：<code>list</code>、<code>dict</code>、<code>str</code> 等是<code>Iterable</code>但不是<code>Iterator</code>，不过可以通过<code>iter()</code>函数获取<code>Iterator</code>对象。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2016/06/10/React-Native-◊Èº˛…˙√¸÷‹∆⁄/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/06/10/React-Native-◊Èº˛…˙√¸÷‹∆⁄/" itemprop="url">React Native 组件生命周期</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-10T13:16:35+08:00">
+                2016-06-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/06/10/React-Native-◊Èº˛…˙√¸÷‹∆⁄/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/06/10/React-Native-◊Èº˛…˙√¸÷‹∆⁄/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="getInitialState"><a href="#getInitialState" class="headerlink" title="getInitialState()"></a>getInitialState()</h3><p>组件在安装之前，会调用 <code>getInitialState</code> 来初始化组件的状态，返回值被用作 <code>this.state</code> 的初始值来使用。</p>
+<p><code>注意</code>：在 ES6 中，使用下面方式设置初始化值：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line">    <span class="keyword">this</span>.state = &#123;<span class="attr">count</span>: props.initialCount&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="getDefaultProps"><a href="#getDefaultProps" class="headerlink" title="getDefaultProps()"></a>getDefaultProps()</h3><p>在创建类的时候调用并缓存，如果该组件没有从父组件获得到 props，可以通过这个方法设置默认值。这个组件创建的值不能够跨实例共享，不会被赋值。</p>
+<p><code>注意</code>：在 ES6 中，可以使用下面的方式设置默认值：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Greeting</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Greeting.defaultProps = &#123;</span><br><span class="line">  name: <span class="string">'Mary'</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="propTypes"><a href="#propTypes" class="headerlink" title="propTypes"></a>propTypes</h3><p>该 <code>propTypes</code> 对象能够验证传递给组件的 props 的类型：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">propTypes: &#123;</span><br><span class="line">  <span class="comment">// You can declare that a prop is a specific JS primitive. By default, these</span></span><br><span class="line">  <span class="comment">// are all optional.</span></span><br><span class="line">  optionalArray: React.PropTypes.array,</span><br><span class="line">  optionalBool: React.PropTypes.bool,</span><br><span class="line">  optionalFunc: React.PropTypes.func,</span><br><span class="line">  optionalNumber: React.PropTypes.number,</span><br><span class="line">  optionalObject: React.PropTypes.object,</span><br><span class="line">  optionalString: React.PropTypes.string,</span><br><span class="line">  optionalSymbol: React.PropTypes.symbol,</span><br><span class="line">  <span class="comment">// more ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更多详细信息可参考<a href="http://reactjs.cn/react/docs/reusable-components.html" target="_blank" rel="noopener">这里</a></p>
+<h3 id="componentWillMount"><a href="#componentWillMount" class="headerlink" title="componentWillMount()"></a>componentWillMount()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> componentWillMount()</span><br></pre></td></tr></table></figure></p>
+<p>这个方法是在组件创建并初始化之后，在第一次 <code>render()</code> 之前调用，可以做一些业务初始化操作，也可以设置㢟状态。这个函数在整个生命周期中只被<code>调用一次</code>。</p>
+<h3 id="componentDidMount"><a href="#componentDidMount" class="headerlink" title="componentDidMount()"></a>componentDidMount()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> componentDidMount()</span><br></pre></td></tr></table></figure></p>
+<p>组件第一次 <code>render()</code> 之后，只会<code>调用一次</code>。可以再这个函数中操作子组件。需要注意的是，React Native 是先调用子组件的 <code>componentDidMount()</code> ，然后在调用父组件的函数。可以在这个组件当中设置计时器或者网络请求等。调用这个函数完毕后，就等待触发其他事件。</p>
+<h3 id="componentWillReceiveProps"><a href="#componentWillReceiveProps" class="headerlink" title="componentWillReceiveProps()"></a>componentWillReceiveProps()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> componentWillReceiveProps(</span><br><span class="line">  object nextProps</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>当组件收到新的 props，就会调用该函数。举个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// nextProps 是即将被设置的新的属性，旧的属性还可以通过 this.props 来获取。</span></span><br><span class="line"><span class="comment">// 根据属性的变化，通过 this.setState() 来更新组件状态、这里面更新状态是安全的，并不会触发额外的 render()</span></span><br><span class="line">componentWillReceiveProps(nextProps) &#123;  </span><br><span class="line">  <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">    likesIncreasing: nextProps.likeCount &gt; <span class="keyword">this</span>.props.likeCount</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate()"></a>shouldComponentUpdate()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">boolean shouldComponentUpdate(  </span><br><span class="line">  object nextProps, object nextState</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>当组件接收到新的 <code>props</code> 和 <code>state</code> 改变的话，会触发调用该方法。参数 <code>nextProps</code> 和 <code>componentWillReceiveProps</code> 函数一样。参数 <code>nextState</code> 表示组件即将更新的状态值。返回参数决定是否需要更新组件，如果 <code>true</code> 表示更新，继续向下执行。否则表示不更新，直接进入等待状态。</p>
+<p>默认情况下，该函数永远返回 <code>true</code> 来保证数据变化的时候 UI 能同步更新，也可以通过检查属性变化前后来决定 UI 是否更新来提高应用性能。</p>
+<h3 id="componentWillUpdate"><a href="#componentWillUpdate" class="headerlink" title="componentWillUpdate()"></a>componentWillUpdate()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> componentWillUpdate(</span><br><span class="line">  object nextProps, object nextState</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p><code>shouldComponentUpdate</code> 函数返回 <code>true</code>，并且 <code>nextProps</code> 或者 <code>nextState</code> 发生改变时，就会开始更新组件。</p>
+<p><code>注意</code>：这个方法里面不能调用 <code>this.setState()</code> 来修改状态，这个函数调用之后，就会把 <code>nextProps</code> 和 <code>nextState</code> 分别设置到 <code>this.props</code> 和 <code>this.state</code> 中。紧接着这个函数，就会调用 <code>render()</code> 来更新界面了。</p>
+<h3 id="componentDidUpdate"><a href="#componentDidUpdate" class="headerlink" title="componentDidUpdate()"></a>componentDidUpdate()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> componentDidUpdate(  </span><br><span class="line">  object prevProps, object prevState</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>这里已经完成 props 和 state 状态的更新，此函数的输入参数就变成了 <code>prevProps</code> 和 <code>prevState</code>。</p>
+<h3 id="componentWillUnmount"><a href="#componentWillUnmount" class="headerlink" title="componentWillUnmount()"></a>componentWillUnmount()</h3><p>函数原型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> componentWillUnmount()</span><br></pre></td></tr></table></figure></p>
+<p>组件销毁的时候调用，可以做一些组件相关的清理工作，例如取消计时器等。</p>
+<hr>
+<p>参考：<br><a href="https://race604.com/react-native-component-lifecycle/" target="_blank" rel="noopener">https://race604.com/react-native-component-lifecycle/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2016/05/12/lodash-ºÚΩÈ/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1316,274 +1789,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2015/04/18/C++ const/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JY's Den">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/04/18/C++ const/" itemprop="url">C++ const</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-18T00:16:04+08:00">
-                2015-04-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2015/04/18/C++ const/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2015/04/18/C++ const/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  main.cpp</span></span><br><span class="line"><span class="comment">//  Cpp</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  Created by mac on 2017/4/17.</span></span><br><span class="line"><span class="comment">//  Copyright © 2017年 JY. All rights reserved.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 内存申请与释放</span></span><br><span class="line"><span class="comment">//int *arr = new int[10];</span></span><br><span class="line"><span class="comment">//delete []arr;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">int *p = new int[100];</span></span><br><span class="line"><span class="comment">if(NULL == P) &#123;</span></span><br><span class="line"><span class="comment">  // 申请成功</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用频繁的函数建议写成内联函数</span></span><br><span class="line"><span class="comment">// 内联条件，逻辑简单，不能是递归函数</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> b = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">int</span> x = <span class="number">3</span>;</span><br><span class="line"><span class="comment">//  x = 5; error</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">int</span> *y = &amp;x;</span><br><span class="line">  y = &amp;b;</span><br><span class="line"><span class="comment">//  *y = 100; error</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">int</span> *<span class="keyword">const</span> z = &amp;x;</span><br><span class="line"><span class="comment">//  z = &amp;b;   error</span></span><br><span class="line"><span class="comment">//  *z = 100; error</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// x 为不可变，所以也不能通过 *y2 来改变指针的值</span></span><br><span class="line"><span class="comment">//  int *y2 = &amp;x;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// b 有读写权限，指针为读权限，所以正确，上面的为错误</span></span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">int</span> *y2 = &amp;b;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//  int x = 3;</span></span><br><span class="line"><span class="comment">//  const int &amp;y = x;</span></span><br><span class="line"><span class="comment">//  </span></span><br><span class="line"><span class="comment">//  x = 10;</span></span><br><span class="line"><span class="comment">//  y = 100;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2015/04/17/C++ “˝”√/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JY's Den">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/04/17/C++ “˝”√/" itemprop="url">C++ 引用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-17T22:28:51+08:00">
-                2015-04-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2015/04/17/C++ “˝”√/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2015/04/17/C++ “˝”√/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">  <span class="keyword">int</span> x;</span><br><span class="line">  <span class="keyword">int</span> y;</span><br><span class="line">&#125;Coord;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> &amp;a, <span class="keyword">int</span> &amp;b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 引用：必须要初始化</span></span><br><span class="line"><span class="comment">//  int a = 3;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//  类型 *&amp;指针引用名 = 指针;</span></span><br><span class="line"><span class="comment">//  int a = 10;</span></span><br><span class="line"><span class="comment">//  int *p = &amp;a;</span></span><br><span class="line"><span class="comment">//  int *&amp;q = p;</span></span><br><span class="line"><span class="comment">//  *q = 20;</span></span><br><span class="line"><span class="comment">//  cout &lt;&lt; a &lt;&lt; endl;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">int</span> &amp;b = a;</span><br><span class="line">  b = <span class="number">20</span>;</span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; a &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; b &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">  Coord c;</span><br><span class="line">  Coord &amp;c1 = c;</span><br><span class="line">  c1.x = <span class="number">20</span>;</span><br><span class="line">  c1.y = <span class="number">30</span>;</span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; c.x &lt;&lt; <span class="string">' '</span> &lt;&lt; c.y &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> a1 = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">int</span> a2 = <span class="number">40</span>;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; a1 &lt;&lt; <span class="string">' '</span> &lt;&lt; a2 &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">  func(a1, a2);</span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; a1 &lt;&lt; <span class="string">' '</span> &lt;&lt; a2 &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> &amp;a, <span class="keyword">int</span> &amp;b)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> c = <span class="number">0</span>;</span><br><span class="line">  c = a;</span><br><span class="line">  a = b;</span><br><span class="line">  b = c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><a href="http://blog.csdn.net/Simba888888/article/category/1464971/4" target="_blank" rel="noopener">http://blog.csdn.net/Simba888888/article/category/1464971/4</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1629,7 +1839,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1642,7 +1852,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1689,7 +1899,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

@@ -249,6 +249,415 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2019/02/28/GCD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/02/28/GCD/" itemprop="url">GCD</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-28T16:05:37+08:00">
+                2019-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/28/GCD/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/02/28/GCD/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Dispatch-Queue"><a href="#Dispatch-Queue" class="headerlink" title="Dispatch Queue"></a>Dispatch Queue</h1><p><code>Serial Dispatch Queue</code>：依次执行，等待现在执行中处理结束<br><code>Concurrent Dispatch Queue</code>: 并发执行，不等待现在执行中处理结束</p>
+<h3 id="Dispatch-Queue-种类"><a href="#Dispatch-Queue-种类" class="headerlink" title="Dispatch Queue 种类"></a>Dispatch Queue 种类</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// serial dispatch queue</span></span><br><span class="line"><span class="built_in">dispatch_queue_t</span> serialDispatchQueue = dispatch_queue_create(<span class="string">"com.gcd.serialDispatchQueue"</span>, <span class="literal">NULL</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// concurrent dispatch queue</span></span><br><span class="line"><span class="built_in">dispatch_queue_t</span> concurrentDispatchQueue = dispatch_queue_create(<span class="string">"com.gcd.concurrentDispatchQueue"</span>, DISPATCH_QUEUE_CONCURRENT)</span><br><span class="line"></span><br><span class="line"><span class="comment">// main queue(serial) queue</span></span><br><span class="line"><span class="built_in">dispatch_queue_t</span> mainDispatchQueue = dispatch_get_main_queue()</span><br><span class="line"></span><br><span class="line"><span class="comment">// global queue(concurrent) queue</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">四种优先级：</span></span><br><span class="line"><span class="comment">DISPATCH_QUEUE_PRIORITY_HIGH    默认</span></span><br><span class="line"><span class="comment">DISPATCH_QUEUE_PRIORITY_DEFAULT</span></span><br><span class="line"><span class="comment">DISPATCH_QUEUE_PRIORITY_LOW</span></span><br><span class="line"><span class="comment">DISPATCH_QUEUE_PRIORITY_BACKGROUND 后台优先级</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">dispatch_queue_t</span> globalDispatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="dispatch-set-target-queue"><a href="#dispatch-set-target-queue" class="headerlink" title="dispatch_set_target_queue"></a>dispatch_set_target_queue</h3><p><code>dispatch_queue_create</code> 生成的队列都是具有默认有优先级，因此变更队列的优先级使用<code>dispatch_set_target_queue</code>。将不可并行执行的处理追加到多个<code>Serial Dispatch Queue</code>中时，如果使用<code>dispatch_set_target_queue</code>函数指定为某一个<code>Serial Dispatch Queue</code>，则可以防止处理并行执行。</p>
+<p><code>注意：</code>第一个参数如果指定为<code>Main Dispatch Queue</code>和<code>Global Dispatch Queue</code>则不知道会出现什么情况，因此这些均不可指定。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dispatch_queue_t</span> serialDispatchQueue = dispatch_queue_create(<span class="string">"com.serial"</span>, <span class="literal">NULL</span>);</span><br><span class="line"><span class="built_in">dispatch_queue_t</span> globalDispatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, <span class="number">0</span>);</span><br><span class="line">dispatch_set_target_queue(serialDispatchQueue, globalDispatchQueue);</span><br></pre></td></tr></table></figure>
+<h3 id="dispatch-after"><a href="#dispatch-after" class="headerlink" title="dispatch_after"></a>dispatch_after</h3><p>使用<code>dispatch_after</code>延时将Block追加到<code>Main Dispatch Queue</code>中处理。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, <span class="number">3</span>ull * <span class="built_in">NSEC_PER_SEC</span>);</span><br><span class="line">dispatch_after(time, dispatch_get_main_queue(), ^&#123;</span><br><span class="line">  <span class="built_in">NSLog</span>(<span class="string">@"waited at least three seconds."</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Dispatch-Group"><a href="#Dispatch-Group" class="headerlink" title="Dispatch Group"></a>Dispatch Group</h3><p>在追加多个Dispatch Queue中的多个处理全部结束后想执行结束处理，使用Dispatch Group。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">  <span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);</span><br><span class="line">  dispatch_group_t group = dispatch_group_create();</span><br><span class="line">  dispatch_group_async(group, queue, ^&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"blk0"</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  dispatch_group_async(group, queue, ^&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"blk1"</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  dispatch_group_async(group, queue, ^&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"blk2"</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  dispatch_group_notify(group, queue, ^&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"done"</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// blk1</span></span><br><span class="line"><span class="comment">// blk2</span></span><br><span class="line"><span class="comment">// blk3</span></span><br><span class="line"><span class="comment">// done</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Dispatch Group 处理尚未执行结束，就会一直等待</span></span><br><span class="line">dispatch_group_wait(group, DISPATCH_TIME_FOREVER);</span><br></pre></td></tr></table></figure>
+<h3 id="dispatch-barrier-async"><a href="#dispatch-barrier-async" class="headerlink" title="dispatch_barrier_async"></a>dispatch_barrier_async</h3><p>使用<code>dispatch_barrier_async</code>来避免读写数据库导致的竞争。使用<code>Concurrent DIspatch Queue</code>和<code>dispatch_barrier_async</code>可以实现高效率的数据库访问和文件访问。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_queue_create(<span class="string">"com.gcd.concureent"</span>, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line">  <span class="built_in">dispatch_async</span>(queue, ^&#123;<span class="built_in">NSLog</span>(<span class="string">@"blk0_for_reading"</span>);&#125;);</span><br><span class="line">  <span class="built_in">dispatch_async</span>(queue, ^&#123;<span class="built_in">NSLog</span>(<span class="string">@"blk1_for_reading"</span>);&#125;);</span><br><span class="line">  <span class="built_in">dispatch_async</span>(queue, ^&#123;<span class="built_in">NSLog</span>(<span class="string">@"blk2_for_reading"</span>);&#125;);</span><br><span class="line">  dispatch_barrier_async(queue, ^&#123;<span class="built_in">NSLog</span>(<span class="string">@"blk2_for_writing"</span>);&#125;);</span><br><span class="line">  <span class="built_in">dispatch_async</span>(queue, ^&#123;<span class="built_in">NSLog</span>(<span class="string">@"blk3_for_reading"</span>);&#125;);</span><br><span class="line">  <span class="built_in">dispatch_async</span>(queue, ^&#123;<span class="built_in">NSLog</span>(<span class="string">@"blk4_for_reading"</span>);&#125;);</span><br><span class="line">  <span class="built_in">dispatch_async</span>(queue, ^&#123;<span class="built_in">NSLog</span>(<span class="string">@"blk5_for_reading"</span>);&#125;);</span><br></pre></td></tr></table></figure></p>
+<h3 id="dispatch-sync、dispatch-async"><a href="#dispatch-sync、dispatch-async" class="headerlink" title="dispatch_sync、dispatch_async"></a>dispatch_sync、dispatch_async</h3><p><code>dispatch_async：</code>将指定Block<code>非同步</code>追加到指定的Dispatch Queue中，dispatch_async函数不做任何等待。<br><code>dispatch_sync：</code>将指定Block<code>同步</code>追加到指定的Dispatch Queue中，在追加Block结束之前，dispatch_sync函数会一直等待。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2019/01/09/ss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/09/ss/" itemprop="url">ss</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-09T11:35:48+08:00">
+                2019-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/09/ss/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/09/ss/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2018/10/08/Effective-JavaScript-01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JY's Den">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/08/Effective-JavaScript-01/" itemprop="url">Effective-JavaScript_01</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-08T21:16:12+08:00">
+                2018-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/08/Effective-JavaScript-01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/10/08/Effective-JavaScript-01/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="第5条：避免对混合类型使用-运算符"><a href="#第5条：避免对混合类型使用-运算符" class="headerlink" title="第5条：避免对混合类型使用==运算符"></a>第5条：避免对混合类型使用==运算符</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"1.0e0"</span> == &#123; <span class="attr">valueOf</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="literal">true</span>; &#125; &#125;;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>==</code> 运算符，在比较之前，它们都会被转换成数字。<code>1.0e0</code> 被解析为数字1，而匿名对象也通过调用自身的`valueOf方法得到结果true，然后再转换为数字，得到1。</p>
+<p>对于Date对象，隐式转换会将Date对象转换为原始类型（优先尝试 toString 方法，再尝试 valueOf 方法）。</p>
+<p>将非Date对象转换为原始类型（优先尝试 valueOf 方法，再尝试 toString 方法）。</p>
+<p><code>为了避免隐式类型转换，尽量使用 === 运算符符</code></p>
+<h3 id="了解分号插入的局限"><a href="#了解分号插入的局限" class="headerlink" title="了解分号插入的局限"></a>了解分号插入的局限</h3><p><code>在以(、[、+、- 或者 / 字符开头的语句前决不能省略分号</code></p>
+<p>比如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">"r"</span>, <span class="string">"g"</span>, <span class="string">"b"</span>].forEach(<span class="function"><span class="keyword">function</span>(<span class="params">key</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p><code>在脚本链接的时候，在脚本之间显示地插入分号：</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// file1.js</span></span><br><span class="line">;(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">&#125;)()</span><br><span class="line"></span><br><span class="line"><span class="comment">// file2.js</span></span><br><span class="line">;(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2018/06/23/NSTableView/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1298,466 +1707,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/04/08/map°¢fitter°¢reduce/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JY's Den">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/04/08/map°¢fitter°¢reduce/" itemprop="url">map、fitter、reduce、flatMap</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-08T10:14:06+08:00">
-                2017-04-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/04/08/map°¢fitter°¢reduce/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/04/08/map°¢fitter°¢reduce/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在 Swift 高阶使用中，map、fitter、reduce 是很常见的操作，能使代码干净整洁。在理解其概念之前，先要明白泛型的概念。</p>
-<h3 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h3><p>定义 <code>computeIntArray</code> 函数，接收一个数组，并返回其元素的2倍组成的另一个新的数组。但此函数只支持 <code>Int</code> 类型。如果换成其他类型则不适用，所以这里考虑用泛型来解决。<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">computeIntArray</span><span class="params">(xs: [Int], transform: <span class="params">(Int)</span></span></span> -&gt; <span class="type">Int</span>) -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="keyword">var</span> result: [<span class="type">Int</span>] = []</span><br><span class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</span><br><span class="line">    result.append(transform(x))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">doubleArray</span><span class="params">(xs: [Int])</span></span> -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="keyword">return</span> computeIntArray(xs: xs) &#123; x <span class="keyword">in</span> x * <span class="number">2</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">doubleArray(xs: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 换成 bool，则会出现编译错误</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">isEvenArray</span><span class="params">(xs: [Int])</span></span> -&gt; [<span class="type">Bool</span>] &#123;</span><br><span class="line">  <span class="keyword">return</span> computeIntArray(xs: xs) &#123; x <span class="keyword">in</span>  x % <span class="number">2</span> == <span class="number">0</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用泛型支持各种类型，进行抽象，对于任何 Element 的数组和 transform: Element -&gt; T 函数，它都会生成一个 T 类型数组</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;Element, T&gt;<span class="params">(xs: [Element], transform: <span class="params">(Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">  <span class="keyword">var</span> result: [<span class="type">T</span>] = []</span><br><span class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</span><br><span class="line">    result.append(transform(x))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">genericComputeArray</span>&lt;T&gt;<span class="params">(xs: [Int], transform: <span class="params">(Int)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">map</span>(xs: xs, transform: transform)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">genericComputeArray(xs: [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]) &#123; x <span class="keyword">in</span> x * <span class="number">2</span> &#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p><code>map</code>函数能够被数组调用，还接收一个闭包参数，将数组中的每一个元素依次作用于该闭包，并返回一个新的数组。</p>
-<p>上面的例子中，将泛型函数写成全局函数固然能够完成任务，但是为了避免写入顶层函数实现。将此函数定义为 Array 的扩展更合适。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;T&gt;<span class="params">(tranform: <span class="params">(Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">    <span class="keyword">var</span> result: [<span class="type">T</span>] = []</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">      result.append(tranform(x))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].<span class="built_in">map</span> &#123; x <span class="keyword">in</span> x * x &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="fitter"><a href="#fitter" class="headerlink" title="fitter"></a>fitter</h3><p>与 <code>map</code> 函数类似，<code>fitter</code> 函数也可以接收一个闭包作为参数，同样可以避免函数为顶层实现：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">filter</span><span class="params">(includeElement: <span class="params">(Element)</span></span></span> -&gt; <span class="type">Bool</span>) -&gt; [<span class="type">Element</span>] &#123;</span><br><span class="line">    <span class="keyword">var</span> result: [<span class="type">Element</span>] = []</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> <span class="keyword">where</span> includeElement(x) &#123;</span><br><span class="line">      result.append(x)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ["HelloWorld.swift"]</span></span><br><span class="line">[<span class="string">"HelloWorld.swift"</span>, <span class="string">"HelloWorld.md"</span>].<span class="built_in">filter</span> &#123;x <span class="keyword">in</span> x.hasSuffix(<span class="string">"swift"</span>)&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="reduce"><a href="#reduce" class="headerlink" title="reduce"></a>reduce</h3><p><code>reduce</code> 函数将变量初始化为某个值，对数组中的每一项进行遍历，最后一某种方式更新结果。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">reduce</span>&lt;T&gt;<span class="params">(initial: T, combine: <span class="params">(T, Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; <span class="type">T</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> result = initial</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">      result = combine(result, x)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出：1</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="built_in">reduce</span>(initial: <span class="number">0</span>) &#123; result, x <span class="keyword">in</span> result + x &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 也可以用运算符作为最后一个参数。这里初始化值为：1</span></span><br><span class="line"><span class="comment">// 输出：7</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="built_in">reduce</span>(initial: <span class="number">1</span>, combine: +)</span><br></pre></td></tr></table></figure>
-<h3 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h3><p><code>flatMap</code> 与 <code>map</code> 类似，区别是若元素值不为 nil 的情况下，<code>flatMap</code> 能将可选类型转换为非可选类型：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> array = [<span class="string">"123"</span>, <span class="string">""</span>, <span class="string">"4567"</span>]</span><br><span class="line"><span class="keyword">let</span> anotherArray = array.<span class="built_in">map</span> &#123; (string: <span class="type">String</span>) -&gt; <span class="type">Int</span>? <span class="keyword">in</span></span><br><span class="line">  <span class="keyword">let</span> length = string.characters.<span class="built_in">count</span></span><br><span class="line">  <span class="keyword">guard</span> length &gt; <span class="number">0</span> <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> string.characters.<span class="built_in">count</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// [Optional(3), nil, Optional(4)]</span></span><br><span class="line"><span class="built_in">print</span>(anotherArray)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> anotherArray2 = array.flatMap&#123; (string: <span class="type">String</span>) -&gt; <span class="type">Int</span>? <span class="keyword">in</span></span><br><span class="line">  <span class="keyword">let</span> length = string.characters.<span class="built_in">count</span></span><br><span class="line">  <span class="keyword">guard</span> length &gt; <span class="number">0</span> <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> string.characters.<span class="built_in">count</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// [3, 4]</span></span><br><span class="line"><span class="built_in">print</span>(anotherArray2)</span><br></pre></td></tr></table></figure>
-<h3 id="Any-与-泛型"><a href="#Any-与-泛型" class="headerlink" title="Any 与 泛型"></a>Any 与 泛型</h3><p>尽量避免使用 <code>Any</code> 类型，因为使用 <code>Any</code> 类型会避开 swift 的类型系统。比如将 <code>noOp</code> 函数返回值设为 0 会导致类型错误。此外，任何调用 <code>noOpAny</code> 的函数都不知道返回值会被转换为何种类型。而结果就是可能导致各种各样的运行时错误。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">noOp</span>&lt;T&gt;<span class="params">(x: T)</span></span> -&gt; <span class="type">T</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">noOpAny</span><span class="params">(x: Any)</span></span> -&gt; <span class="type">Any</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> result = noOp(x: <span class="number">3</span>)</span><br><span class="line"><span class="keyword">let</span> ret = noOpAny(x: <span class="string">"3"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// oOp中，我们可以清楚返回值和输入值完全一样，而 noOpAny 则不一样，返回是任意类型。甚至和原来输入值不同的类型。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">noOpWrong</span><span class="params">(x: Any)</span></span> -&gt; <span class="type">Any</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> s = noOpWrong(x: <span class="string">"string"</span>)</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/21/∂¡ È± º«/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JY's Den">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/03/21/∂¡ È± º«/" itemprop="url">读书笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T23:56:40+08:00">
-                2017-03-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/03/21/∂¡ È± º«/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/03/21/∂¡ È± º«/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>这篇文章合集是整理了一些读书笔记，做了一些目录索引。</p>
-<hr>
-<h4 id="《Effective-Objective-C-2-0》"><a href="#《Effective-Objective-C-2-0》" class="headerlink" title="《Effective Objective-C 2.0》"></a>《Effective Objective-C 2.0》</h4><p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-1/" target="_blank" rel="noopener">Effective Objective-C 2.0 第一章</a></p>
-<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-2/" target="_blank" rel="noopener">Effective Objective-C 2.0 第二章</a></p>
-<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-3/" target="_blank" rel="noopener">Effective Objective-C 2.0 第三章</a></p>
-<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-4/" target="_blank" rel="noopener">Effective Objective-C 2.0 第四章</a></p>
-<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-5/" target="_blank" rel="noopener">Effective Objective-C 2.0 第五章</a></p>
-<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-6/" target="_blank" rel="noopener">Effective Objective-C 2.0 第六章</a></p>
-<p><a href="http://devyu.xyz/2017/03/21/Effective-Objective-C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-7/" target="_blank" rel="noopener">Effective Objective-C 2.0 第七章</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://devyu.github.io/2017/03/21/Effective-Objective-C∂¡ È± º«-7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JY's Den">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/03/21/Effective-Objective-C∂¡ È± º«-7/" itemprop="url">Effective-Objective-C读书笔记(7)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T22:29:08+08:00">
-                2017-03-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/03/21/Effective-Objective-C∂¡ È± º«-7/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/03/21/Effective-Objective-C∂¡ È± º«-7/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="系统框架"><a href="#系统框架" class="headerlink" title="系统框架"></a>系统框架</h3><h4 id="第47条：熟悉系统框架"><a href="#第47条：熟悉系统框架" class="headerlink" title="第47条：熟悉系统框架"></a>第47条：熟悉系统框架</h4><p>Fundation、CoreFundation、CFNetwork(封装 BSD socket，抽象成易于使用的网络接口)、CoreAudio、AVFoundation、CoreData、CoreText 等。</p>
-<h4 id="第48条：多用-block-枚举，少用-for-循环"><a href="#第48条：多用-block-枚举，少用-for-循环" class="headerlink" title="第48条：多用 block 枚举，少用 for 循环"></a>第48条：多用 block 枚举，少用 for 循环</h4><p>遍历 collection 可以使用 <code>for 循环</code>、<code>NSEnumerator</code>、<code>快速遍历法</code>。<code>block 枚举</code>本身通过 GCD 来并发这行遍历操作，无需另外编写代码。而其它遍历方式无法轻易实现这一点。如果已知待遍历的 collection 含有何种对象，则应该修改签名，指出对象的具体类型。</p>
-<h4 id="第49条：对自定义内存管理语句-collection-使用无缝桥接"><a href="#第49条：对自定义内存管理语句-collection-使用无缝桥接" class="headerlink" title="第49条：对自定义内存管理语句 collection 使用无缝桥接"></a>第49条：对自定义内存管理语句 collection 使用无缝桥接</h4><p>使用<code>__bridge</code>进行桥接 Foundation 与 CoreFoundation 框架中的 C 怨言数据结构之间转换：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NSArray *anArray = @[@1, @2, @3];</span><br><span class="line">CFArrayRef aCFArray = (__bridge CFArrayRef)(anArray);</span><br></pre></td></tr></table></figure></p>
-<p>转换涉及到的内存管理：</p>
-<ul>
-<li><code>__bridge</code>：告诉ARC 如何处理 Objective-C 对象，ARC 仍然具备这个对象的所有权。</li>
-<li><code>__bridge_retained</code>：ARC 将交出对象的所有权。</li>
-<li><code>__bridge_transfer</code>：反向转换，比如将 <code>CFArrayRef</code> 转换为 <code>NSArray *</code>。并令 ARC 获得对象所有权。</li>
-<li>使用 <code>CoreFoundation</code> 框架最后一定要调用与之对应的<code>CFRelease()</code>。</li>
-</ul>
-<h4 id="第50条：构建缓存时选用-NSCache-而非-NSDictionary"><a href="#第50条：构建缓存时选用-NSCache-而非-NSDictionary" class="headerlink" title="第50条：构建缓存时选用 NSCache 而非 NSDictionary"></a>第50条：构建缓存时选用 NSCache 而非 NSDictionary</h4><p>对比：</p>
-<ul>
-<li>当系统资源耗尽，可以自动删减缓存。使用NSDictionary需要自己 hook，在内存低警告的时候手动删减缓存。NSCache 是线程安全的，NSDictionary 不具备这种优势。</li>
-<li>可以给 NSCache 对象设置上限，用于限制缓存中的对象总个数。</li>
-<li>将 <code>NSPurgeableData</code> 对象与 <code>NSCache</code> 搭配使用，可以实现自动清除数据的功能。也就是说，当 <code>NSPurgeableData</code> 对象锁斩内存被系统所丢弃，该对象自身也可会从缓存中移除。</li>
-</ul>
-<h4 id="第51条：精简-initialize-与-load-的实现代码"><a href="#第51条：精简-initialize-与-load-的实现代码" class="headerlink" title="第51条：精简 initialize 与 load 的实现代码"></a>第51条：精简 initialize 与 load 的实现代码</h4><p>对于加入runtime系统中的每个类和分类，都会调用这个方法，并且只调用一次。如果分类和类里面都定义了<code>load</code>方法，会先调用类里的，在调用分类里的。<code>load</code>方法再调用前，会加载父类的<code>load</code>方法。执行该<code>load</code>方法时，系统还处于“脆弱状态”(fragile state)，根据某个指定的程序库，却无法判断出其中各个类的载入顺序。因此，在<code>load</code>方法中使用其他类是不安全的。比如说：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@interface EOCClassB</span><br><span class="line">+ (void)load &#123;</span><br><span class="line">  NSLog(@&quot;Loading EOCClassB&quot;);</span><br><span class="line">  // 此处代码不安全，也许 EOCClassA 方法并没有加载</span><br><span class="line">  EOCClassA *obj = [EOCClassA new];</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-<p>该类不能在里面等待锁，也不要调用可能会加锁的方法。凡是在类加载之前执行某些任务的，基本都不太对。其真正的用途是仅仅在调试程序，比如可以在分类里编写此方法，用来判断该分类是否已经正确载入系统中。</p>
-<p>想要执行与类初始化有关的操作，还要覆写<code>+ (void)initialize</code>。它与<code>+ (void)load</code>方法都是由 runtime 调用的，并且只调用一次。但是有一些区别：</p>
-<ul>
-<li><code>initialize</code>是<code>惰性调用的</code>，也就是程序用到相关的类时，才会调用。也就是说应用程序无需将每个类的<code>initialize</code>都执行一遍，这与<code>load</code>方法不同。对于<code>load</code>，应用程序必须阻塞并等着所有类的<code>load</code>都执行完，才能继续。</li>
-<li>runtime 系统在执行该方法时，是处于正常状态的。因此，此时可以安全使用并调用任意类中的任意方法。而且 runtime 系统能确保<code>initialize</code>方法在“线程安全的环境”中执行。也就是说只有执行<code>initialize</code>的那个线程可以操作类或类实例。其他线程都要先阻塞，等着<code>initialize</code>执行完。</li>
-<li><code>initialize</code>与其他消息一样，如果某个类未实现它，其父类实习那了，那么就会运行父类的实现代码。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@interface EOCBaseClass: NSObject</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation EOCBaseClass</span><br><span class="line">+ (void)initialize &#123;</span><br><span class="line">  NSLog(@&quot;%@ initialize&quot;, self);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@interface EOCSubClass: NSObject</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation EOCSubClass</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-<p>首次使用 <code>EOCSubClass</code> 时，会输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">EOCBaseClass initialize</span><br><span class="line">EOCSubClass initialize</span><br></pre></td></tr></table></figure>
-<p>与其他方法一样（load 除外）， initialize 也遵循常用的继承规则。所以在初始化 EOCSubClass 时，由于子类未覆写<code>initialize</code>方法，因此还要把父类的实现代码再运行一遍。鉴于此通常会这样实现 <code>initialize</code> 方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+ (void)initialize &#123;</span><br><span class="line">  if (self == [EOCBaseClass class]) &#123;</span><br><span class="line">    NSLog(@&quot;%@ initialize&quot;, self);  </span><br><span class="line"></span><br><span class="line">    // 初始化内部数据，不应该在这里调用其它方法。</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>总结：</p>
-<ul>
-<li>再加载阶段，如果类实现了 load 方法，那么系统就会调用它。类的 load 方法比分类的要先调用。与其他方法不同，load 方法不参与覆写机制。</li>
-<li>首次使用某个类，系统会向其发送 initialize 消息，此方法遵从普通对象的覆写规则，所以要在初始化方法中判断初始化的是哪个类。</li>
-<li>load、initialize 方法应该实现的更精简一些，避免循环引用。</li>
-<li>常量，基本类型可以在编译期定义。无法编译期设定的全局常量（Objective-C 对象），可以放在 initialize 方法里面初始化。</li>
-</ul>
-<h4 id="第52条：NSTimer-会保留目标对象"><a href="#第52条：NSTimer-会保留目标对象" class="headerlink" title="第52条：NSTimer 会保留目标对象"></a>第52条：NSTimer 会保留目标对象</h4><ul>
-<li>NSTimer 对象会保留其目标对象，直到计数器本身失效位置，调用 <code>invalidate</code> 方法可令计时器失效。另外，一次性的计时器在触发完任务之后也会失效。</li>
-<li>反复执行任务的计时器，容易产生循环引用，因为 NSTimer 保留其目标实例，目标实例变量又持有 NSTimer，导致循环引用。</li>
-<li>扩充 NSTimer 的功能，通过 block 方式来打破循环引用。如下：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">// NSTimer+EOCBlockSupport.h</span><br><span class="line">@interface NSTimer (EOCBlockSupport)</span><br><span class="line">+ (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval</span><br><span class="line">                                          block:(void (^)())block</span><br><span class="line">                                        repeats:(BOOL)repeats;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">// NSTimer+EOCBlockSupport.m</span><br><span class="line">@implementation NSTimer (EOCBlockSupport)</span><br><span class="line">+ (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval</span><br><span class="line">                                          block:(void (^)())block</span><br><span class="line">                                        repeats:(BOOL)repeats &#123;</span><br><span class="line">  return [self scheduledTimerWithTimeInterval:interval</span><br><span class="line">                                       target:self</span><br><span class="line">                                     selector:@selector(eoc_blockInvoke:)</span><br><span class="line">                                     userInfo:[block copy]</span><br><span class="line">                                      repeats:repeats];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (void)eoc_blockInvoke:(NSTimer *)timer &#123;</span><br><span class="line">  void (^block)() = timer.userInfo;</span><br><span class="line">  if (block) &#123;</span><br><span class="line">    block();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// EOCClass.h</span><br><span class="line">@interface NSTimer : NSObject</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">// EOCClass.m</span><br><span class="line">@implementation EOCClass &#123;</span><br><span class="line">  NSTimer *_pollTimer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)startPolling &#123;</span><br><span class="line">  // 通过 wealSelf 来避免实例变量 _pollTimer 持有 NSTimer，NSTimer 又持有 block，block 又持有 self 的三重循环引用。</span><br><span class="line">  __weak EOCClass *wealSelf = self;</span><br><span class="line">  _pollTimer = [NSTimer eoc_scheduledTimerWithTimeInterval:5.0</span><br><span class="line">                                                     block:^&#123;</span><br><span class="line">                                                       EOCClass *strongSelf = wealSelf;</span><br><span class="line">                                                       [strongSelf p_doPoll];</span><br><span class="line">                                                     &#125; repeats:YES];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)p_doPoll &#123;&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1803,7 +1757,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1816,7 +1770,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1863,7 +1817,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
